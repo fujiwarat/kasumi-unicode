@@ -17,6 +17,8 @@ using namespace std;
 
 KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                                    KasumiConfiguration *conf){
+  this->conf = conf;
+  
   dictionary = aDictionary;
   modificationFlag = false;
   
@@ -123,6 +125,9 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
   gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
   gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
+  const int FREQ_DEFAULT = conf->getPropertyValueByInt("DefaultFrequency");
+  const int FREQ_LBOUND = conf->getPropertyValueByInt("MinFrequency");
+  const int FREQ_UBOUND = conf->getPropertyValueByInt("MaxFrequency");
   GtkObject *adjustment = gtk_adjustment_new(FREQ_DEFAULT,
                                              FREQ_LBOUND,
                                              FREQ_UBOUND,
@@ -309,7 +314,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                              GDK_S, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
   button = gtk_button_new();
-  gtk_button_set_label(GTK_BUTTON(button),_("Add"));
+  gtk_button_set_label(GTK_BUTTON(button),_("New Word"));
   gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_add),this);
@@ -410,15 +415,7 @@ void KasumiMainWindow::ClickedStoreButton(){
 }
 
 void KasumiMainWindow::ClickedAddButton(){
-  KasumiWord *word = new KasumiWord();
-  word->setSoundByUTF8(string(gtk_entry_get_text(
-    GTK_ENTRY(SoundEntry))));
-  word->setSpellingByUTF8(string(gtk_entry_get_text(
-    GTK_ENTRY(SpellingEntry))));
-  word->setFrequency(gtk_spin_button_get_value_as_int(
-    GTK_SPIN_BUTTON(FrequencySpin)));
-  word->setWordClass(getActiveWordClass());
-
+  KasumiWord *word = new KasumiWord(conf);
   dictionary->appendWord(word);
 }
 
@@ -469,6 +466,7 @@ void KasumiMainWindow::ChangedListCursor(){
     
     gtk_entry_set_text(GTK_ENTRY(SpellingEntry),"");
     gtk_entry_set_text(GTK_ENTRY(SoundEntry),"");
+    const int FREQ_DEFAULT = conf->getPropertyValueByInt("DefaultFrequency");
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),FREQ_DEFAULT);
     setActiveWordClass(NOUN);
     

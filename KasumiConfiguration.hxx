@@ -13,13 +13,17 @@ private:
   map<string, string> config;
   string ConfFileName;
   
-  void loadConfiguration() throw (KasumiConfigurationLoadException);
+  void loadDefaultProperties();
+  void loadConfigurationFile() throw (KasumiConfigurationLoadException);
+  void loadConfigurationFromArgument(int argc, char *argv[]);
   void saveConfiguration() throw (KasumiConfigurationSaveException);
+
+  void setPropertyValue(const string &name, const string &value);
 public:
-  KasumiConfiguration() throw (KasumiConfigurationLoadException);
+  KasumiConfiguration(int argc, char *argv[]) throw (KasumiConfigurationLoadException);
   ~KasumiConfiguration();
-  void setConfiguration(const string &name, const string &value);
-  string getConfiguration(const string &name);
+  string getPropertyValue(const string &name);
+  int getPropertyValueByInt(const string &name);  
 };
 
 #endif

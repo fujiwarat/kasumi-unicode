@@ -58,6 +58,7 @@ class KasumiMainWindow : public KasumiDicEventListener{
                                                gpointer data);
 private:
   KasumiDic *dictionary;
+  KasumiConfiguration *conf;
   GtkWidget *window;
   GtkWidget *SpellingEntry;
   GtkWidget *SoundEntry;

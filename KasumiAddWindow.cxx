@@ -16,6 +16,8 @@ using namespace std;
 
 KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                                  KasumiConfiguration *conf){
+  this->conf = conf;
+  
   dictionary = aDictionary;
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -53,6 +55,9 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
+  const int FREQ_DEFAULT = conf->getPropertyValueByInt("DefaultFrequency");
+  const int FREQ_LBOUND = conf->getPropertyValueByInt("MinFrequency");  
+  const int FREQ_UBOUND = conf->getPropertyValueByInt("MaxFrequency");
   GtkObject *adjustment = gtk_adjustment_new(FREQ_DEFAULT,
                                              FREQ_LBOUND,
                                              FREQ_UBOUND,
@@ -192,7 +197,7 @@ void KasumiAddWindow::ClickedQuitButton(GtkWidget *widget){
 }
 
 void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
-  KasumiWord *word = new KasumiWord();
+  KasumiWord *word = new KasumiWord(conf);
 
   if(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))) == ""){
     GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(window),
@@ -261,6 +266,7 @@ void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
 
   gtk_entry_set_text(GTK_ENTRY(SoundEntry), "");
   gtk_entry_set_text(GTK_ENTRY(SpellingEntry), "");
+  const int FREQ_DEFAULT = conf->getPropertyValueByInt("DefaultFrequency");
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),FREQ_DEFAULT);
   gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),0);
 }

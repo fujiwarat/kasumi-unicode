@@ -1,3 +1,9 @@
+2004-12-20  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - Users can change default/maximum/minimum frequency value
+	 - Remove "Add" button and add "New Word" button
+
 2004-12-08  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* New feature

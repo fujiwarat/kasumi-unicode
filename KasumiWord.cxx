@@ -3,6 +3,7 @@
 #include <iconv.h>
 #include "KasumiWord.hxx"
 #include "KasumiException.hxx"
+#include "KasumiConfiguration.hxx"
 #include "KasumiString.hxx" // for EUCJP_***(constant string)
 
 #include <iostream>
@@ -36,10 +37,10 @@ string KasumiWord::convertEUCJPToUTF8(const string &aEUCJP){
   return string(utf8);
 }
 
-KasumiWord::KasumiWord(){
+KasumiWord::KasumiWord(KasumiConfiguration *conf){
   Sound = string();
   Sound_UTF8 = string();
-  Frequency = FREQ_DEFAULT;
+  Frequency = conf->getPropertyValueByInt("DefaultFrequency");
   Spelling = string();
   Spelling_UTF8 = string();
   WordClass = NOUN;

@@ -10,6 +10,7 @@
 #include "KasumiWord.hxx"
 #include "KasumiException.hxx"
 #include "KasumiDicEventListener.hxx"
+#include "KasumiConfiguration.hxx"
 
 #define ERROR 0
 #define VALID 1
@@ -22,9 +23,10 @@ private:
   vector<KasumiWord*> WordList; // manage words with id
   vector<KasumiDicEventListener*> EventListeners;
   
-  void load() throw (KasumiDicExaminationException);
+  void load(KasumiConfiguration *conf) throw (KasumiDicExaminationException);
 public:
-  KasumiDic(const string aDicFileName) throw(KasumiDicExaminationException);
+  KasumiDic(const string aDicFileName, KasumiConfiguration *conf)
+    throw(KasumiDicExaminationException);
   void store() throw(KasumiDicStoreException);
   int appendWord(KasumiWord *word); // returns this word's ID
   void removeWord(size_t id) throw(KasumiOutOfBoundException);

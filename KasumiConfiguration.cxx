@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <getopt.h> /* for getopt_long() */
 
 #include "KasumiConfiguration.hxx"
 #include "KasumiException.hxx"
@@ -13,8 +14,12 @@
 
 using namespace std;
 
-KasumiConfiguration::KasumiConfiguration()
+KasumiConfiguration::KasumiConfiguration(int argc, char *argv[])
   throw(KasumiConfigurationLoadException){
+
+  loadDefaultProperties();
+  loadConfigurationFromArgument(argc, argv);
+  
   char *home = getenv("HOME");
   if(home == NULL){
     cout << "Cannot find $HOME environment variable." << endl;
@@ -23,7 +28,7 @@ KasumiConfiguration::KasumiConfiguration()
 
   ConfFileName = string(home) + "/.kasumi";
   try{
-    loadConfiguration();
+    loadConfigurationFile();
   }catch(KasumiConfigurationLoadException e){
     throw e;
   }
@@ -33,11 +38,67 @@ KasumiConfiguration::~KasumiConfiguration(){
   saveConfiguration();
 }
 
-void KasumiConfiguration::loadConfiguration()
+void KasumiConfiguration::loadDefaultProperties(){
+  char *home = getenv("HOME");
+  if(home == NULL){
+    cout << "Cannot find $HOME environment variable." << endl;
+    exit(1);
+  }
+  
+  config[string("StartupMode")] = string("MAIN");
+  config[string("DictionaryPath")] = string(home) + "/.anthy/private-dic.src.tmp";
+  config[string("DefaultFrequency")] = string("500");
+  config[string("MaxFrequency")] = string("1000");
+  config[string("MinFrequency")] = string("1");
+}
+
+void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[]){
+  int option_index = 0;
+  static struct option long_options[] = {
+    {"help", no_argument, NULL, 'h'},
+    {"version", no_argument, NULL, 'v'},
+    {"add", no_argument, NULL, 'a'},
+    {"main", no_argument, NULL, 'm'},
+    {0,0,0,0}
+  };
+
+  int c;    
+  while(1){
+    c = getopt_long(argc, argv, "hvam", long_options, &option_index);
+    if(c == -1) break; // no more argument
+
+    switch(c){
+    case 'h':
+      setPropertyValue(string("StartupMode"),string("HELP"));    
+      break;
+    case 'v':
+      setPropertyValue(string("StartupMode"),string("VERSION"));    
+      break;
+    case 'a':
+      setPropertyValue(string("StartupMode"),string("ADD"));
+      break;
+    case 'm':
+      setPropertyValue(string("StartupMode"),string("MAIN"));
+      break;
+    case '?':
+      cout << "Argument error." << endl;
+      exit(1);
+      break;
+    }
+  }
+
+  if(optind < argc){
+    cout << "non-option ARGV-elements: ";
+    while (optind < argc)
+      cout << argv[optind++];
+    cout << endl;
+  }
+}
+
+
+void KasumiConfiguration::loadConfigurationFile()
   throw(KasumiConfigurationLoadException){
 
-  cout << "OK1" << endl;
-  
   int line = 0;
   string Contents = string();
   KasumiString Buffer;
@@ -72,18 +133,41 @@ void KasumiConfiguration::saveConfiguration()
 
 }
 
-void KasumiConfiguration::setConfiguration(const string &name, const string &value){
+void KasumiConfiguration::setPropertyValue(const string &name, const string &value){
+  map<string,string>::iterator p;
+  
+  p = config.find(name);
+
+  if(p == config.end()){
+    cout << "error: you cannot set " << name << " property." << endl;
+    exit(1);
+  }
+  
   config[name] = value;
 }
 
-string KasumiConfiguration::getConfiguration(const string &name){
+string KasumiConfiguration::getPropertyValue(const string &name){
   map<string,string>::iterator p;
 
   p = config.find(name);
 
-  if(p != config.end()){
-    return p->second;
+  if(p == config.end()){
+    cout << "error: " << name << " property has not been set yet." << endl;
+    exit(1);
   }
   
-  return string();
+  return p->second;
+}
+
+int KasumiConfiguration::getPropertyValueByInt(const string &name){
+  map<string,string>::iterator p;
+
+  p = config.find(name);
+
+  if(p == config.end()){
+    cout << "error: " << name << " property has not been set yet." << endl;
+    exit(1);
+  }
+  
+  return str2int(p->second);
 }

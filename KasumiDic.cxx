@@ -2,6 +2,7 @@
 #include "KasumiWord.hxx"
 #include "KasumiString.hxx"
 #include "KasumiException.hxx"
+#include "KasumiConfiguration.hxx"
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -13,19 +14,19 @@ using namespace std;
 
 #define OptionOutput( Word, OptionName ) (string(OptionName) + " = " + (Word->getOption(OptionName) ? "y" : "n"))
 
-KasumiDic::KasumiDic(const string aDicFileName)
+KasumiDic::KasumiDic(const string aDicFileName, KasumiConfiguration *conf)
   throw(KasumiDicExaminationException){
 
   DicFileName = aDicFileName;
 
   try{
-    load();
+    load(conf);
   }catch(KasumiDicExaminationException e){
     throw e;
   }
 }
 
-void KasumiDic::load()
+void KasumiDic::load(KasumiConfiguration *conf)
   throw(KasumiDicExaminationException){
   
   int line = 0;
@@ -48,6 +49,9 @@ void KasumiDic::load()
             0);
   }
 
+  const int FREQ_LBOUND = conf->getPropertyValueByInt("MinFrequency");  
+  const int FREQ_UBOUND = conf->getPropertyValueByInt("MaxFrequency");
+  
   // analyze Anthy Dictionary reading each line
   while(getline(DicFile, Buffer, '\n')){
     line++;
@@ -57,7 +61,7 @@ void KasumiDic::load()
     }else if(Buffer.isEmptyLine()){
       // empty line; nothing to do
     }else if(Buffer.isEntryLine()){
-      KasumiWord *newWord = new KasumiWord();
+      KasumiWord *newWord = new KasumiWord(conf);
 
       newWord->setSound(Buffer.getSound());
       freq = Buffer.getFrequency();

@@ -8,13 +8,10 @@
 #include <string>
 #include <map>
 #include "KasumiException.hxx"
+#include "KasumiConfiguration.hxx"
 #include <iconv.h>
 
 using namespace std;
-
-#define FREQ_UBOUND 1000
-#define FREQ_LBOUND 1
-#define FREQ_DEFAULT 500
 
 enum _WordClassEnum {NOUN, ADV, PERSON, PLACE, ADJ};
 typedef _WordClassEnum WordClassType;
@@ -36,7 +33,7 @@ private:
   static string convertUTF8ToEUCJP(const string &aEUCJP);
   static string convertEUCJPToUTF8(const string &aUTF8);  
 public:
-  KasumiWord();
+  KasumiWord(KasumiConfiguration *conf);
 
   // property functions
   void setSound(const string &aSound);
