@@ -22,7 +22,7 @@ bool KasumiString::isEmptyLine(){
 }
 
 bool KasumiString::isEntryLine(){
-  unsigned int i;
+  int i;
 
   if(isKeyValLine()){
     return false;
@@ -47,7 +47,7 @@ bool KasumiString::isEntryLine(){
 }
 
 bool KasumiString::isKeyValLine(){
-  unsigned int i;
+  int i;
 
   i = find("=",0);
 

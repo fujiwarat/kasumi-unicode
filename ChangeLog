@@ -6,6 +6,11 @@
 	* fix
 	 - solved inability to change mode
 
+	* fix
+	 - change the type of 'i' to be compared with 'npos' from unsigned int 
+	   to (signed) int because npos can be negative value in x86_64
+	   machine.
+
 2005-01-31  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* fix
