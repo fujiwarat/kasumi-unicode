@@ -418,6 +418,7 @@ void _call_back_add_window_destroy(GtkWidget *widget,
                                    gpointer data){
   KasumiAddWindow *window = (KasumiAddWindow *)data;
   window->destroy();
+  gtk_main_quit();
 }
 
 gboolean _call_back_add_window_delete_event(GtkWidget *widget,

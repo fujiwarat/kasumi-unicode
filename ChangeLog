@@ -1,3 +1,8 @@
+2005-01-31  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - quit correctly when close button clicked
+
 2005-01-08  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* fix

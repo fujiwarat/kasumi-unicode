@@ -992,6 +992,7 @@ void _call_back_destroy(GtkWidget *widget,
                         gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->destroy();
+  gtk_main_quit();
 }
 
 gboolean _call_back_delete_event(GtkWidget *widget,
