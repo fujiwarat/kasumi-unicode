@@ -128,45 +128,103 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   gtk_combo_box_append_text(GTK_COMBO_BOX(WordClassCombo), _("Place-name"));
   gtk_combo_box_append_text(GTK_COMBO_BOX(WordClassCombo), _("Adjective"));
   gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo), 0);
-  HandlerIDOfWordClassCombo = g_signal_connect(G_OBJECT(WordClassCombo), "changed",
-                   G_CALLBACK(_call_back_changed_word_class_combo), this);
-  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(WordClassCombo),FALSE,FALSE,0);
+  HandlerIDOfWordClassCombo =
+    g_signal_connect(G_OBJECT(WordClassCombo), "changed",
+                     G_CALLBACK(_call_back_changed_word_class_combo), this);
+  gtk_box_pack_start(GTK_BOX(entry_vbox),
+                     GTK_WIDGET(WordClassCombo),FALSE,FALSE,0);
 
   /* creating noun option pane */
   NounOptionPane = gtk_vbox_new(FALSE,0);
   gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(NounOptionPane),
                      FALSE,FALSE,0);
 
-  NounOptionNaConnectionCheck = gtk_check_button_new_with_label(_("NA connection"));
-  gtk_box_pack_start(GTK_BOX(NounOptionPane),GTK_WIDGET(NounOptionNaConnectionCheck),
-                     FALSE,FALSE,0);
-  g_signal_connect(G_OBJECT(NounOptionNaConnectionCheck),"toggled",
-                   G_CALLBACK(_call_back_toggled_check),this);
-
-  NounOptionSaConnectionCheck = gtk_check_button_new_with_label(_("SA connection"));
-  gtk_box_pack_start(GTK_BOX(NounOptionPane),GTK_WIDGET(NounOptionSaConnectionCheck),
-                     FALSE,FALSE,0);
-  g_signal_connect(G_OBJECT(NounOptionSaConnectionCheck),"toggled",
-                   G_CALLBACK(_call_back_toggled_check),this);
-
-  NounOptionSuruConnectionCheck = gtk_check_button_new_with_label(_("SURU connection"));
-  gtk_box_pack_start(GTK_BOX(NounOptionPane),GTK_WIDGET(NounOptionSuruConnectionCheck),
-                     FALSE,FALSE,0);
-  g_signal_connect(G_OBJECT(NounOptionSuruConnectionCheck),"toggled",
-                   G_CALLBACK(_call_back_toggled_check),this);
-
-  NounOptionGokanCheck = gtk_check_button_new_with_label(_("Can be Bunnsetsu"));
-  gtk_box_pack_start(GTK_BOX(NounOptionPane),GTK_WIDGET(NounOptionGokanCheck),
-                     FALSE,FALSE,0);
-  g_signal_connect(G_OBJECT(NounOptionGokanCheck),"toggled",
-                   G_CALLBACK(_call_back_toggled_check),this);
-
-  NounOptionKakujoshiConnectionCheck = gtk_check_button_new_with_label(_("KAKUJOSHI connection"));
+  NounOptionNaConnectionCheck =
+    gtk_check_button_new_with_label(_("NA connection"));
   gtk_box_pack_start(GTK_BOX(NounOptionPane),
-                     GTK_WIDGET(NounOptionKakujoshiConnectionCheck),FALSE,FALSE,0);
-  g_signal_connect(G_OBJECT(NounOptionKakujoshiConnectionCheck),"toggled",
-                   G_CALLBACK(_call_back_toggled_check),this);
+                     GTK_WIDGET(NounOptionNaConnectionCheck),
+                     FALSE,FALSE,0);
+  HandlerIDOfNounOptionNaConnectionCheck =
+    g_signal_connect(G_OBJECT(NounOptionNaConnectionCheck),"toggled",
+                     G_CALLBACK(_call_back_toggled_check),this);
 
+  NounOptionSaConnectionCheck =
+    gtk_check_button_new_with_label(_("SA connection"));
+  gtk_box_pack_start(GTK_BOX(NounOptionPane),
+                     GTK_WIDGET(NounOptionSaConnectionCheck),
+                     FALSE,FALSE,0);
+  HandlerIDOfNounOptionSaConnectionCheck =
+    g_signal_connect(G_OBJECT(NounOptionSaConnectionCheck),"toggled",
+                     G_CALLBACK(_call_back_toggled_check),this);
+
+  NounOptionSuruConnectionCheck =
+    gtk_check_button_new_with_label(_("SURU connection"));
+  gtk_box_pack_start(GTK_BOX(NounOptionPane),
+                     GTK_WIDGET(NounOptionSuruConnectionCheck),
+                     FALSE,FALSE,0);
+  HandlerIDOfNounOptionSuruConnectionCheck =
+    g_signal_connect(G_OBJECT(NounOptionSuruConnectionCheck),"toggled",
+                     G_CALLBACK(_call_back_toggled_check),this);
+
+  NounOptionGokanCheck =
+    gtk_check_button_new_with_label(_("Can be Bunnsetsu"));
+  gtk_box_pack_start(GTK_BOX(NounOptionPane),
+                     GTK_WIDGET(NounOptionGokanCheck),
+                     FALSE,FALSE,0);
+  HandlerIDOfNounOptionGokanCheck =
+    g_signal_connect(G_OBJECT(NounOptionGokanCheck),"toggled",
+                     G_CALLBACK(_call_back_toggled_check),this);
+
+  NounOptionKakujoshiConnectionCheck =
+    gtk_check_button_new_with_label(_("KAKUJOSHI connection"));
+  gtk_box_pack_start(GTK_BOX(NounOptionPane),
+                     GTK_WIDGET(NounOptionKakujoshiConnectionCheck),
+                     FALSE,FALSE,0);
+  HandlerIDOfNounOptionKakujoshiConnectionCheck =
+    g_signal_connect(G_OBJECT(NounOptionKakujoshiConnectionCheck),"toggled",
+                     G_CALLBACK(_call_back_toggled_check),this);
+
+  /* creating adv option pane */
+  AdvOptionPane = gtk_vbox_new(FALSE,0);
+  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(AdvOptionPane),
+                     FALSE,FALSE,0);
+
+  AdvOptionToConnectionCheck =
+    gtk_check_button_new_with_label(_("TO connection"));
+  gtk_box_pack_start(GTK_BOX(AdvOptionPane),
+                     GTK_WIDGET(AdvOptionToConnectionCheck),
+                     FALSE,FALSE,0);
+  HandlerIDOfAdvOptionToConnectionCheck =
+    g_signal_connect(G_OBJECT(AdvOptionToConnectionCheck),"toggled",
+                     G_CALLBACK(_call_back_toggled_check),this);
+
+  AdvOptionTaruConnectionCheck =
+    gtk_check_button_new_with_label(_("TARU connection"));
+  gtk_box_pack_start(GTK_BOX(AdvOptionPane),
+                     GTK_WIDGET(AdvOptionTaruConnectionCheck),
+                     FALSE,FALSE,0);
+  HandlerIDOfAdvOptionTaruConnectionCheck =
+    g_signal_connect(G_OBJECT(AdvOptionTaruConnectionCheck),"toggled",
+                     G_CALLBACK(_call_back_toggled_check),this);
+
+  AdvOptionSuruConnectionCheck =
+    gtk_check_button_new_with_label(_("SURU connection"));
+  gtk_box_pack_start(GTK_BOX(AdvOptionPane),
+                     GTK_WIDGET(AdvOptionSuruConnectionCheck),
+                     FALSE,FALSE,0);
+  HandlerIDOfAdvOptionSuruConnectionCheck =
+    g_signal_connect(G_OBJECT(AdvOptionSuruConnectionCheck),"toggled",
+                     G_CALLBACK(_call_back_toggled_check),this);
+
+  AdvOptionGokanCheck =
+    gtk_check_button_new_with_label(_("Can be Bunnsetsu"));
+  gtk_box_pack_start(GTK_BOX(AdvOptionPane),
+                     GTK_WIDGET(AdvOptionGokanCheck),
+                     FALSE,FALSE,0);
+  HandlerIDOfAdvOptionGokanCheck =
+    g_signal_connect(G_OBJECT(AdvOptionGokanCheck),"toggled",
+                     G_CALLBACK(_call_back_toggled_check),this);
+  
   /* creating box for buttons */
   GtkWidget *hbutton_box = gtk_hbutton_box_new();
   gtk_button_box_set_layout(GTK_BUTTON_BOX(hbutton_box),GTK_BUTTONBOX_SPREAD);
@@ -198,6 +256,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
                    G_CALLBACK(_call_back_remove),this);
   
   gtk_widget_show_all(window);
+  gtk_widget_hide(AdvOptionPane);
 
   refresh();
 
@@ -295,7 +354,72 @@ void KasumiMainWindow::ChangedListCursor(GtkWidget *widget){
     g_signal_handler_unblock(SoundEntry, HandlerIDOfSoundEntry);
     g_signal_handler_unblock(SpellingEntry, HandlerIDOfSpellingEntry);
     g_signal_handler_unblock(FrequencySpin, HandlerIDOfFrequencySpin);
-    g_signal_handler_unblock(WordClassCombo, HandlerIDOfWordClassCombo);  
+    g_signal_handler_unblock(WordClassCombo, HandlerIDOfWordClassCombo);
+
+    if(word->getWordClass() == NOUN){
+      gtk_widget_show(NounOptionPane);
+      gtk_widget_hide(AdvOptionPane);
+
+      g_signal_handler_block(NounOptionSaConnectionCheck,
+                               HandlerIDOfNounOptionSaConnectionCheck);
+      g_signal_handler_block(NounOptionNaConnectionCheck,
+                               HandlerIDOfNounOptionNaConnectionCheck);
+      g_signal_handler_block(NounOptionSuruConnectionCheck,
+                               HandlerIDOfNounOptionSuruConnectionCheck);
+      g_signal_handler_block(NounOptionGokanCheck,
+                               HandlerIDOfNounOptionGokanCheck);
+      g_signal_handler_block(NounOptionKakujoshiConnectionCheck,
+                               HandlerIDOfNounOptionKakujoshiConnectionCheck);
+      
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionSaConnectionCheck), word->getOption(string(EUCJP_SASETSUZOKU)));
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionNaConnectionCheck), word->getOption(string(EUCJP_NASETSUZOKU)));
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionSuruConnectionCheck), word->getOption(string(EUCJP_SURUSETSUZOKU)));
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionGokanCheck), word->getOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU)));
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionKakujoshiConnectionCheck), word->getOption(string(EUCJP_KAKUJOSHISETSUZOKU)));
+
+      g_signal_handler_unblock(NounOptionSaConnectionCheck,
+                               HandlerIDOfNounOptionSaConnectionCheck);
+      g_signal_handler_unblock(NounOptionNaConnectionCheck,
+                               HandlerIDOfNounOptionNaConnectionCheck);
+      g_signal_handler_unblock(NounOptionSuruConnectionCheck,
+                               HandlerIDOfNounOptionSuruConnectionCheck);
+      g_signal_handler_unblock(NounOptionGokanCheck,
+                               HandlerIDOfNounOptionGokanCheck);
+      g_signal_handler_unblock(NounOptionKakujoshiConnectionCheck,
+                               HandlerIDOfNounOptionKakujoshiConnectionCheck);
+    }else if(word->getWordClass() == ADV){
+      gtk_widget_hide(NounOptionPane);
+      gtk_widget_show(AdvOptionPane);
+
+      g_signal_handler_block(AdvOptionToConnectionCheck,
+                               HandlerIDOfAdvOptionToConnectionCheck);
+      g_signal_handler_block(AdvOptionTaruConnectionCheck,
+                               HandlerIDOfAdvOptionTaruConnectionCheck);
+      g_signal_handler_block(AdvOptionSuruConnectionCheck,
+                               HandlerIDOfAdvOptionSuruConnectionCheck);
+      g_signal_handler_block(AdvOptionGokanCheck,
+                               HandlerIDOfAdvOptionGokanCheck);
+      
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(AdvOptionToConnectionCheck), word->getOption(string(EUCJP_TOSETSUZOKU)));
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(AdvOptionTaruConnectionCheck), word->getOption(string(EUCJP_TARUSETSUZOKU)));
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(AdvOptionSuruConnectionCheck), word->getOption(string(EUCJP_SURUSETSUZOKU)));
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(AdvOptionGokanCheck), word->getOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU)));
+
+      g_signal_handler_unblock(AdvOptionToConnectionCheck,
+                               HandlerIDOfAdvOptionToConnectionCheck);
+      g_signal_handler_unblock(AdvOptionTaruConnectionCheck,
+                               HandlerIDOfAdvOptionTaruConnectionCheck);
+      g_signal_handler_unblock(AdvOptionSuruConnectionCheck,
+                               HandlerIDOfAdvOptionSuruConnectionCheck);
+      g_signal_handler_unblock(AdvOptionGokanCheck,
+                               HandlerIDOfAdvOptionGokanCheck);
+    }else{
+      gtk_widget_hide(NounOptionPane);
+      gtk_widget_hide(AdvOptionPane);
+    }
+  }else{
+    gtk_widget_hide(NounOptionPane);
+    gtk_widget_hide(AdvOptionPane);
   }
 }
 
@@ -347,6 +471,46 @@ void KasumiMainWindow::ChangedWordClassCombo(GtkWidget *widget){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
     word->setWordClass(getActiveWordClass());
+    modifiedWord(id);
+  }
+}
+
+void KasumiMainWindow::ChangedOption(GtkWidget *widget){
+  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeIter iter;
+  int id;
+  string OptionName = string("");
+  bool val;
+
+  if(widget == NounOptionSaConnectionCheck){
+    OptionName = string(EUCJP_SASETSUZOKU);
+  }else if(widget == NounOptionNaConnectionCheck){
+    OptionName = string(EUCJP_NASETSUZOKU);
+  }else if(widget == NounOptionSuruConnectionCheck){
+    OptionName = string(EUCJP_SURUSETSUZOKU);
+  }else if(widget == NounOptionGokanCheck){
+    OptionName = string(EUCJP_GOKANNNOMIDEBUNNSETSU);
+  }else if(widget == NounOptionKakujoshiConnectionCheck){
+    OptionName = string(EUCJP_KAKUJOSHISETSUZOKU);
+  }else if(widget == AdvOptionToConnectionCheck){
+    OptionName = string(EUCJP_TOSETSUZOKU);
+  }else if(widget == AdvOptionTaruConnectionCheck){
+    OptionName = string(EUCJP_TARUSETSUZOKU);
+  }else if(widget == AdvOptionSuruConnectionCheck){
+    OptionName = string(EUCJP_SURUSETSUZOKU);    
+  }else if(widget == AdvOptionGokanCheck){
+    OptionName = string(EUCJP_GOKANNNOMIDEBUNNSETSU);
+  }
+
+  if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+    val = true;
+  else
+    val = false;
+
+  if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter) && (OptionName != "")){
+    gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
+    KasumiWord *word = dictionary->getWordWithID(id);
+    word->setOption(OptionName, val);
     modifiedWord(id);
   }
 }
@@ -505,24 +669,5 @@ void _call_back_changed_word_class_combo(GtkWidget *widget, gpointer data){
 
 void _call_back_toggled_check(GtkWidget *widget, gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
-  if(widget == window->NounOptionSaConnectionCheck){
-    cout << "Sa" << endl;
-  }else if(widget == window->NounOptionNaConnectionCheck){
-    cout << "Na" << endl;
-  }else if(widget == window->NounOptionSuruConnectionCheck){
-    cout << "Suru" << endl;
-  }else if(widget == window->NounOptionGokanCheck){
-    cout << "Gokan" << endl;
-  }else if(widget == window->NounOptionKakujoshiConnectionCheck){
-    cout << "Kakujoshi" << endl;
-  }else if(widget == window->AdvOptionToConnectionCheck){
-
-  }else if(widget == window->AdvOptionTaruConnectionCheck){
-
-  }else if(widget == window->AdvOptionSuruConnectionCheck){
-
-  }else if(widget == window->AdvOptionGokanCheck){
-
-  } 
-  //  window->ChangedWordClassCombo(widget);
+  window->ChangedOption(widget);
 }

@@ -59,7 +59,17 @@ private:
   gulong HandlerIDOfSoundEntry;
   gulong HandlerIDOfSpellingEntry;
   gulong HandlerIDOfFrequencySpin;
-  gulong HandlerIDOfWordClassCombo;  
+  gulong HandlerIDOfWordClassCombo;
+  gulong HandlerIDOfNounOptionSaConnectionCheck;
+  gulong HandlerIDOfNounOptionNaConnectionCheck;
+  gulong HandlerIDOfNounOptionSuruConnectionCheck;
+  gulong HandlerIDOfNounOptionGokanCheck;
+  gulong HandlerIDOfNounOptionKakujoshiConnectionCheck;
+  gulong HandlerIDOfAdvOptionToConnectionCheck;
+  gulong HandlerIDOfAdvOptionTaruConnectionCheck;
+  gulong HandlerIDOfAdvOptionSuruConnectionCheck;
+  gulong HandlerIDOfAdvOptionGokanCheck;
+
   
   void destroy(GtkWidget *widget);
   gboolean delete_event(GtkWidget *widget, GdkEvent *event);
@@ -72,6 +82,7 @@ private:
   void ChangedSpellingEntry(GtkWidget *widget);
   void ChangedFrequencySpin(GtkWidget *widget);
   void ChangedWordClassCombo(GtkWidget *widget);
+  void ChangedOption(GtkWidget *widget);
 
   GtkTreeIter *findCorrespondingIter(int id);
   

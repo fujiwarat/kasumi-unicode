@@ -176,7 +176,7 @@ void KasumiWord::setOption(string aOptionName, bool aOption){
 
   p = Option.find(aOptionName);
 
-  if(p != Option.end()){
+  if(p == Option.end()){
     Option.insert(make_pair(aOptionName,aOption));    
   }else{
     Option[aOptionName] = aOption;

@@ -113,6 +113,11 @@ void KasumiDic::removeWord(int id) throw(KasumiOutOfBoundException){
 
 void KasumiDic::store() throw(KasumiDicStoreException){
   int i;
+  ofstream DicFile(DicFileName.c_str());
+  if(!DicFile.is_open()){
+    cout << "Cannot overwrite data to" << DicFileName << "." << endl;
+    return;
+  }
   string ret = string();
   
   for(i=0; i<WordList.size(); i++){
@@ -149,7 +154,16 @@ void KasumiDic::store() throw(KasumiDicStoreException){
     ret += "\n";
   }
 
-  cout << ret;
+  DicFile << ret;
+  DicFile.close();
+
+  string command = "cat " + DicFileName + "|anthy-dic-tool --load";
+  if(system(command.c_str()) == 0){
+    cout << "correctly registered dictionary" << endl;
+  }else{
+    cout << "cannot register dicitionary for some reason" << endl;
+    exit(1);
+  }
 }
 
 void KasumiDic::registerEventListener(KasumiDicEventListener *listener){
