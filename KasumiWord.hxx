@@ -12,6 +12,10 @@
 
 using namespace std;
 
+#define FREQ_UBOUND 1000
+#define FREQ_LBOUND 1
+#define FREQ_DEFAULT 500
+
 enum _WordClassEnum {NOUN, ADV, PERSON, PLACE, ADJ};
 typedef _WordClassEnum WordClassType;
 

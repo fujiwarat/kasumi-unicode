@@ -24,6 +24,7 @@ KasumiDic::KasumiDic(const string aDicFileName) throw(KasumiDicExaminationExcept
 
 void KasumiDic::load() throw(KasumiDicExaminationException){
   int line = 0;
+  int freq;
   string DicContents = string();
   KasumiString Buffer;
 
@@ -50,7 +51,14 @@ void KasumiDic::load() throw(KasumiDicExaminationException){
       KasumiWord *newWord = new KasumiWord();
 
       newWord->setSound(Buffer.getSound());
-      newWord->setFrequency(Buffer.getFrequency());
+      freq = Buffer.getFrequency();
+      if(freq < FREQ_LBOUND){
+        newWord->setFrequency(FREQ_LBOUND);
+      }else if(freq > FREQ_UBOUND){
+        newWord->setFrequency(FREQ_UBOUND);
+      }else{
+        newWord->setFrequency(freq);
+      }
       newWord->setSpelling(Buffer.getSpelling());
 
       while(getline(DicFile, Buffer, '\n')){

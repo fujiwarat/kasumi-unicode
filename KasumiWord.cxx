@@ -39,7 +39,7 @@ string KasumiWord::convertEUCJPToUTF8(string aEUCJP){
 KasumiWord::KasumiWord(){
   Sound = string();
   Sound_UTF8 = string();
-  Frequency = 0;
+  Frequency = FREQ_DEFAULT;
   Spelling = string();
   Spelling_UTF8 = string();
   WordClass = NOUN;

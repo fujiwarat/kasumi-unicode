@@ -2,6 +2,7 @@
 #include <iostream>
 #include "KasumiAddWindow.hxx"
 #include "KasumiWord.hxx"
+#include "KasumiDic.hxx"
 #include "KasumiString.hxx"
 #include "intl.h"
 
@@ -49,7 +50,12 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary){
   gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
-  GtkObject *adjustment = gtk_adjustment_new(1,1,32767,1,100,0);
+  GtkObject *adjustment = gtk_adjustment_new(FREQ_DEFAULT,
+                                             FREQ_LBOUND,
+                                             FREQ_UBOUND,
+                                             1,
+                                             FREQ_LBOUND / 100
+                                             ,0);
   FrequencySpin = gtk_spin_button_new(GTK_ADJUSTMENT(adjustment),1.0,0);
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(FrequencySpin),FALSE,FALSE,0);
 
@@ -226,7 +232,7 @@ void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
 
   gtk_entry_set_text(GTK_ENTRY(SoundEntry), "");
   gtk_entry_set_text(GTK_ENTRY(SpellingEntry), "");
-  gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),0);
+  gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),FREQ_DEFAULT);
   gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),0);
 }
 
