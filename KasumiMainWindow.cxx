@@ -2,6 +2,7 @@
 #include <iostream>
 #include "KasumiMainWindow.hxx"
 #include "KasumiException.hxx"
+#include "KasumiString.hxx"
 #include "intl.h"
 
 #ifdef HAVE_CONFIG_H
@@ -30,11 +31,11 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hbox),TRUE,TRUE,0);
 
   /* creating scrolled window for wordlist */
-  GtkWidget *scroll = gtk_scrolled_window_new(NULL,NULL);
-  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
+  ScrolledWindow = gtk_scrolled_window_new(NULL,NULL);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(ScrolledWindow),
                                  GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
-  gtk_widget_set_size_request(GTK_WIDGET(scroll),300,300);
-  gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(scroll),TRUE,TRUE,0);
+  gtk_widget_set_size_request(GTK_WIDGET(ScrolledWindow),300,300);
+  gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(ScrolledWindow),TRUE,TRUE,0);
 
 
   /* creating tree(list) view for words */
@@ -74,7 +75,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   /* destroy model automatically with view */  
   g_object_unref(GTK_TREE_MODEL(WordList));
 
-  gtk_container_add(GTK_CONTAINER(scroll),GTK_WIDGET(WordListView));  
+  gtk_container_add(GTK_CONTAINER(ScrolledWindow),GTK_WIDGET(WordListView));  
 
   /* creating vbox for text entries */
   GtkWidget *entry_vbox = gtk_vbox_new(FALSE,0);
@@ -130,6 +131,41 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   HandlerIDOfWordClassCombo = g_signal_connect(G_OBJECT(WordClassCombo), "changed",
                    G_CALLBACK(_call_back_changed_word_class_combo), this);
   gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(WordClassCombo),FALSE,FALSE,0);
+
+  /* creating noun option pane */
+  NounOptionPane = gtk_vbox_new(FALSE,0);
+  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(NounOptionPane),
+                     FALSE,FALSE,0);
+
+  NounOptionNaConnectionCheck = gtk_check_button_new_with_label(_("NA connection"));
+  gtk_box_pack_start(GTK_BOX(NounOptionPane),GTK_WIDGET(NounOptionNaConnectionCheck),
+                     FALSE,FALSE,0);
+  g_signal_connect(G_OBJECT(NounOptionNaConnectionCheck),"toggled",
+                   G_CALLBACK(_call_back_toggled_check),this);
+
+  NounOptionSaConnectionCheck = gtk_check_button_new_with_label(_("SA connection"));
+  gtk_box_pack_start(GTK_BOX(NounOptionPane),GTK_WIDGET(NounOptionSaConnectionCheck),
+                     FALSE,FALSE,0);
+  g_signal_connect(G_OBJECT(NounOptionSaConnectionCheck),"toggled",
+                   G_CALLBACK(_call_back_toggled_check),this);
+
+  NounOptionSuruConnectionCheck = gtk_check_button_new_with_label(_("SURU connection"));
+  gtk_box_pack_start(GTK_BOX(NounOptionPane),GTK_WIDGET(NounOptionSuruConnectionCheck),
+                     FALSE,FALSE,0);
+  g_signal_connect(G_OBJECT(NounOptionSuruConnectionCheck),"toggled",
+                   G_CALLBACK(_call_back_toggled_check),this);
+
+  NounOptionGokanCheck = gtk_check_button_new_with_label(_("Can be Bunnsetsu"));
+  gtk_box_pack_start(GTK_BOX(NounOptionPane),GTK_WIDGET(NounOptionGokanCheck),
+                     FALSE,FALSE,0);
+  g_signal_connect(G_OBJECT(NounOptionGokanCheck),"toggled",
+                   G_CALLBACK(_call_back_toggled_check),this);
+
+  NounOptionKakujoshiConnectionCheck = gtk_check_button_new_with_label(_("KAKUJOSHI connection"));
+  gtk_box_pack_start(GTK_BOX(NounOptionPane),
+                     GTK_WIDGET(NounOptionKakujoshiConnectionCheck),FALSE,FALSE,0);
+  g_signal_connect(G_OBJECT(NounOptionKakujoshiConnectionCheck),"toggled",
+                   G_CALLBACK(_call_back_toggled_check),this);
 
   /* creating box for buttons */
   GtkWidget *hbutton_box = gtk_hbutton_box_new();
@@ -218,10 +254,10 @@ void KasumiMainWindow::ClickedStoreButton(GtkWidget *widget){
 
 void KasumiMainWindow::ClickedAddButton(GtkWidget *widget){
   KasumiWord *word = new KasumiWord();
-  word->setSpellingByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SpellingEntry))));
-  word->setSoundByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))));
-  word->setFrequency(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(FrequencySpin)));
-  word->setWordClass(getActiveWordClass());
+  word->setSpellingByUTF8(_("Spelling"));
+  word->setSoundByUTF8(_("Sound"));
+  word->setFrequency(1);
+  word->setWordClass(NOUN);
 
   dictionary->appendWord(word);
 }
@@ -320,7 +356,23 @@ void KasumiMainWindow::removedWord(int id){
 }
 
 void KasumiMainWindow::appendedWord(int id){
-  refresh();
+  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeIter iter;
+  KasumiWord *word = dictionary->getWordWithID(id);
+  
+  gtk_list_store_append(WordList,&iter);
+  
+  gtk_list_store_set(WordList, &iter,
+                     COL_ID, id,
+                     COL_WORD, word->getSpellingByUTF8().c_str(),
+                     COL_YOMI, word->getSoundByUTF8().c_str(),
+                     COL_FREQ, word->getFrequency(),
+                     COL_PART, word->getStringOfWordClassByUTF8().c_str(),
+                     -1);
+  gtk_tree_selection_select_iter(WordListSelection,&iter);
+
+  GtkAdjustment *adjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(ScrolledWindow));
+  gtk_adjustment_set_value(adjustment, adjustment->upper);
 }
 
 void KasumiMainWindow::modifiedWord(int id){
@@ -449,4 +501,28 @@ void _call_back_changed_frequency_spin(GtkWidget *widget, gpointer data){
 void _call_back_changed_word_class_combo(GtkWidget *widget, gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ChangedWordClassCombo(widget);
+}
+
+void _call_back_toggled_check(GtkWidget *widget, gpointer data){
+  KasumiMainWindow *window = (KasumiMainWindow *)data;
+  if(widget == window->NounOptionSaConnectionCheck){
+    cout << "Sa" << endl;
+  }else if(widget == window->NounOptionNaConnectionCheck){
+    cout << "Na" << endl;
+  }else if(widget == window->NounOptionSuruConnectionCheck){
+    cout << "Suru" << endl;
+  }else if(widget == window->NounOptionGokanCheck){
+    cout << "Gokan" << endl;
+  }else if(widget == window->NounOptionKakujoshiConnectionCheck){
+    cout << "Kakujoshi" << endl;
+  }else if(widget == window->AdvOptionToConnectionCheck){
+
+  }else if(widget == window->AdvOptionTaruConnectionCheck){
+
+  }else if(widget == window->AdvOptionSuruConnectionCheck){
+
+  }else if(widget == window->AdvOptionGokanCheck){
+
+  } 
+  //  window->ChangedWordClassCombo(widget);
 }

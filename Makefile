@@ -89,12 +89,12 @@ POSUB = po
 RANLIB = ranlib
 USE_INCLUDED_LIBINTL = no
 USE_NLS = yes
-VERSION = 0.4.0
+VERSION = 0.5
 localedir = ${prefix}/share/locale
 
 bin_PROGRAMS = kasumi
 
-kasumi_SOURCES = main.cxx                  KasumiDic.cxx KasumiDic.hxx                  KasumiWord.cxx KasumiWord.hxx 				 KasumiString.cxx KasumiString.hxx 				 KasumiException.hxx 				 KasumiMainWindow.cxx KasumiMainWindow.hxx 				 KasumiDicEventListener.hxx
+kasumi_SOURCES = main.cxx intl.h                  KasumiDic.cxx KasumiDic.hxx                  KasumiWord.cxx KasumiWord.hxx 				 KasumiString.cxx KasumiString.hxx 				 KasumiException.hxx 				 KasumiMainWindow.cxx KasumiMainWindow.hxx 				 KasumiDicEventListener.hxx
 
 
 AM_CPPFLAGS = -DLOCALEDIR='"$(localedir)"'

@@ -30,6 +30,7 @@ class KasumiMainWindow : public KasumiDicEventListener{
   friend void _call_back_changed_spelling_entry(GtkWidget *widget, gpointer data);
   friend void _call_back_changed_frequency_spin(GtkWidget *widget, gpointer data);
   friend void _call_back_changed_word_class_combo(GtkWidget *widget, gpointer data);
+  friend void _call_back_toggled_check(GtkWidget *widget, gpointer data);
 private:
   KasumiDic *dictionary;
   GtkWidget *window;
@@ -38,6 +39,21 @@ private:
   GtkWidget *FrequencySpin;
   GtkWidget *WordClassCombo;
   GtkWidget *WordListView;
+  GtkWidget *ScrolledWindow;
+
+  GtkWidget *NounOptionPane;
+  GtkWidget *NounOptionSaConnectionCheck;
+  GtkWidget *NounOptionNaConnectionCheck;
+  GtkWidget *NounOptionSuruConnectionCheck;
+  GtkWidget *NounOptionGokanCheck;
+  GtkWidget *NounOptionKakujoshiConnectionCheck;
+
+  GtkWidget *AdvOptionPane;
+  GtkWidget *AdvOptionToConnectionCheck;
+  GtkWidget *AdvOptionTaruConnectionCheck;
+  GtkWidget *AdvOptionSuruConnectionCheck;
+  GtkWidget *AdvOptionGokanCheck;
+  
   GtkListStore *WordList;
   GtkTreeSelection *WordListSelection;
   gulong HandlerIDOfSoundEntry;

@@ -10,7 +10,7 @@
 # General Public License and is *not* in the public domain.
 
 PACKAGE = kasumi
-VERSION = 0.4.0
+VERSION = 0.5
 
 SHELL = /bin/sh
 

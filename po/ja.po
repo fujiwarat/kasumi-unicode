@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-25 20:59+0900\n"
+"POT-Creation-Date: 2004-11-03 21:27+0900\n"
 "PO-Revision-Date: 2004-10-18 08:30+0900\n"
 "Last-Translator: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
 "Language-Team: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
@@ -15,58 +15,78 @@ msgstr ""
 "Content-Type: text/plain; charset=EUC-JP\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: KasumiMainWindow.cxx:16
+#: KasumiMainWindow.cxx:18
 msgid "Kasumi"
 msgstr "霞"
 
-#: KasumiMainWindow.cxx:43 KasumiMainWindow.cxx:78
+#: KasumiMainWindow.cxx:45 KasumiMainWindow.cxx:85 KasumiMainWindow.cxx:257
 msgid "Spelling"
 msgstr "単語"
 
-#: KasumiMainWindow.cxx:49 KasumiMainWindow.cxx:87
+#: KasumiMainWindow.cxx:51 KasumiMainWindow.cxx:96 KasumiMainWindow.cxx:258
 msgid "Sound"
 msgstr "読み"
 
-#: KasumiMainWindow.cxx:55 KasumiMainWindow.cxx:96
+#: KasumiMainWindow.cxx:57 KasumiMainWindow.cxx:107
 msgid "Frequency"
 msgstr "頻度"
 
-#: KasumiMainWindow.cxx:61 KasumiMainWindow.cxx:106
+#: KasumiMainWindow.cxx:63 KasumiMainWindow.cxx:119
 msgid "Word Class"
 msgstr "品詞"
 
-#: KasumiMainWindow.cxx:112
+#: KasumiMainWindow.cxx:125
 msgid "Noun"
 msgstr "名詞"
 
-#: KasumiMainWindow.cxx:113
+#: KasumiMainWindow.cxx:126
 msgid "Adverb"
 msgstr "副詞"
 
-#: KasumiMainWindow.cxx:114
+#: KasumiMainWindow.cxx:127
 msgid "Person's name"
 msgstr "人名"
 
-#: KasumiMainWindow.cxx:115
+#: KasumiMainWindow.cxx:128
 msgid "Place-name"
 msgstr "地名"
 
-#: KasumiMainWindow.cxx:116
+#: KasumiMainWindow.cxx:129
 msgid "Adjective"
 msgstr "形容詞"
 
-#: KasumiMainWindow.cxx:127
+#: KasumiMainWindow.cxx:140
+msgid "NA connection"
+msgstr "な接続"
+
+#: KasumiMainWindow.cxx:146
+msgid "SA connection"
+msgstr "さ接続"
+
+#: KasumiMainWindow.cxx:152
+msgid "SURU connection"
+msgstr "する接続"
+
+#: KasumiMainWindow.cxx:158
+msgid "Can be Bunnsetsu"
+msgstr "語幹のみで文節"
+
+#: KasumiMainWindow.cxx:164
+msgid "KAKUJOSHI connection"
+msgstr "格助詞接続"
+
+#: KasumiMainWindow.cxx:177
 msgid "Quit"
 msgstr "終了"
 
-#: KasumiMainWindow.cxx:133
+#: KasumiMainWindow.cxx:183
 msgid "Store"
 msgstr "保存"
 
-#: KasumiMainWindow.cxx:139
+#: KasumiMainWindow.cxx:189
 msgid "Add"
 msgstr "追加"
 
-#: KasumiMainWindow.cxx:145
+#: KasumiMainWindow.cxx:195
 msgid "Remove"
 msgstr "削除"

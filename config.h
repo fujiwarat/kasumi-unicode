@@ -144,7 +144,7 @@
 #define PACKAGE "kasumi"
 
 /* Version number of package */
-#define VERSION "0.4.0"
+#define VERSION "0.5"
 
 /* Define if <inttypes.h> exists, doesn't clash with <sys/types.h>,
        and declares uintmax_t.  */
