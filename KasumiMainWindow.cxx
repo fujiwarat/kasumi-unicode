@@ -239,6 +239,12 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   gtk_box_pack_start(GTK_BOX(search_hbox),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_find_next_by_sound),this);
+
+  button = gtk_button_new();
+  gtk_button_set_label(GTK_BUTTON(button),_("Find Next By Spelling"));
+  gtk_box_pack_start(GTK_BOX(search_hbox),GTK_WIDGET(button),FALSE,FALSE,0);
+  g_signal_connect(G_OBJECT(button),"clicked",
+                   G_CALLBACK(_call_back_find_next_by_spelling),this);
   
   /* creating box for buttons */
   GtkWidget *hbutton_box = gtk_hbutton_box_new();
@@ -395,6 +401,23 @@ void KasumiMainWindow::ChangedListCursor(GtkWidget *widget){
     g_signal_handler_unblock(WordClassCombo, HandlerIDOfWordClassCombo);
 
     synchronizeOptionCheckButton(word);
+  }else{
+    g_signal_handler_block(SoundEntry, HandlerIDOfSoundEntry);
+    g_signal_handler_block(SpellingEntry, HandlerIDOfSpellingEntry);
+    g_signal_handler_block(FrequencySpin, HandlerIDOfFrequencySpin);
+    g_signal_handler_block(WordClassCombo, HandlerIDOfWordClassCombo);  
+    
+    gtk_entry_set_text(GTK_ENTRY(SpellingEntry),"");
+    gtk_entry_set_text(GTK_ENTRY(SoundEntry),"");
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),1);
+    setActiveWordClass(NOUN);
+    
+    g_signal_handler_unblock(SoundEntry, HandlerIDOfSoundEntry);
+    g_signal_handler_unblock(SpellingEntry, HandlerIDOfSpellingEntry);
+    g_signal_handler_unblock(FrequencySpin, HandlerIDOfFrequencySpin);
+    g_signal_handler_unblock(WordClassCombo, HandlerIDOfWordClassCombo);
+    
+    synchronizeOptionCheckButton(NULL);
   }
 
   flipOptionPane();
@@ -496,26 +519,109 @@ void KasumiMainWindow::ChangedOption(GtkWidget *widget){
 }
 
 void KasumiMainWindow::FindNextBySound(GtkWidget *widget){
+  FindNext(SOUND);
+}
+
+void KasumiMainWindow::FindNextBySpelling(GtkWidget *widget){
+  FindNext(SPELLING);
+}
+
+void KasumiMainWindow::FindNext(SearchBy by){
   GtkTreeModel *model = GTK_TREE_MODEL(WordList);
   GtkTreeIter iter;
   KasumiWord *word;
+  bool fromFirst = false;
+  GtkTreeIter StartIter;
   int id;
+  string searchString = string(gtk_entry_get_text(GTK_ENTRY(SearchEntry)));
+  string comparedString;
+  GtkWidget *dialog;
 
   if(!gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
-    gtk_tree_model_get_iter_first(model, &iter);
+    if(!gtk_tree_model_get_iter_first(model, &iter)){
+      // If no words, do nothing.
+      return;
+    }
+    fromFirst = true;
   }
+  StartIter = iter;
   
+  // Search from next word if a certain word is selected.
+  // If the selected is the last word, seek from the first word.
+  if(!fromFirst && !gtk_tree_model_iter_next(model,&iter)){
+    // If no words, do nothing;    
+    if(!gtk_tree_model_get_iter_first(model, &iter))
+      return;
+
+    fromFirst = true;
+  }
+
+  // liner search!
   do{
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     word = dictionary->getWordWithID(id);
-    
-    if(word->getSoundByUTF8() == string(gtk_entry_get_text(GTK_ENTRY(SearchEntry)))){
+
+    if(by == SPELLING){
+      comparedString = word->getSpellingByUTF8();
+    }else{
+      comparedString = word->getSoundByUTF8();
+    }
+
+    if(comparedString == searchString){
+      // if found, select that word and don't search any more
       gtk_tree_selection_select_iter(WordListSelection,&iter);
       return;
     }
   }while(gtk_tree_model_iter_next(model, &iter));
-  cout << "Cannot find." << endl;
+
   
+  // Unless searched from the first word, seek from the head again.
+  if(!fromFirst){
+    dialog = gtk_message_dialog_new (GTK_WINDOW(window),
+                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_MESSAGE_QUESTION,
+                                     GTK_BUTTONS_YES_NO,
+                                     _("Cannot find a specific word. Search from first?"));
+    if(gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES){
+      gtk_widget_destroy (dialog);
+    
+      if(!gtk_tree_model_get_iter_first(model, &iter))
+        return;
+
+      // liner search to selected word!
+      do{
+        gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
+        word = dictionary->getWordWithID(id);
+
+        if(by == SPELLING){
+          comparedString = word->getSpellingByUTF8();
+        }else{
+          comparedString = word->getSoundByUTF8();
+        }
+
+        if(comparedString == searchString){
+          gtk_tree_selection_select_iter(WordListSelection,&iter);
+          return;
+        }
+      }while(gtk_tree_model_iter_next(model, &iter) &&
+             (StartIter.user_data != iter.user_data ||
+              StartIter.user_data2 != iter.user_data2 ||
+              StartIter.user_data3 != iter.user_data3));
+    }else{
+      gtk_widget_destroy(dialog);
+      gtk_tree_selection_unselect_all(WordListSelection);      
+      return;
+    }
+  }
+
+  dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+                                  GTK_DIALOG_DESTROY_WITH_PARENT,
+                                  GTK_MESSAGE_WARNING,
+                                  GTK_BUTTONS_OK,
+                                  _("Cannot find a specific word."));
+  gtk_dialog_run(GTK_DIALOG (dialog));
+  gtk_widget_destroy(dialog);
+  gtk_tree_selection_unselect_all(WordListSelection);
 }
 
 void KasumiMainWindow::removedWord(int id){
@@ -617,6 +723,37 @@ WordClassType KasumiMainWindow::getActiveWordClass(){
 }
 
 void KasumiMainWindow::synchronizeOptionCheckButton(KasumiWord *word){
+  if(word == NULL){
+    g_signal_handler_block(NounOptionSaConnectionCheck,
+                           HandlerIDOfNounOptionSaConnectionCheck);
+    g_signal_handler_block(NounOptionNaConnectionCheck,
+                           HandlerIDOfNounOptionNaConnectionCheck);
+    g_signal_handler_block(NounOptionSuruConnectionCheck,
+                           HandlerIDOfNounOptionSuruConnectionCheck);
+    g_signal_handler_block(NounOptionGokanCheck,
+                           HandlerIDOfNounOptionGokanCheck);
+    g_signal_handler_block(NounOptionKakujoshiConnectionCheck,
+                           HandlerIDOfNounOptionKakujoshiConnectionCheck);
+      
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionSaConnectionCheck), false);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionNaConnectionCheck), false);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionSuruConnectionCheck), false);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionGokanCheck), false);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionKakujoshiConnectionCheck), false);
+    
+    g_signal_handler_unblock(NounOptionSaConnectionCheck,
+                             HandlerIDOfNounOptionSaConnectionCheck);
+    g_signal_handler_unblock(NounOptionNaConnectionCheck,
+                             HandlerIDOfNounOptionNaConnectionCheck);
+    g_signal_handler_unblock(NounOptionSuruConnectionCheck,
+                             HandlerIDOfNounOptionSuruConnectionCheck);
+    g_signal_handler_unblock(NounOptionGokanCheck,
+                             HandlerIDOfNounOptionGokanCheck);
+    g_signal_handler_unblock(NounOptionKakujoshiConnectionCheck,
+                             HandlerIDOfNounOptionKakujoshiConnectionCheck);
+    return;
+  }
+  
   if(word->getWordClass() == NOUN){
     g_signal_handler_block(NounOptionSaConnectionCheck,
                            HandlerIDOfNounOptionSaConnectionCheck);
@@ -747,4 +884,9 @@ void _call_back_toggled_check(GtkWidget *widget, gpointer data){
 void _call_back_find_next_by_sound(GtkWidget *widget, gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->FindNextBySound(widget);
+}
+
+void _call_back_find_next_by_spelling(GtkWidget *widget, gpointer data){
+  KasumiMainWindow *window = (KasumiMainWindow *)data;
+  window->FindNextBySpelling(widget);
 }

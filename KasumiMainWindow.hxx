@@ -18,6 +18,13 @@ enum column_name{
   NUM_COLS
 };
 
+enum _SearchByEnum{
+  SOUND = 0,
+  SPELLING
+};
+
+typedef _SearchByEnum SearchBy;
+
 class KasumiMainWindow : public KasumiDicEventListener{
   friend void _call_back_destroy(GtkWidget *widget, gpointer data);
   friend gboolean _call_back_delete_event(GtkWidget *widget, GdkEvent *event, gpointer data);
@@ -31,7 +38,8 @@ class KasumiMainWindow : public KasumiDicEventListener{
   friend void _call_back_changed_frequency_spin(GtkWidget *widget, gpointer data);
   friend void _call_back_changed_word_class_combo(GtkWidget *widget, gpointer data);
   friend void _call_back_toggled_check(GtkWidget *widget, gpointer data);
-  friend void _call_back_find_next_by_sound(GtkWidget *widget, gpointer data);  
+  friend void _call_back_find_next_by_sound(GtkWidget *widget, gpointer data);
+  friend void _call_back_find_next_by_spelling(GtkWidget *widget, gpointer data);
 private:
   KasumiDic *dictionary;
   GtkWidget *window;
@@ -87,7 +95,11 @@ private:
   void ChangedFrequencySpin(GtkWidget *widget);
   void ChangedWordClassCombo(GtkWidget *widget);
   void ChangedOption(GtkWidget *widget);
-  void FindNextBySound(GtkWidget *widget);
+
+  void KasumiMainWindow::FindNextBySound(GtkWidget *widget);
+  void KasumiMainWindow::FindNextBySpelling(GtkWidget *widget);
+  void KasumiMainWindow::FindNext(SearchBy by);
+
 
   GtkTreeIter *findCorrespondingIter(int id);
 

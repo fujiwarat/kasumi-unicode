@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-11 01:48+0900\n"
+"POT-Creation-Date: 2004-11-11 10:53+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,26 +90,38 @@ msgstr ""
 msgid "Find Next By Sound"
 msgstr ""
 
-#: KasumiMainWindow.cxx:250 KasumiAddWindow.cxx:143
+#: KasumiMainWindow.cxx:244
+msgid "Find Next By Spelling"
+msgstr ""
+
+#: KasumiMainWindow.cxx:256 KasumiAddWindow.cxx:143
 msgid "Quit"
 msgstr ""
 
-#: KasumiMainWindow.cxx:256
+#: KasumiMainWindow.cxx:262
 msgid "Store"
 msgstr ""
 
-#: KasumiMainWindow.cxx:262 KasumiAddWindow.cxx:149
+#: KasumiMainWindow.cxx:268 KasumiAddWindow.cxx:149
 msgid "Add"
 msgstr ""
 
-#: KasumiMainWindow.cxx:268
+#: KasumiMainWindow.cxx:274
 msgid "Remove"
 msgstr ""
 
-#: KasumiMainWindow.cxx:320
+#: KasumiMainWindow.cxx:326
 msgid ""
 "Your dictionary went through several changes. Do you save these changes "
 "before Kasumi quits?"
+msgstr ""
+
+#: KasumiMainWindow.cxx:584
+msgid "Cannot find a specific word. Search from first?"
+msgstr ""
+
+#: KasumiMainWindow.cxx:621
+msgid "Cannot find a specific word."
 msgstr ""
 
 #: KasumiAddWindow.cxx:180

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-11 01:48+0900\n"
+"POT-Creation-Date: 2004-11-11 10:53+0900\n"
 "PO-Revision-Date: 2004-10-18 08:30+0900\n"
 "Last-Translator: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
 "Language-Team: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
@@ -86,31 +86,42 @@ msgid "TARU connection"
 msgstr "たる接続"
 
 #: KasumiMainWindow.cxx:238
-#, fuzzy
 msgid "Find Next By Sound"
 msgstr "次を読みで検索"
 
-#: KasumiMainWindow.cxx:250 KasumiAddWindow.cxx:143
+#: KasumiMainWindow.cxx:244
+msgid "Find Next By Spelling"
+msgstr "次を読みで検索"
+
+#: KasumiMainWindow.cxx:256 KasumiAddWindow.cxx:143
 msgid "Quit"
 msgstr "終了"
 
-#: KasumiMainWindow.cxx:256
+#: KasumiMainWindow.cxx:262
 msgid "Store"
 msgstr "保存"
 
-#: KasumiMainWindow.cxx:262 KasumiAddWindow.cxx:149
+#: KasumiMainWindow.cxx:268 KasumiAddWindow.cxx:149
 msgid "Add"
 msgstr "追加"
 
-#: KasumiMainWindow.cxx:268
+#: KasumiMainWindow.cxx:274
 msgid "Remove"
 msgstr "削除"
 
-#: KasumiMainWindow.cxx:320
+#: KasumiMainWindow.cxx:326
 msgid ""
 "Your dictionary went through several changes. Do you save these changes "
 "before Kasumi quits?"
 msgstr "辞書に変更が加えられました。霞を終了する前に保存しますか？"
+
+#: KasumiMainWindow.cxx:584
+msgid "Cannot find a specific word. Search from first?"
+msgstr "検索しても見つかりませんでした。最初から検索しますか？"
+
+#: KasumiMainWindow.cxx:621
+msgid "Cannot find a specific word."
+msgstr "検索しても見つかりませんでした。"
 
 #: KasumiAddWindow.cxx:180
 msgid "Invlid entry for Sound."
