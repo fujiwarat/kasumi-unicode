@@ -1,3 +1,8 @@
+2005-03-02  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - launch correctly unless ~/.anthy directory exists
+
 2005-03-01  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* fix

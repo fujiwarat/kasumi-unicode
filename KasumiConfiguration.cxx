@@ -65,7 +65,7 @@ void KasumiConfiguration::loadDefaultProperties()
   }
   
   config[string("StartupMode")] = string("MANAGE");
-  config[string("DictionaryPath")] = string(home) + "/.anthy/private-dic.src.tmp";
+  config[string("DictionaryPath")] = string(home) + "/.private-dic.src.tmp";
   config[string("DefaultFrequency")] = string("500");
   config[string("MaxFrequency")] = string("1000");
   config[string("MinFrequency")] = string("1");
