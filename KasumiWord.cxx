@@ -98,7 +98,8 @@ WordClassType KasumiWord::getWordClass(){
   return WordClass;
 }
 
-void KasumiWord::setWordClassWithName(string aWordClass) throw(KasumiInvalidWordClassNameException){
+void KasumiWord::setWordClassWithName(string aWordClass)
+  throw(KasumiInvalidWordClassNameException){
   if(aWordClass == EUCJP_MEISHI){
     WordClass = NOUN;
   }else if(aWordClass == EUCJP_FUKUSHI){
@@ -115,7 +116,8 @@ void KasumiWord::setWordClassWithName(string aWordClass) throw(KasumiInvalidWord
   }
 }
 
-void KasumiWord::setWordClassWithNameByUTF8(string aWordClass) throw(KasumiInvalidWordClassNameException){
+void KasumiWord::setWordClassWithNameByUTF8(string aWordClass)
+  throw(KasumiInvalidWordClassNameException){
   try{
     string euc = convertUTF8ToEUCJP(aWordClass);
     if(euc == EUCJP_MEISHI){
