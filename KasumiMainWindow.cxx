@@ -25,16 +25,16 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   g_signal_connect(G_OBJECT(window), "destroy",
                    G_CALLBACK(_call_back_destroy), this);
 
-  /* creating top vbox */
+  // creating top vbox
   GtkWidget *vbox = gtk_vbox_new(FALSE,8);
   gtk_container_set_border_width(GTK_CONTAINER(vbox),8);
   gtk_container_add(GTK_CONTAINER(window),vbox);
 
-  /* creating hbox for wordlist and text entries */
+  // creating hbox for text entries, spin button and so on
   GtkWidget *hbox = gtk_hbox_new(FALSE,8);
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hbox),TRUE,TRUE,0);
 
-  /* creating scrolled window for wordlist */
+  // creating scrolled window for list view
   ScrolledWindow = gtk_scrolled_window_new(NULL,NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(ScrolledWindow),
                                  GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
@@ -42,7 +42,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(ScrolledWindow),TRUE,TRUE,0);
 
 
-  /* creating tree(list) view for words */
+  // creating tree(list) view for words
   GtkWidget *WordListView = gtk_tree_view_new();
   GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
   gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(WordListView),-1,
@@ -69,34 +69,42 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
                                               NULL);
   WordList = gtk_list_store_new(NUM_COLS,G_TYPE_UINT,G_TYPE_STRING,
                                 G_TYPE_STRING,G_TYPE_UINT,G_TYPE_STRING);
-  gtk_tree_view_set_model(GTK_TREE_VIEW(WordListView),GTK_TREE_MODEL(WordList));
+  gtk_tree_view_set_model(GTK_TREE_VIEW(WordListView),
+                          GTK_TREE_MODEL(WordList));
 
   WordListSelection = gtk_tree_view_get_selection(GTK_TREE_VIEW(WordListView));
   gtk_tree_selection_set_mode(WordListSelection, GTK_SELECTION_SINGLE);
   g_signal_connect(G_OBJECT(WordListSelection), "changed",
                    G_CALLBACK(_call_back_changed_list_cursor), this);
 
-  /* destroy model automatically with view */  
+  // destroy model automatically with view
   g_object_unref(GTK_TREE_MODEL(WordList));
 
   gtk_container_add(GTK_CONTAINER(ScrolledWindow),GTK_WIDGET(WordListView));  
 
-  /* creating vbox for text entries */
+  // creating vbox for text entries
   GtkWidget *entry_vbox = gtk_vbox_new(FALSE,0);
   gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(entry_vbox),FALSE,FALSE,0);
 
-  /* creating text entries for "Word" */
+  // creating text entries for "Spelling"
   GtkWidget *label = gtk_label_new(_("Spelling"));
   GtkWidget *alignment = gtk_alignment_new(0,0.5,0,0);
   gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
   gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
   SpellingEntry = gtk_entry_new();
-  HandlerIDOfSpellingEntry = g_signal_connect(G_OBJECT(SpellingEntry), "changed",
-                   G_CALLBACK(_call_back_changed_spelling_entry), this);
-  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(SpellingEntry),FALSE,FALSE,0);
+  HandlerIDOfSpellingEntry =
+    g_signal_connect(G_OBJECT(SpellingEntry),
+                     "changed",
+                     G_CALLBACK(_call_back_changed_spelling_entry),
+                     this);
+  gtk_box_pack_start(GTK_BOX(entry_vbox),
+                     GTK_WIDGET(SpellingEntry),
+                     FALSE,
+                     FALSE,
+                     0);
 
-  /* creating text entries for "Yomi" */
+  // creating text entries for "Sound"
   label = gtk_label_new(_("Sound"));
   alignment = gtk_alignment_new(0,0.5,0,0);
   gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
@@ -107,7 +115,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
                G_CALLBACK(_call_back_changed_sound_entry), this);
   gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(SoundEntry),FALSE,FALSE,0);
 
-  /* creating spin button for "Frequency" */
+  // creating spin button for "Frequency"
   label = gtk_label_new(_("Frequency"));
   alignment = gtk_alignment_new(0,0.5,0,0);
   gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
@@ -120,11 +128,18 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
                                              FREQ_LBOUND / 100
                                              ,0);
   FrequencySpin = gtk_spin_button_new(GTK_ADJUSTMENT(adjustment),1.0,0);
-  HandlerIDOfFrequencySpin = g_signal_connect(G_OBJECT(FrequencySpin), "value-changed",
-                   G_CALLBACK(_call_back_changed_frequency_spin), this);
-  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(FrequencySpin),FALSE,FALSE,0);
+  HandlerIDOfFrequencySpin =
+    g_signal_connect(G_OBJECT(FrequencySpin),
+                     "value-changed",
+                     G_CALLBACK(_call_back_changed_frequency_spin),
+                     this);
+  gtk_box_pack_start(GTK_BOX(entry_vbox),
+                     GTK_WIDGET(FrequencySpin),
+                     FALSE,
+                     FALSE,
+                     0);
 
-  /* creating combo box for "Word Class" */
+  // creating combo box for "Word Class"
   label = gtk_label_new(_("Word Class"));
   alignment = gtk_alignment_new(0,0.5,0,0);
   gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
@@ -143,7 +158,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   gtk_box_pack_start(GTK_BOX(entry_vbox),
                      GTK_WIDGET(WordClassCombo),FALSE,FALSE,0);
 
-  /* creating noun option pane */
+  // creating noun option pane
   NounOptionPane = gtk_vbox_new(FALSE,0);
   gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(NounOptionPane),
                      FALSE,FALSE,0);
@@ -193,7 +208,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
     g_signal_connect(G_OBJECT(NounOptionKakujoshiConnectionCheck),"toggled",
                      G_CALLBACK(_call_back_toggled_check),this);
 
-  /* creating adv option pane */
+  // creating adv option pane
   AdvOptionPane = gtk_vbox_new(FALSE,0);
   gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(AdvOptionPane),
                      FALSE,FALSE,0);
@@ -240,7 +255,11 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
 
   // creating Entry and Button for search function
   SearchEntry = gtk_entry_new();
-  gtk_box_pack_start(GTK_BOX(search_hbox),GTK_WIDGET(SearchEntry),FALSE,FALSE,0);
+  gtk_box_pack_start(GTK_BOX(search_hbox),
+                     GTK_WIDGET(SearchEntry),
+                     FALSE,
+                     FALSE,
+                     0);
 
   GtkWidget *button = gtk_button_new();
   gtk_button_set_label(GTK_BUTTON(button),_("Find Next By Sound"));
@@ -327,12 +346,12 @@ void KasumiMainWindow::refresh(){
       
         gtk_list_store_append(WordList,&iter);
       
-        gtk_list_store_set(WordList, &iter,
-                           COL_ID, i,
-                           COL_WORD, word->getSpellingByUTF8().c_str(),
-                           COL_YOMI, word->getSoundByUTF8().c_str(),
-                           COL_FREQ, word->getFrequency(),
-                           COL_PART, word->getStringOfWordClassByUTF8().c_str(),
+        gtk_list_store_set(WordList,&iter,
+                           COL_ID,i,
+                           COL_WORD,word->getSpellingByUTF8().c_str(),
+                           COL_YOMI,word->getSoundByUTF8().c_str(),
+                           COL_FREQ,word->getFrequency(),
+                           COL_PART,word->getStringOfWordClassByUTF8().c_str(),
                            -1);
       }
     }catch(KasumiOutOfBoundException e){
@@ -352,7 +371,9 @@ gboolean KasumiMainWindow::delete_event(GdkEvent *event){
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_MESSAGE_QUESTION,
                                      GTK_BUTTONS_YES_NO,
-                                     _("Your dictionary went through several changes. Do you save these changes before Kasumi quits?"));
+                                     _("Your dictionary went through several "
+                                       "changes. Do you save these changes "
+                                       "before Kasumi quits?"));
     switch(gtk_dialog_run (GTK_DIALOG (dialog))){
     case GTK_RESPONSE_YES:
       dictionary->store();
@@ -386,9 +407,12 @@ void KasumiMainWindow::ClickedStoreButton(){
 
 void KasumiMainWindow::ClickedAddButton(){
   KasumiWord *word = new KasumiWord();
-  word->setSoundByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))));
-  word->setSpellingByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SpellingEntry))));
-  word->setFrequency(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(FrequencySpin)));
+  word->setSoundByUTF8(string(gtk_entry_get_text(
+    GTK_ENTRY(SoundEntry))));
+  word->setSpellingByUTF8(string(gtk_entry_get_text(
+    GTK_ENTRY(SpellingEntry))));
+  word->setFrequency(gtk_spin_button_get_value_as_int(
+    GTK_SPIN_BUTTON(FrequencySpin)));
   word->setWordClass(getActiveWordClass());
 
   dictionary->appendWord(word);
@@ -419,9 +443,12 @@ void KasumiMainWindow::ChangedListCursor(){
     g_signal_handler_block(FrequencySpin, HandlerIDOfFrequencySpin);
     g_signal_handler_block(WordClassCombo, HandlerIDOfWordClassCombo);  
                            
-    gtk_entry_set_text(GTK_ENTRY(SpellingEntry),word->getSpellingByUTF8().c_str());
-    gtk_entry_set_text(GTK_ENTRY(SoundEntry),word->getSoundByUTF8().c_str());
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),word->getFrequency());
+    gtk_entry_set_text(GTK_ENTRY(SpellingEntry),
+                       word->getSpellingByUTF8().c_str());
+    gtk_entry_set_text(GTK_ENTRY(SoundEntry),
+                       word->getSoundByUTF8().c_str());
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),
+                              word->getFrequency());
     setActiveWordClass(word->getWordClass());
 
     g_signal_handler_unblock(SoundEntry, HandlerIDOfSoundEntry);
@@ -473,7 +500,8 @@ void KasumiMainWindow::ChangedSpellingEntry(){
   if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
-    word->setSpellingByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SpellingEntry))));
+    word->setSpellingByUTF8(string(gtk_entry_get_text(
+      GTK_ENTRY(SpellingEntry))));
     modifiedWord(id);
   }
 }
@@ -486,7 +514,8 @@ void KasumiMainWindow::ChangedFrequencySpin(){
   if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
-    word->setFrequency(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(FrequencySpin)));
+    word->setFrequency(gtk_spin_button_get_value_as_int(
+      GTK_SPIN_BUTTON(FrequencySpin)));
     modifiedWord(id);
   }
 }
@@ -539,7 +568,8 @@ void KasumiMainWindow::ChangedOption(GtkWidget *widget){
   else
     val = false;
 
-  if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter) && (OptionName != "")){
+  if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter) &&
+     (OptionName != "")){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
     word->setOption(OptionName, val);
@@ -560,7 +590,8 @@ void KasumiMainWindow::FindNext(SearchBy by){
   GtkTreeIter iter;
   KasumiWord *word;
   bool fromFirst = false;
-  bool prefixSearch = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(PrefixSearchCheck));
+  bool prefixSearch =
+    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(PrefixSearchCheck));
   GtkTreeIter StartIter;
   int id;
   string searchString = string(gtk_entry_get_text(GTK_ENTRY(SearchEntry)));
@@ -612,7 +643,8 @@ void KasumiMainWindow::FindNext(SearchBy by){
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_MESSAGE_QUESTION,
                                      GTK_BUTTONS_YES_NO,
-                                     _("Cannot find a specific word. Search from first?"));
+                                     _("Cannot find a specific word. Search "
+                                       "from first?"));
     if(gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES){
       gtk_widget_destroy (dialog);
     
@@ -676,7 +708,8 @@ void KasumiMainWindow::appendedWord(int id){
                      -1);
   gtk_tree_selection_select_iter(WordListSelection,&iter);
 
-  GtkAdjustment *adjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(ScrolledWindow));
+  GtkAdjustment *adjustment =
+    gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(ScrolledWindow));
   gtk_adjustment_set_value(adjustment, adjustment->upper);
   modificationFlag = true;  
 }
@@ -687,12 +720,12 @@ void KasumiMainWindow::modifiedWord(int id){
   if(iter != NULL){
     KasumiWord *word = dictionary->getWordWithID(id);
     
-    gtk_list_store_set(WordList, iter,
-                       COL_ID, id,
-                       COL_WORD, word->getSpellingByUTF8().c_str(),
-                       COL_YOMI, word->getSoundByUTF8().c_str(),
-                       COL_FREQ, word->getFrequency(),
-                       COL_PART, word->getStringOfWordClassByUTF8().c_str(),
+    gtk_list_store_set(WordList,iter,
+                       COL_ID,id,
+                       COL_WORD,word->getSpellingByUTF8().c_str(),
+                       COL_YOMI,word->getSoundByUTF8().c_str(),
+                       COL_FREQ,word->getFrequency(),
+                       COL_PART,word->getStringOfWordClassByUTF8().c_str(),
                        -1);
   }
   modificationFlag = true;  
@@ -767,11 +800,21 @@ void KasumiMainWindow::synchronizeOptionCheckButton(KasumiWord *word){
     g_signal_handler_block(NounOptionKakujoshiConnectionCheck,
                            HandlerIDOfNounOptionKakujoshiConnectionCheck);
       
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionSaConnectionCheck), false);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionNaConnectionCheck), false);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionSuruConnectionCheck), false);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionGokanCheck), false);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionKakujoshiConnectionCheck), false);
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(NounOptionSaConnectionCheck),
+      false);
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(NounOptionNaConnectionCheck),
+      false);
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(NounOptionSuruConnectionCheck),
+      false);
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(NounOptionGokanCheck),
+      false);
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(NounOptionKakujoshiConnectionCheck),
+      false);
     
     g_signal_handler_unblock(NounOptionSaConnectionCheck,
                              HandlerIDOfNounOptionSaConnectionCheck);
@@ -798,11 +841,21 @@ void KasumiMainWindow::synchronizeOptionCheckButton(KasumiWord *word){
     g_signal_handler_block(NounOptionKakujoshiConnectionCheck,
                            HandlerIDOfNounOptionKakujoshiConnectionCheck);
       
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionSaConnectionCheck), word->getOption(string(EUCJP_SASETSUZOKU)));
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionNaConnectionCheck), word->getOption(string(EUCJP_NASETSUZOKU)));
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionSuruConnectionCheck), word->getOption(string(EUCJP_SURUSETSUZOKU)));
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionGokanCheck), word->getOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU)));
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionKakujoshiConnectionCheck), word->getOption(string(EUCJP_KAKUJOSHISETSUZOKU)));
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(NounOptionSaConnectionCheck),
+      word->getOption(string(EUCJP_SASETSUZOKU)));
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(NounOptionNaConnectionCheck),
+      word->getOption(string(EUCJP_NASETSUZOKU)));
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(NounOptionSuruConnectionCheck),
+      word->getOption(string(EUCJP_SURUSETSUZOKU)));
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(NounOptionGokanCheck),
+      word->getOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU)));
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(NounOptionKakujoshiConnectionCheck),
+      word->getOption(string(EUCJP_KAKUJOSHISETSUZOKU)));
     
     g_signal_handler_unblock(NounOptionSaConnectionCheck,
                              HandlerIDOfNounOptionSaConnectionCheck);
@@ -824,10 +877,18 @@ void KasumiMainWindow::synchronizeOptionCheckButton(KasumiWord *word){
     g_signal_handler_block(AdvOptionGokanCheck,
                            HandlerIDOfAdvOptionGokanCheck);
       
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(AdvOptionToConnectionCheck), word->getOption(string(EUCJP_TOSETSUZOKU)));
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(AdvOptionTaruConnectionCheck), word->getOption(string(EUCJP_TARUSETSUZOKU)));
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(AdvOptionSuruConnectionCheck), word->getOption(string(EUCJP_SURUSETSUZOKU)));
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(AdvOptionGokanCheck), word->getOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU)));
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(AdvOptionToConnectionCheck),
+      word->getOption(string(EUCJP_TOSETSUZOKU)));
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(AdvOptionTaruConnectionCheck),
+      word->getOption(string(EUCJP_TARUSETSUZOKU)));
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(AdvOptionSuruConnectionCheck),
+      word->getOption(string(EUCJP_SURUSETSUZOKU)));
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(AdvOptionGokanCheck),
+      word->getOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU)));
 
     g_signal_handler_unblock(AdvOptionToConnectionCheck,
                              HandlerIDOfAdvOptionToConnectionCheck);
@@ -853,72 +914,87 @@ void KasumiMainWindow::flipOptionPane(){
   }
 }
 
-void _call_back_destroy(GtkWidget *widget, gpointer data){
+void _call_back_destroy(GtkWidget *widget,
+                        gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->destroy();
 }
 
-gboolean _call_back_delete_event(GtkWidget *widget, GdkEvent *event, gpointer data){
+gboolean _call_back_delete_event(GtkWidget *widget,
+                                 GdkEvent *event,
+                                 gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   return window->delete_event(event);
 }
 
-void _call_back_quit(GtkWidget *widget, gpointer data){
+void _call_back_quit(GtkWidget *widget,
+                     gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ClickedQuitButton();
 }
 
-void _call_back_store(GtkWidget *widget, gpointer data){
+void _call_back_store(GtkWidget *widget,
+                      gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ClickedStoreButton();
 }
 
-void _call_back_add(GtkWidget *widget, gpointer data){
+void _call_back_add(GtkWidget *widget,
+                    gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ClickedAddButton();
 }
 
-void _call_back_remove(GtkWidget *widget, gpointer data){
+void _call_back_remove(GtkWidget *widget,
+                       gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ClickedRemoveButton();
 }
 
-void _call_back_changed_list_cursor(GtkWidget *widget, gpointer data){
+void _call_back_changed_list_cursor(GtkWidget *widget,
+                                    gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ChangedListCursor();
 }
 
-void _call_back_changed_sound_entry(GtkWidget *widget, gpointer data){
+void _call_back_changed_sound_entry(GtkWidget *widget,
+                                    gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ChangedSoundEntry();
 }
 
-void _call_back_changed_spelling_entry(GtkWidget *widget, gpointer data){
+void _call_back_changed_spelling_entry(GtkWidget *widget,
+                                       gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ChangedSpellingEntry();
 }
 
-void _call_back_changed_frequency_spin(GtkWidget *widget, gpointer data){
+void _call_back_changed_frequency_spin(GtkWidget *widget,
+                                       gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ChangedFrequencySpin();
 }
 
-void _call_back_changed_word_class_combo(GtkWidget *widget, gpointer data){
+void _call_back_changed_word_class_combo(GtkWidget *widget,
+                                         gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ChangedWordClassCombo();
 }
 
-void _call_back_toggled_check(GtkWidget *widget, gpointer data){
+void _call_back_toggled_check(GtkWidget *widget,
+                              gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ChangedOption(widget);
 }
 
-void _call_back_find_next_by_sound(GtkWidget *widget, gpointer data){
+void _call_back_find_next_by_sound(GtkWidget *widget,
+                                   gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->FindNextBySound(widget);
 }
 
-void _call_back_find_next_by_spelling(GtkWidget *widget, gpointer data){
+void _call_back_find_next_by_spelling(GtkWidget *widget,
+                                      gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->FindNextBySpelling(widget);
 }

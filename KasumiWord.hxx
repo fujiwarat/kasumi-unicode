@@ -55,8 +55,10 @@ public:
   void setWordClass(WordClassType aWordClass);
   WordClassType getWordClass();
 
-  void setWordClassWithName(string aWordClass) throw(KasumiInvalidWordClassNameException);
-  void setWordClassWithNameByUTF8(string aWordClass) throw(KasumiInvalidWordClassNameException);
+  void setWordClassWithName(string aWordClass)
+    throw(KasumiInvalidWordClassNameException);
+  void setWordClassWithNameByUTF8(string aWordClass)
+    throw(KasumiInvalidWordClassNameException);
   string getStringOfWordClass();
   string getStringOfWordClassByUTF8();  
   

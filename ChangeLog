@@ -1,3 +1,8 @@
+2004-11-27  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* Fix
+	 - trivial code and comment change for easy code reading
+
 2004-11-26  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* KasumiAddWindow.cxx: New feature

@@ -13,7 +13,9 @@ using namespace std;
 
 #define OptionOutput( Word, OptionName ) (string(OptionName) + " = " + (Word->getOption(OptionName) ? "y" : "n"))
 
-KasumiDic::KasumiDic(const string aDicFileName) throw(KasumiDicExaminationException){
+KasumiDic::KasumiDic(const string aDicFileName)
+  throw(KasumiDicExaminationException){
+
   DicFileName = aDicFileName;
 
   try{
@@ -23,7 +25,9 @@ KasumiDic::KasumiDic(const string aDicFileName) throw(KasumiDicExaminationExcept
   }
 }
 
-void KasumiDic::load() throw(KasumiDicExaminationException){
+void KasumiDic::load()
+  throw(KasumiDicExaminationException){
+  
   int line = 0;
   int freq;
   string DicContents = string();
@@ -31,13 +35,17 @@ void KasumiDic::load() throw(KasumiDicExaminationException){
 
   string command = "anthy-dic-tool --dump > " + DicFileName;
   if(system(command.c_str()) != 0){
-    throw KasumiDicExaminationException("Cannot dump Anthy dictoinary to " + DicFileName, 0);
+    throw KasumiDicExaminationException(
+            "Cannot dump Anthy dictoinary to " + DicFileName,
+            0);
   }
 
   ifstream DicFile(DicFileName.c_str());
   
   if(!DicFile.is_open()){
-    throw KasumiDicExaminationException("Cannot open Anthy dicitionary file.", 0);
+    throw KasumiDicExaminationException(
+            "Cannot open Anthy dicitionary file.",
+            0);
   }
 
   // analyze Anthy Dictionary reading each line
@@ -84,14 +92,18 @@ void KasumiDic::load() throw(KasumiDicExaminationException){
             }
           }
         }else{
-          throw KasumiDicExaminationException("Invalid entry in Anthy private dictionary file.", line);
+          throw KasumiDicExaminationException(
+                  "Invalid entry in Anthy private dictionary file.",
+                  line);
         }
       }
 
       appendWord(newWord);
     }else{
       // not classfied line; Anthy Dicitionary is invalid!
-          throw KasumiDicExaminationException("Invalid entry in Anthy private dictionary file.", line);
+          throw KasumiDicExaminationException(
+                  "Invalid entry in Anthy private dictionary file.",
+                  line);
     }
   }
 
@@ -109,7 +121,9 @@ int KasumiDic::appendWord(KasumiWord *word){
   return getUpperBoundOfWordID();
 }
 
-void KasumiDic::removeWord(size_t id) throw(KasumiOutOfBoundException){
+void KasumiDic::removeWord(size_t id)
+  throw(KasumiOutOfBoundException){
+
   size_t i;
   
   if(id >= WordList.size() || id < 0){
@@ -127,7 +141,9 @@ void KasumiDic::removeWord(size_t id) throw(KasumiOutOfBoundException){
   //  free(word);
 }
 
-void KasumiDic::store() throw(KasumiDicStoreException){
+void KasumiDic::store()
+  throw(KasumiDicStoreException){
+
   size_t i;
   ofstream DicFile(DicFileName.c_str());
   if(!DicFile.is_open()){
@@ -136,7 +152,6 @@ void KasumiDic::store() throw(KasumiDicStoreException){
   }
   string ret = string();
 
-  
   for(i=0; i<WordList.size(); i++){
     ostringstream ostr;
 
@@ -147,7 +162,8 @@ void KasumiDic::store() throw(KasumiDicStoreException){
     ostr << WordList[i]->getFrequency();
     ret += ostr.str() + " ";
     ret += WordList[i]->getSpelling() + "\n";
-    ret += string(EUCJP_HINNSHI) + " = " + WordList[i]->getStringOfWordClass() + "\n";
+    ret += string(EUCJP_HINNSHI) + " = " +
+      WordList[i]->getStringOfWordClass() + "\n";
 
     if(WordList[i]->getWordClass() == NOUN){
       ret += OptionOutput(WordList[i], EUCJP_NASETSUZOKU) + "\n";
@@ -168,7 +184,8 @@ void KasumiDic::store() throw(KasumiDicStoreException){
 
       // nothing to do
     }else{
-      throw KasumiDicStoreException("internal error while saving Anthy Dictionary.");
+      throw KasumiDicStoreException(
+              "internal error while saving Anthy Dictionary.");
     }
     
     ret += "\n";
@@ -192,7 +209,9 @@ void KasumiDic::registerEventListener(KasumiDicEventListener *listener){
   EventListeners.push_back(listener);  
 }
 
-KasumiWord *KasumiDic::getWordWithID(size_t id) throw(KasumiOutOfBoundException){
+KasumiWord *KasumiDic::getWordWithID(size_t id)
+  throw(KasumiOutOfBoundException){
+
   if(id >= WordList.size() || id < 0){
     throw new KasumiOutOfBoundException("Out of Bound!");
   }
