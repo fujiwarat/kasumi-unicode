@@ -40,4 +40,7 @@ public:
   string getVal();
 };
 
+int str2int(const string &str);
+string int2str(int i);
+
 #endif

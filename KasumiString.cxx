@@ -1,5 +1,6 @@
 #include "KasumiString.hxx"
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -123,4 +124,17 @@ string KasumiString::getVal(){
   }
 
   return NULL;
+}
+
+int str2int(const string &str){
+   stringstream ss(str);
+   int i;
+   ss >> i;
+   return i;
+}
+
+string int2str(int i){
+   stringstream ss;
+   ss << i;
+   return ss.str();
 }
