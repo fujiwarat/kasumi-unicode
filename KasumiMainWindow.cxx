@@ -276,6 +276,8 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   PrefixSearchCheck = gtk_check_button_new_with_label(_("Prefix Search"));
   gtk_box_pack_start(GTK_BOX(search_hbox),GTK_WIDGET(PrefixSearchCheck),
                      FALSE,FALSE,0);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(PrefixSearchCheck),true);
+  
 
   /* creating box for buttons */
   GtkWidget *hbutton_box = gtk_hbutton_box_new();
