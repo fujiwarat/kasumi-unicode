@@ -2396,4 +2396,3 @@ main ()
   AC_SUBST(GTK_LIBS)
   rm -f conf.gtktest
 ])
-
