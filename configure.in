@@ -29,3 +29,4 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 dnl Checks for library functions.
 
 AC_OUTPUT(Makefile intl/Makefile po/Makefile.in m4/Makefile )
+
