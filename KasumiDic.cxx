@@ -130,6 +130,8 @@ void KasumiDic::store() throw(KasumiDicStoreException){
   for(i=0; i<WordList.size(); i++){
     ostringstream ostr;
 
+    if(WordList[i] == NULL)
+      continue;
     ret += WordList[i]->getSound() + " ";
     ostr << WordList[i]->getFrequency();
     ret += ostr.str() + " ";

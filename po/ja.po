@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-05 17:09+0900\n"
+"POT-Creation-Date: 2004-11-05 17:46+0900\n"
 "PO-Revision-Date: 2004-10-18 08:30+0900\n"
 "Last-Translator: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
 "Language-Team: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
@@ -19,12 +19,12 @@ msgstr ""
 msgid "Kasumi"
 msgstr "霞"
 
-#: KasumiMainWindow.cxx:46 KasumiMainWindow.cxx:86 KasumiMainWindow.cxx:340
+#: KasumiMainWindow.cxx:46 KasumiMainWindow.cxx:86 KasumiMainWindow.cxx:341
 #: KasumiAddWindow.cxx:29
 msgid "Spelling"
 msgstr "単語"
 
-#: KasumiMainWindow.cxx:52 KasumiMainWindow.cxx:97 KasumiMainWindow.cxx:341
+#: KasumiMainWindow.cxx:52 KasumiMainWindow.cxx:97 KasumiMainWindow.cxx:342
 #: KasumiAddWindow.cxx:38
 msgid "Sound"
 msgstr "読み"
