@@ -64,10 +64,10 @@ int main(int argc, char *argv[])
     }else if(startupMode == string("VERSION")){
       showVersion();
     }else if(startupMode == string("MANAGE")){
-      KasumiMainWindow window = KasumiMainWindow(dic,conf);
+      KasumiMainWindow *window = new KasumiMainWindow(dic,conf);
       gtk_main();
     }else if(startupMode == string("ADD")){
-      KasumiAddWindow window = KasumiAddWindow(dic,conf);
+      KasumiAddWindow *window = new KasumiAddWindow(dic,conf);
       gtk_main();
     }
   }catch(KasumiConfigurationLoadException e){

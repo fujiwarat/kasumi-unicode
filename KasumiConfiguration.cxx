@@ -74,6 +74,8 @@ void KasumiConfiguration::loadDefaultProperties()
   config[string("NewWordShortcutKey")] = string("Ctrl+N");
   config[string("RemoveShortcutKey")] = string("Ctrl+R");
   config[string("AddShortcutKey")] = string("Ctrl+A");
+  config[string("AddingModeShortcutKey")] = string("Ctrl+J");
+  config[string("ManageModeShortcutKey")] = string("Ctrl+M");    
   config[string("DefaultSpelling")] = string("");
   config[string("DefaultSound")] = string("");
   config[string("DefaultWordClass")] = string(EUCJP_MEISHI);
@@ -241,6 +243,8 @@ void KasumiConfiguration::checkValidity()
   keyNames.push_back(string("NewWordShortcutKey"));
   keyNames.push_back(string("RemoveShortcutKey"));
   keyNames.push_back(string("AddShortcutKey"));
+  keyNames.push_back(string("AddingModeShortcutKey"));
+  keyNames.push_back(string("ManageModeShortcutKey"));
 
   while(!keyNames.empty()){
     string keyName = keyNames.front();

@@ -135,15 +135,27 @@ void KasumiDic::removeWord(size_t id)
   }
 
   KasumiWord *word = WordList[id];
-  //  WordList[id] = NULL;
   word->setFrequency(0);
 
   for(i=0;i<EventListeners.size();i++){
     EventListeners[i]->removedWord(getUpperBoundOfWordID());
   }
-  
-  //  free(word);
 }
+
+void KasumiDic::modifyWord(size_t id)
+  throw(KasumiOutOfBoundException){
+
+  size_t i;
+  
+  if(id >= WordList.size() || id < 0){
+    throw new KasumiOutOfBoundException("Out of Bound!");
+  }
+
+  for(i=0;i<EventListeners.size();i++){
+    EventListeners[i]->modifiedWord(id);
+  }
+}
+
 
 void KasumiDic::store()
   throw(KasumiDicStoreException){
@@ -208,7 +220,32 @@ void KasumiDic::store()
 }
 
 void KasumiDic::registerEventListener(KasumiDicEventListener *listener){
+  int i,size;
+
+  size = EventListeners.size();
+
+  // if the listener have been already registered, nothing to do
+  // assuring no duplication
+  for(i=0;i<size;i++){
+    if(EventListeners[i] == listener){
+      return;
+    }
+  }
+  
   EventListeners.push_back(listener);  
+}
+
+void KasumiDic::removeEventListener(KasumiDicEventListener *listener){
+  vector<KasumiDicEventListener*>::iterator i;
+  KasumiDicEventListener *p;
+
+  for(i=EventListeners.begin();i!=EventListeners.end();i++){
+    p = *i;
+    if(p = listener){
+      EventListeners.erase(i);
+      return;
+    }
+  }
 }
 
 KasumiWord *KasumiDic::getWordWithID(size_t id)

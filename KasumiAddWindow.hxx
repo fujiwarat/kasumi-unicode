@@ -20,6 +20,8 @@ class KasumiAddWindow{
                                          gpointer data);
   friend void _call_back_add_window_add(GtkWidget *widget,
                                         gpointer data);
+  friend void _call_back_manage_mode(GtkWidget *widget,
+                                     gpointer data);
   friend void _call_back_add_window_changed_word_class_combo(GtkWidget *widget,
                                                              gpointer data);
 private:
@@ -44,15 +46,17 @@ private:
   GtkWidget *AdvOptionSuruConnectionCheck;
   GtkWidget *AdvOptionGokanCheck;
   
-  void destroy(GtkWidget *widget);
-  gboolean delete_event(GtkWidget *widget,
-                        GdkEvent *event);
+  void destroy();
+  gboolean delete_event(GdkEvent *event);
   void ClickedQuitButton(GtkWidget *widget);
   void ClickedAddButton(GtkWidget *widget);
   void ChangedWordClassCombo(GtkWidget *widget);
   WordClassType getActiveWordClass();
+
+  void SwitchToManageMode();
 public:
   KasumiAddWindow(KasumiDic *aDictionary, KasumiConfiguration *conf);
+  ~KasumiAddWindow();
 };
 
 #endif

@@ -184,6 +184,19 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                              getAccelKey(key),
                              getModifierType(key),
                              GTK_ACCEL_VISIBLE);
+
+  button = gtk_button_new();
+  gtk_button_set_label(GTK_BUTTON(button),_("Manage Mode"));
+  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
+  g_signal_connect(G_OBJECT(button),"clicked",
+                   G_CALLBACK(_call_back_manage_mode),this);
+  accel = gtk_accel_group_new();
+  gtk_window_add_accel_group(GTK_WINDOW(window), accel);
+  key = conf->getPropertyValue("ManageModeShortcutKey");
+  gtk_widget_add_accelerator(button, "clicked", accel,
+                             getAccelKey(key),
+                             getModifierType(key),
+                             GTK_ACCEL_VISIBLE);
   
   gtk_widget_show_all(window);
   gtk_widget_hide(AdvOptionPane);
@@ -217,18 +230,21 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   }
 }
 
-
-void KasumiAddWindow::destroy(GtkWidget *widget){
-  gtk_main_quit();
+KasumiAddWindow::~KasumiAddWindow(){
+  destroy();
 }
 
-gboolean KasumiAddWindow::delete_event(GtkWidget *widget,
-                                       GdkEvent *event){
+void KasumiAddWindow::destroy(){
+  gtk_widget_destroy(window);
+}
+
+gboolean KasumiAddWindow::delete_event(GdkEvent *event){
   return FALSE;
 }
 void KasumiAddWindow::ClickedQuitButton(GtkWidget *widget){
-  if(!delete_event(widget,NULL)){
-    destroy(widget);
+  if(!delete_event(NULL)){
+    destroy();
+    gtk_main_quit();
   }
 }
 
@@ -375,17 +391,22 @@ WordClassType KasumiAddWindow::getActiveWordClass(){
   }
 }
 
+void KasumiAddWindow::SwitchToManageMode(){
+  KasumiMainWindow *mainwindow = new KasumiMainWindow(dictionary,conf);
+  delete this;
+}
+
 void _call_back_add_window_destroy(GtkWidget *widget,
                                    gpointer data){
   KasumiAddWindow *window = (KasumiAddWindow *)data;
-  window->destroy(widget);
+  window->destroy();
 }
 
 gboolean _call_back_add_window_delete_event(GtkWidget *widget,
                                             GdkEvent *event,
                                             gpointer data){
   KasumiAddWindow *window = (KasumiAddWindow *)data;
-  return window->delete_event(widget, event);
+  return window->delete_event(event);
 }
 
 void _call_back_add_window_quit(GtkWidget *widget,
@@ -398,6 +419,12 @@ void _call_back_add_window_add(GtkWidget *widget,
                                gpointer data){
   KasumiAddWindow *window = (KasumiAddWindow *)data;
   window->ClickedAddButton(widget);
+}
+
+void _call_back_manage_mode(GtkWidget *widget,
+                            gpointer data){
+  KasumiAddWindow *window = (KasumiAddWindow *)data;
+  window->SwitchToManageMode();
 }
 
 void _call_back_add_window_changed_word_class_combo(GtkWidget *widget,

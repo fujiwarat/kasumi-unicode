@@ -5,6 +5,7 @@
 #include "KasumiWord.hxx"
 #include "KasumiDic.hxx"
 #include "KasumiString.hxx"
+#include "KasumiAddWindow.hxx"
 #include "KasumiConfiguration.hxx"
 #include <gdk/gdkkeysyms.h>
 #include "intl.h"
@@ -347,6 +348,19 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                              getModifierType(key),
                              GTK_ACCEL_VISIBLE);
 
+  button = gtk_button_new();
+  gtk_button_set_label(GTK_BUTTON(button),_("Adding Mode"));
+  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
+  g_signal_connect(G_OBJECT(button),"clicked",
+                   G_CALLBACK(_call_back_adding_mode),this);
+  accel = gtk_accel_group_new();
+  gtk_window_add_accel_group(GTK_WINDOW(window), accel);
+  key = conf->getPropertyValue("AddingModeShortcutKey");
+  gtk_widget_add_accelerator(button, "clicked", accel,
+                             getAccelKey(key),
+                             getModifierType(key),
+                             GTK_ACCEL_VISIBLE);
+
   gtk_widget_show_all(window);
   gtk_widget_hide(AdvOptionPane);
 
@@ -391,8 +405,13 @@ void KasumiMainWindow::refresh(){
   }
 }
 
+KasumiMainWindow::~KasumiMainWindow(){
+  dictionary->removeEventListener(this);  
+  destroy();
+}
+
 void KasumiMainWindow::destroy(){
-  gtk_main_quit();
+  gtk_widget_destroy(window);
 }
 
 gboolean KasumiMainWindow::delete_event(GdkEvent *event){
@@ -422,6 +441,7 @@ gboolean KasumiMainWindow::delete_event(GdkEvent *event){
 void KasumiMainWindow::ClickedQuitButton(){
   if(!delete_event(NULL)){
     destroy();
+    gtk_main_quit();
   }
 }
 
@@ -511,7 +531,8 @@ void KasumiMainWindow::ChangedSoundEntry(){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
     word->setSoundByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))));
-    modifiedWord(id);
+    //    modifiedWord(id);
+    dictionary->modifyWord(id);
   }
 }
 
@@ -525,7 +546,8 @@ void KasumiMainWindow::ChangedSpellingEntry(){
     KasumiWord *word = dictionary->getWordWithID(id);
     word->setSpellingByUTF8(string(gtk_entry_get_text(
       GTK_ENTRY(SpellingEntry))));
-    modifiedWord(id);
+    //    modifiedWord(id);
+    dictionary->modifyWord(id);
   }
 }
 
@@ -539,7 +561,8 @@ void KasumiMainWindow::ChangedFrequencySpin(){
     KasumiWord *word = dictionary->getWordWithID(id);
     word->setFrequency(gtk_spin_button_get_value_as_int(
       GTK_SPIN_BUTTON(FrequencySpin)));
-    modifiedWord(id);
+    //modifiedWord(id);
+    dictionary->modifyWord(id);
   }
 }
 
@@ -553,7 +576,8 @@ void KasumiMainWindow::ChangedWordClassCombo(){
     KasumiWord *word = dictionary->getWordWithID(id);
     word->setWordClass(getActiveWordClass());
     synchronizeOptionCheckButton(word);
-    modifiedWord(id);
+    //    modifiedWord(id);
+    dictionary->modifyWord(id);
   }
 
   flipOptionPane();  
@@ -596,8 +620,14 @@ void KasumiMainWindow::ChangedOption(GtkWidget *widget){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
     word->setOption(OptionName, val);
-    modifiedWord(id);
+    //    modifiedWord(id);
+    dictionary->modifyWord(id);
   }
+}
+
+void KasumiMainWindow::SwitchToAddingMode(){
+  KasumiAddWindow *addwindow = new KasumiAddWindow(dictionary,conf);
+  delete this;
 }
 
 void KasumiMainWindow::FindNext(bool fromCurrent){
@@ -969,6 +999,12 @@ void _call_back_remove(GtkWidget *widget,
                        gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ClickedRemoveButton();
+}
+
+void _call_back_adding_mode(GtkWidget *widget,
+                            gpointer data){
+  KasumiMainWindow *window = (KasumiMainWindow *)data;
+  window->SwitchToAddingMode();
 }
 
 void _call_back_changed_list_cursor(GtkWidget *widget,

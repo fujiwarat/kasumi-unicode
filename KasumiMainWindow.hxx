@@ -40,6 +40,8 @@ class KasumiMainWindow : public KasumiDicEventListener{
                              gpointer data);
   friend void _call_back_remove(GtkWidget *widget,
                                 gpointer data);
+  friend void _call_back_adding_mode(GtkWidget *widget,
+                                     gpointer data);
   friend void _call_back_changed_list_cursor(GtkWidget *widget,
                                              gpointer data);
   friend void _call_back_changed_sound_entry(GtkWidget *widget,
@@ -115,6 +117,7 @@ private:
   void ChangedFrequencySpin();
   void ChangedWordClassCombo();
   void ChangedOption(GtkWidget *widget);
+  void SwitchToAddingMode();
 
   void KasumiMainWindow::FindNext(bool fromCurrent);
   GtkTreeIter *findCorrespondingIter(int id);
@@ -125,6 +128,7 @@ private:
   void flipOptionPane();
 public:
   KasumiMainWindow(KasumiDic *aDictionary, KasumiConfiguration *conf);
+  ~KasumiMainWindow();
   void refresh();
   void removedWord(int id);
   void appendedWord(int id);
