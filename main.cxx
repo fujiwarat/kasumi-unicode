@@ -5,6 +5,7 @@
 #include <gtk/gtk.h>
 #include <getopt.h> /* for getopt_long() */
 #include <stdlib.h>
+#include <time.h>
 #include <iostream>
 #include <string>
 #include "KasumiDic.hxx"
@@ -93,14 +94,14 @@ int main(int argc, char *argv[])
 
   /* obtain anthy dictionary file name */
   home = getenv("HOME");
-  if(home != NULL){
-    dic_filename = string(home);
-    dic_filename.append("/.anthy/private-dic.src.tmp");
-    free(home);
-  }else{
+  if(home == NULL){
     cout << "Cannot find $HOME environment variable." << endl;
+    exit(1);
   }
 
+  dic_filename = string(home) + "/.anthy/private-dic.src.tmp";
+  free(home);  
+  
   KasumiDic *dic;
   try{
     dic = new KasumiDic(dic_filename);
@@ -116,4 +117,7 @@ int main(int argc, char *argv[])
     KasumiAddWindow window = KasumiAddWindow(dic);
     gtk_main();
   }
+
+
 }
+

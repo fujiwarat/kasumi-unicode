@@ -252,7 +252,11 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   gtk_box_pack_start(GTK_BOX(search_hbox),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_find_next_by_spelling),this);
-  
+
+  PrefixSearchCheck = gtk_check_button_new_with_label(_("Prefix Search"));
+  gtk_box_pack_start(GTK_BOX(search_hbox),GTK_WIDGET(PrefixSearchCheck),
+                     FALSE,FALSE,0);
+
   /* creating box for buttons */
   GtkWidget *hbutton_box = gtk_hbutton_box_new();
   gtk_button_box_set_layout(GTK_BUTTON_BOX(hbutton_box),GTK_BUTTONBOX_SPREAD);
@@ -538,6 +542,7 @@ void KasumiMainWindow::FindNext(SearchBy by){
   GtkTreeIter iter;
   KasumiWord *word;
   bool fromFirst = false;
+  bool prefixSearch = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(PrefixSearchCheck));
   GtkTreeIter StartIter;
   int id;
   string searchString = string(gtk_entry_get_text(GTK_ENTRY(SearchEntry)));
@@ -574,7 +579,8 @@ void KasumiMainWindow::FindNext(SearchBy by){
       comparedString = word->getSoundByUTF8();
     }
 
-    if(comparedString == searchString){
+    if((comparedString == searchString) ||
+       (prefixSearch && comparedString.find(searchString,0) == 0)){
       // if found, select that word and don't search any more
       gtk_tree_selection_select_iter(WordListSelection,&iter);
       return;
@@ -606,7 +612,8 @@ void KasumiMainWindow::FindNext(SearchBy by){
           comparedString = word->getSoundByUTF8();
         }
 
-        if(comparedString == searchString){
+        if((comparedString == searchString) ||
+           (prefixSearch && comparedString.find(searchString,0) == 0)){
           gtk_tree_selection_select_iter(WordListSelection,&iter);
           return;
         }

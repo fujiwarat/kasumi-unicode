@@ -1,3 +1,11 @@
+2004-11-14  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* Fix
+	 - trivial change for temporary file 
+
+	* New feature
+	 - prefix search function
+
 2004-11-12 Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* Fix

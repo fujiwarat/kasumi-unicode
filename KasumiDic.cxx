@@ -2,6 +2,7 @@
 #include "KasumiWord.hxx"
 #include "KasumiString.hxx"
 #include "KasumiException.hxx"
+#include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -93,6 +94,7 @@ void KasumiDic::load() throw(KasumiDicExaminationException){
           throw KasumiDicExaminationException("Invalid entry in Anthy private dictionary file.", line);
     }
   }
+
 }
 
 int KasumiDic::appendWord(KasumiWord *word){

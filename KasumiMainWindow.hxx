@@ -80,6 +80,7 @@ private:
   gulong HandlerIDOfAdvOptionGokanCheck;
 
   GtkWidget *SearchEntry;
+  GtkWidget *PrefixSearchCheck;
   
   bool modificationFlag;
   
