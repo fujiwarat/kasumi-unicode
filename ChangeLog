@@ -1,7 +1,30 @@
-2004-10-18  gettextize  <bug-gnu-gettext@gnu.org>
+2004-11-12 Takashi Nakamoto  <bluedwarf@openoffice.org>
 
-	* Makefile.am (SUBDIRS): New variable.
-	(ACLOCAL_AMFLAGS): New variable.
-	(EXTRA_DIST): New variable.
-	* configure.in (AC_OUTPUT): Add intl/Makefile,
+	* Fix
+	 - adjust default frequency value and upper bounds
+	
+2004-11-10 Takashi Nakamoto  <bluedwarf@openoffice.org>
 
+	* New feature
+	 - search function (complete version)
+	
+2004-11-10 Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* KasumiDic.cxx: Load dictionary directly from "anthy-dic-tool
+	--dump" storing into temporary file.
+	If user removed word, it will be removed correctly from Anthy's
+	internal dictionary.
+	* Solved some compile warnings
+	* KasumiMainWindow.cxx: changed add word operation.
+	* New feature
+	 - search function (test version)
+
+2004-11-05 Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - Add Window.
+
+2004-11-03 Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New version of Kasumi rewritten by C++.
+	* KasumiMainWindow.cxx: New option pane for noun and adverbs.
