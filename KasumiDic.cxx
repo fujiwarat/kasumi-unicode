@@ -27,14 +27,12 @@ void KasumiDic::load() throw(KasumiDicExaminationException){
   string DicContents = string();
   KasumiString Buffer;
 
-  ifstream DicFile(DicFileName.c_str());
-
-  if(!DicFile.is_open()){
-    DicFile.close();    
-    ofstream NewDicFile(DicFileName.c_str());
-    NewDicFile.close();
-    DicFile.open(DicFileName.c_str());
+  string command = "anthy-dic-tool --dump > " + DicFileName;
+  if(system(command.c_str()) != 0){
+    throw KasumiDicExaminationException("Cannot dump Anthy dictoinary to " + DicFileName, 0);
   }
+
+  ifstream DicFile(DicFileName.c_str());
   
   if(!DicFile.is_open()){
     throw KasumiDicExaminationException("Cannot open Anthy dicitionary file.", 0);
@@ -109,13 +107,14 @@ void KasumiDic::removeWord(int id) throw(KasumiOutOfBoundException){
   }
 
   KasumiWord *word = WordList[id];
-  WordList[id] = NULL;
+  //  WordList[id] = NULL;
+  word->setFrequency(0);
 
   for(i=0;i<EventListeners.size();i++){
     EventListeners[i]->removedWord(getUpperBoundOfWordID());
   }
   
-  free(word);
+  //  free(word);
 }
 
 void KasumiDic::store() throw(KasumiDicStoreException){
@@ -126,12 +125,14 @@ void KasumiDic::store() throw(KasumiDicStoreException){
     return;
   }
   string ret = string();
+
   
   for(i=0; i<WordList.size(); i++){
     ostringstream ostr;
 
     if(WordList[i] == NULL)
       continue;
+
     ret += WordList[i]->getSound() + " ";
     ostr << WordList[i]->getFrequency();
     ret += ostr.str() + " ";

@@ -273,7 +273,7 @@ void KasumiMainWindow::refresh(){
     try{
       KasumiWord *word = dictionary->getWordWithID(i);
 
-      if(word != NULL){
+      if(word != NULL && word->getFrequency() != 0){
         GtkTreeIter iter;
         GtkTreePath *path;
       

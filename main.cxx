@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
   home = getenv("HOME");
   if(home != NULL){
     dic_filename = string(home);
-    dic_filename.append("/.anthy/private-dic.src");
+    dic_filename.append("/.anthy/private-dic.src.tmp");
     free(home);
   }else{
     cout << "Cannot find $HOME environment variable." << endl;
