@@ -52,10 +52,11 @@ class KasumiMainWindow : public KasumiDicEventListener{
                                                   gpointer data);
   friend void _call_back_toggled_check(GtkWidget *widget,
                                        gpointer data);
-  friend void _call_back_find_next_by_sound(GtkWidget *widget,
-                                            gpointer data);
-  friend void _call_back_find_next_by_spelling(GtkWidget *widget,
+  friend void _call_back_changed_search_entry(GtkWidget *widget,
+                                                gpointer data);
+  friend void _call_back_activate_search_entry(GtkWidget *widget,
                                                gpointer data);
+
 private:
   KasumiDic *dictionary;
   KasumiConfiguration *conf;
@@ -96,8 +97,9 @@ private:
   gulong HandlerIDOfAdvOptionSuruConnectionCheck;
   gulong HandlerIDOfAdvOptionGokanCheck;
 
+  GtkWidget *SearchBySpellingRadio;
+  GtkWidget *SearchBySoundRadio;
   GtkWidget *SearchEntry;
-  GtkWidget *PrefixSearchCheck;
   
   bool modificationFlag;
   
@@ -114,11 +116,7 @@ private:
   void ChangedWordClassCombo();
   void ChangedOption(GtkWidget *widget);
 
-  void KasumiMainWindow::FindNextBySound(GtkWidget *widget);
-  void KasumiMainWindow::FindNextBySpelling(GtkWidget *widget);
-  void KasumiMainWindow::FindNext(SearchBy by);
-
-
+  void KasumiMainWindow::FindNext(bool fromCurrent);
   GtkTreeIter *findCorrespondingIter(int id);
 
   void synchronizeOptionCheckButton(KasumiWord *word);

@@ -262,29 +262,31 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
 
   // creating Entry and Button for search function
   SearchEntry = gtk_entry_new();
+  g_signal_connect(G_OBJECT(SearchEntry),
+                   "changed",
+                   G_CALLBACK(_call_back_changed_search_entry),
+                   this);
+  g_signal_connect(G_OBJECT(SearchEntry),
+                   "activate",
+                   G_CALLBACK(_call_back_activate_search_entry),
+                   this); // called when Entry key is pressed
   gtk_box_pack_start(GTK_BOX(search_hbox),
                      GTK_WIDGET(SearchEntry),
                      FALSE,
                      FALSE,
                      0);
 
-  GtkWidget *button = gtk_button_new();
-  gtk_button_set_label(GTK_BUTTON(button),_("Find Next By Sound"));
-  gtk_box_pack_start(GTK_BOX(search_hbox),GTK_WIDGET(button),FALSE,FALSE,0);
-  g_signal_connect(G_OBJECT(button),"clicked",
-                   G_CALLBACK(_call_back_find_next_by_sound),this);
-
-  button = gtk_button_new();
-  gtk_button_set_label(GTK_BUTTON(button),_("Find Next By Spelling"));
-  gtk_box_pack_start(GTK_BOX(search_hbox),GTK_WIDGET(button),FALSE,FALSE,0);
-  g_signal_connect(G_OBJECT(button),"clicked",
-                   G_CALLBACK(_call_back_find_next_by_spelling),this);
-
-  PrefixSearchCheck = gtk_check_button_new_with_label(_("Prefix Search"));
-  gtk_box_pack_start(GTK_BOX(search_hbox),GTK_WIDGET(PrefixSearchCheck),
-                     FALSE,FALSE,0);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(PrefixSearchCheck),true);
+  SearchBySpellingRadio = gtk_radio_button_new_with_label(NULL,
+                                                          _("Find By Spelling"));
+  gtk_box_pack_start(GTK_BOX(search_hbox),SearchBySpellingRadio,
+                     TRUE,TRUE,0);
   
+  SearchBySoundRadio =
+    gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(SearchBySpellingRadio),
+                                                _("Find By Sound"));
+  gtk_box_pack_start(GTK_BOX(search_hbox),SearchBySoundRadio,
+                     TRUE,TRUE,0);
+
 
   /* creating box for buttons */
   GtkWidget *hbutton_box = gtk_hbutton_box_new();
@@ -293,7 +295,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
 
 
   // creating buttons and shortcut key configuration
-  button = gtk_button_new();
+  GtkWidget *button = gtk_button_new();
   gtk_button_set_label(GTK_BUTTON(button),_("Quit"));
   gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
@@ -598,26 +600,21 @@ void KasumiMainWindow::ChangedOption(GtkWidget *widget){
   }
 }
 
-void KasumiMainWindow::FindNextBySound(GtkWidget *widget){
-  FindNext(SOUND);
-}
-
-void KasumiMainWindow::FindNextBySpelling(GtkWidget *widget){
-  FindNext(SPELLING);
-}
-
-void KasumiMainWindow::FindNext(SearchBy by){
+void KasumiMainWindow::FindNext(bool fromCurrent){
   GtkTreeModel *model = GTK_TREE_MODEL(WordList);
   GtkTreeIter iter;
   KasumiWord *word;
   bool fromFirst = false;
-  bool prefixSearch =
-    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(PrefixSearchCheck));
   GtkTreeIter StartIter;
   int id;
   string searchString = string(gtk_entry_get_text(GTK_ENTRY(SearchEntry)));
   string comparedString;
   GtkWidget *dialog;
+
+  SearchBy by = SPELLING;
+  if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SearchBySoundRadio))){
+    by = SOUND;
+  }
 
   if(!gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
     if(!gtk_tree_model_get_iter_first(model, &iter)){
@@ -627,10 +624,14 @@ void KasumiMainWindow::FindNext(SearchBy by){
     fromFirst = true;
   }
   StartIter = iter;
-  
-  // Search from next word if a certain word is selected.
-  // If the selected is the last word, seek from the first word.
-  if(!fromFirst && !gtk_tree_model_iter_next(model,&iter)){
+
+  if(fromCurrent){
+    // Search from the selected world
+    // nothing to do ... discourage against calling gtk_tree_model_iter_next
+  }else if(!fromFirst && !gtk_tree_model_iter_next(model,&iter)){
+    // Search from next word if a certain word is selected.
+    // If the selected is the last word, seek from the first word.
+    
     // If no words, do nothing;    
     if(!gtk_tree_model_get_iter_first(model, &iter))
       return;
@@ -649,8 +650,7 @@ void KasumiMainWindow::FindNext(SearchBy by){
       comparedString = word->getSoundByUTF8();
     }
 
-    if((comparedString == searchString) ||
-       (prefixSearch && comparedString.find(searchString,0) == 0)){
+    if(comparedString.find(searchString,0) == 0){
       // if found, select that word and don't search any more
       gtk_tree_selection_select_iter(WordListSelection,&iter);
       return;
@@ -683,8 +683,7 @@ void KasumiMainWindow::FindNext(SearchBy by){
           comparedString = word->getSoundByUTF8();
         }
 
-        if((comparedString == searchString) ||
-           (prefixSearch && comparedString.find(searchString,0) == 0)){
+        if(comparedString.find(searchString,0) == 0){
           gtk_tree_selection_select_iter(WordListSelection,&iter);
           return;
         }
@@ -1008,16 +1007,16 @@ void _call_back_toggled_check(GtkWidget *widget,
   window->ChangedOption(widget);
 }
 
-void _call_back_find_next_by_sound(GtkWidget *widget,
-                                   gpointer data){
+void _call_back_changed_search_entry(GtkWidget *widget,
+                                       gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
-  window->FindNextBySound(widget);
+  window->FindNext(true);
 }
 
-void _call_back_find_next_by_spelling(GtkWidget *widget,
-                                      gpointer data){
+void _call_back_activate_search_entry(GtkWidget *widget,
+                                       gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
-  window->FindNextBySpelling(widget);
+  window->FindNext(false);
 }
 
 guint getAccelKey(const string &key){
