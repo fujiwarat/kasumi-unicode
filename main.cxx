@@ -87,7 +87,6 @@ int main(int argc, char *argv[])
     KasumiDic *dic = new KasumiDic(dic_filename);
 
     KasumiMainWindow window = KasumiMainWindow(dic);
-    dic->store();
   }catch(KasumiDicExaminationException e){
     cout << "line " << e.getLine() << ":" << e.getMessage() << endl;
     return 0;
