@@ -63,6 +63,7 @@ void KasumiConfiguration::loadDefaultProperties(){
   config[string("DefaultAddingSpelling")] = string("");
   config[string("DefaultAddingSound")] = string("");
   config[string("DefaultAddingWordClass")] = string(EUCJP_MEISHI);
+  config[string("DefaultWindowPosX")] = string("0");
 }
 
 void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[]){
@@ -72,6 +73,9 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[]){
     {"version", no_argument, NULL, 'v'},
     {"add", no_argument, NULL, 'a'},
     {"main", no_argument, NULL, 'm'},
+    {"sound", required_argument, NULL, 's'},
+    {"spelling", required_argument, NULL, 't'},
+    {"wordclass", required_argument, NULL, 'w'},
     {0,0,0,0}
   };
 
@@ -92,6 +96,15 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[]){
       break;
     case 'm':
       setPropertyValue(string("StartupMode"),string("MAIN"));
+      break;
+    case 's':
+      setPropertyValue(string("DefaultAddingSound"),string(optarg));
+      break;
+    case 't':
+      setPropertyValue(string("DefaultAddingSpelling"),string(optarg));
+      break;
+    case 'w':
+      setPropertyValue(string("DefaultAddingWordClass"),string(optarg));
       break;
     case '?':
       cout << "Argument error." << endl;

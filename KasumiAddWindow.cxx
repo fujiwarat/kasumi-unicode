@@ -206,7 +206,9 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   }
   
   // resize window appropriate size
-  gtk_window_resize(GTK_WINDOW(window),1,1);
+  gtk_window_reshow_with_initial_size(GTK_WINDOW(window));
+  gtk_window_set_resizable(GTK_WINDOW(window),true);
+  gtk_window_move(GTK_WINDOW(window),0,0);
 }
 
 
@@ -321,7 +323,7 @@ void KasumiAddWindow::ChangedWordClassCombo(GtkWidget *widget){
     gtk_widget_hide(AdvOptionPane);
 
     // resize window appropriate size
-    gtk_window_resize(GTK_WINDOW(window),1,1);
+    gtk_window_reshow_with_initial_size(GTK_WINDOW(window));    
   }else if(getActiveWordClass() == ADV){
     gtk_toggle_button_set_active(
       GTK_TOGGLE_BUTTON(AdvOptionToConnectionCheck),
@@ -340,13 +342,13 @@ void KasumiAddWindow::ChangedWordClassCombo(GtkWidget *widget){
     gtk_widget_show(AdvOptionPane);
     
     // resize window appropriate size
-    gtk_window_resize(GTK_WINDOW(window),1,1);
+    gtk_window_reshow_with_initial_size(GTK_WINDOW(window));    
   }else{
     gtk_widget_hide(NounOptionPane);
     gtk_widget_hide(AdvOptionPane);
     
     // resize window appropriate size
-    gtk_window_resize(GTK_WINDOW(window),1,1);
+    gtk_window_reshow_with_initial_size(GTK_WINDOW(window));    
   }
 }
 

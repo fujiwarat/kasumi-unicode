@@ -19,19 +19,22 @@ using namespace std;
 void showHelp(){
   cout << "Usage: kasumi [option]" << endl;
   cout << "Option:" << endl;
-  cout << "  -h --help       Show this message." << endl;
-  cout << "  -v --versoin    Show Kasumi's version and copyright" << endl;;
-  cout << "                  infomation" << endl;
-  cout << "  -a --add        Run Kasumi with Add window." << endl;
-  cout << "  -m --main       Run Kasumi with default window." << endl;
-  cout << "                  You may abbreviate this option." << endl;
+  cout << "  -h --help        Show this message." << endl;
+  cout << "  -v --versoin     Show Kasumi's version and copyright" << endl;;
+  cout << "                   infomation" << endl;
+  cout << "  -m --main        Run Kasumi in Manage mode." << endl;
+  cout << "                   You may abbreviate this option." << endl;
+  cout << "  -a --add         Run Kasumi in Add mode." << endl;
+  cout << "  --sound val      Set defalut sound entry (only in Add mode)" << endl;
+  cout << "  --spelling val   Set defalut spelling entry (only in Add mode)" << endl;
+  cout << "  --wordclass val  Set defalut word class entry (only in Add mode)" << endl;
   cout << endl;
 }
 
 void showVersion(){
   cout << "kasumi " << VERSION << endl;
   cout << "Copyright (C) 2004 Takashi Nakamoto.\n";
-  cout << "This program comes with NO WARRANTY, to the extent permitted" \
+  cout << "This program comes with NO WARRANTY, to the extent permitted " \
           "by law. \nYou may redistribute it under the terms of the GNU " \
           "General Public License; \nsee the file named COPYING for " \
           "details.";
