@@ -48,7 +48,7 @@ void KasumiConfiguration::loadDefaultProperties(){
     exit(1);
   }
   
-  config[string("StartupMode")] = string("MAIN");
+  config[string("StartupMode")] = string("MANAGE");
   config[string("DictionaryPath")] = string(home) + "/.anthy/private-dic.src.tmp";
   config[string("DefaultFrequency")] = string("500");
   config[string("MaxFrequency")] = string("1000");
@@ -74,7 +74,7 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[]){
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'v'},
     {"add", no_argument, NULL, 'a'},
-    {"main", no_argument, NULL, 'm'},
+    {"manage", no_argument, NULL, 'm'},
     {"sound", required_argument, NULL, 's'},
     {"spelling", required_argument, NULL, 't'},
     {"wordclass", required_argument, NULL, 'w'},
@@ -99,7 +99,7 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[]){
       setPropertyValue(string("StartupMode"),string("ADD"));
       break;
     case 'm':
-      setPropertyValue(string("StartupMode"),string("MAIN"));
+      setPropertyValue(string("StartupMode"),string("MANAGE"));
       break;
     case 's':
       setPropertyValue(string("DefaultAddingSound"),string(optarg));

@@ -22,17 +22,19 @@ void showHelp(){
   cout << "  -h --help        Show this message." << endl;
   cout << "  -v --versoin     Show Kasumi's version and copyright" << endl;;
   cout << "                   infomation" << endl;
-  cout << "  -m --main        Run Kasumi in Manage mode." << endl;
+  cout << "  -m --manage      Run Kasumi in Manage mode." << endl;
   cout << "                   You may abbreviate this option." << endl;
   cout << "  -a --add         Run Kasumi in Add mode." << endl;
   cout << "  --sound val      Set defalut sound entry (only in Add mode)" << endl;
   cout << "  --spelling val   Set defalut spelling entry (only in Add mode)" << endl;
   cout << "  --wordclass val  Set defalut word class entry (only in Add mode)" << endl;
+  cout << "  -x val           Set default horizontal window position" << endl;
+  cout << "  -y val           Set default vertical window position" << endl;
   cout << endl;
 }
 
 void showVersion(){
-  cout << "kasumi " << VERSION << endl;
+  cout << "kasumi " << VERSION << ": a personal dictionary manager for Anthy" << endl;
   cout << "Copyright (C) 2004 Takashi Nakamoto.\n";
   cout << "This program comes with NO WARRANTY, to the extent permitted " \
           "by law. \nYou may redistribute it under the terms of the GNU " \
@@ -61,7 +63,7 @@ int main(int argc, char *argv[])
       showHelp();
     }else if(startupMode == string("VERSION")){
       showVersion();
-    }else if(startupMode == string("MAIN")){
+    }else if(startupMode == string("MANAGE")){
       KasumiMainWindow window = KasumiMainWindow(dic,conf);
       gtk_main();
     }else if(startupMode == string("ADD")){

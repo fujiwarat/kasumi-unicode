@@ -346,7 +346,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                              getAccelKey(key),
                              getModifierType(key),
                              GTK_ACCEL_VISIBLE);
-  
+
   gtk_widget_show_all(window);
   gtk_widget_hide(AdvOptionPane);
 
