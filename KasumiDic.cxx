@@ -191,8 +191,6 @@ void KasumiDic::store()
     ret += "\n";
   }
 
-  cout << ret;
-
   DicFile << ret;
   DicFile.close();
 
