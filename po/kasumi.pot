@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-05 17:46+0900\n"
+"POT-Creation-Date: 2004-11-11 01:48+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,13 +20,11 @@ msgstr ""
 msgid "Kasumi"
 msgstr ""
 
-#: KasumiMainWindow.cxx:46 KasumiMainWindow.cxx:86 KasumiMainWindow.cxx:341
-#: KasumiAddWindow.cxx:29
+#: KasumiMainWindow.cxx:46 KasumiMainWindow.cxx:86 KasumiAddWindow.cxx:29
 msgid "Spelling"
 msgstr ""
 
-#: KasumiMainWindow.cxx:52 KasumiMainWindow.cxx:97 KasumiMainWindow.cxx:342
-#: KasumiAddWindow.cxx:38
+#: KasumiMainWindow.cxx:52 KasumiMainWindow.cxx:97 KasumiAddWindow.cxx:38
 msgid "Sound"
 msgstr ""
 
@@ -88,23 +86,27 @@ msgstr ""
 msgid "TARU connection"
 msgstr ""
 
-#: KasumiMainWindow.cxx:236 KasumiAddWindow.cxx:143
+#: KasumiMainWindow.cxx:238
+msgid "Find Next By Sound"
+msgstr ""
+
+#: KasumiMainWindow.cxx:250 KasumiAddWindow.cxx:143
 msgid "Quit"
 msgstr ""
 
-#: KasumiMainWindow.cxx:242
+#: KasumiMainWindow.cxx:256
 msgid "Store"
 msgstr ""
 
-#: KasumiMainWindow.cxx:248 KasumiAddWindow.cxx:149
+#: KasumiMainWindow.cxx:262 KasumiAddWindow.cxx:149
 msgid "Add"
 msgstr ""
 
-#: KasumiMainWindow.cxx:254
+#: KasumiMainWindow.cxx:268
 msgid "Remove"
 msgstr ""
 
-#: KasumiMainWindow.cxx:307
+#: KasumiMainWindow.cxx:320
 msgid ""
 "Your dictionary went through several changes. Do you save these changes "
 "before Kasumi quits?"

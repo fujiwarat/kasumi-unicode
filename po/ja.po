@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-05 17:46+0900\n"
+"POT-Creation-Date: 2004-11-11 01:48+0900\n"
 "PO-Revision-Date: 2004-10-18 08:30+0900\n"
 "Last-Translator: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
 "Language-Team: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
@@ -19,13 +19,11 @@ msgstr ""
 msgid "Kasumi"
 msgstr "霞"
 
-#: KasumiMainWindow.cxx:46 KasumiMainWindow.cxx:86 KasumiMainWindow.cxx:341
-#: KasumiAddWindow.cxx:29
+#: KasumiMainWindow.cxx:46 KasumiMainWindow.cxx:86 KasumiAddWindow.cxx:29
 msgid "Spelling"
 msgstr "単語"
 
-#: KasumiMainWindow.cxx:52 KasumiMainWindow.cxx:97 KasumiMainWindow.cxx:342
-#: KasumiAddWindow.cxx:38
+#: KasumiMainWindow.cxx:52 KasumiMainWindow.cxx:97 KasumiAddWindow.cxx:38
 msgid "Sound"
 msgstr "読み"
 
@@ -87,23 +85,28 @@ msgstr "と接続"
 msgid "TARU connection"
 msgstr "たる接続"
 
-#: KasumiMainWindow.cxx:236 KasumiAddWindow.cxx:143
+#: KasumiMainWindow.cxx:238
+#, fuzzy
+msgid "Find Next By Sound"
+msgstr "次を読みで検索"
+
+#: KasumiMainWindow.cxx:250 KasumiAddWindow.cxx:143
 msgid "Quit"
 msgstr "終了"
 
-#: KasumiMainWindow.cxx:242
+#: KasumiMainWindow.cxx:256
 msgid "Store"
 msgstr "保存"
 
-#: KasumiMainWindow.cxx:248 KasumiAddWindow.cxx:149
+#: KasumiMainWindow.cxx:262 KasumiAddWindow.cxx:149
 msgid "Add"
 msgstr "追加"
 
-#: KasumiMainWindow.cxx:254
+#: KasumiMainWindow.cxx:268
 msgid "Remove"
 msgstr "削除"
 
-#: KasumiMainWindow.cxx:307
+#: KasumiMainWindow.cxx:320
 msgid ""
 "Your dictionary went through several changes. Do you save these changes "
 "before Kasumi quits?"

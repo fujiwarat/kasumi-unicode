@@ -31,6 +31,7 @@ class KasumiMainWindow : public KasumiDicEventListener{
   friend void _call_back_changed_frequency_spin(GtkWidget *widget, gpointer data);
   friend void _call_back_changed_word_class_combo(GtkWidget *widget, gpointer data);
   friend void _call_back_toggled_check(GtkWidget *widget, gpointer data);
+  friend void _call_back_find_next_by_sound(GtkWidget *widget, gpointer data);  
 private:
   KasumiDic *dictionary;
   GtkWidget *window;
@@ -70,6 +71,8 @@ private:
   gulong HandlerIDOfAdvOptionSuruConnectionCheck;
   gulong HandlerIDOfAdvOptionGokanCheck;
 
+  GtkWidget *SearchEntry;
+  
   bool modificationFlag;
   
   void destroy(GtkWidget *widget);
@@ -84,6 +87,7 @@ private:
   void ChangedFrequencySpin(GtkWidget *widget);
   void ChangedWordClassCombo(GtkWidget *widget);
   void ChangedOption(GtkWidget *widget);
+  void FindNextBySound(GtkWidget *widget);
 
   GtkTreeIter *findCorrespondingIter(int id);
 

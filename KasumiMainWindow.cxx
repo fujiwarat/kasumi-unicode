@@ -225,6 +225,20 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   HandlerIDOfAdvOptionGokanCheck =
     g_signal_connect(G_OBJECT(AdvOptionGokanCheck),"toggled",
                      G_CALLBACK(_call_back_toggled_check),this);
+
+  // creating box for search function
+  GtkWidget *search_hbox = gtk_hbox_new(FALSE,8);
+  gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(search_hbox),FALSE,FALSE,0);
+
+  // creating Entry and Button for search function
+  SearchEntry = gtk_entry_new();
+  gtk_box_pack_start(GTK_BOX(search_hbox),GTK_WIDGET(SearchEntry),FALSE,FALSE,0);
+
+  GtkWidget *button = gtk_button_new();
+  gtk_button_set_label(GTK_BUTTON(button),_("Find Next By Sound"));
+  gtk_box_pack_start(GTK_BOX(search_hbox),GTK_WIDGET(button),FALSE,FALSE,0);
+  g_signal_connect(G_OBJECT(button),"clicked",
+                   G_CALLBACK(_call_back_find_next_by_sound),this);
   
   /* creating box for buttons */
   GtkWidget *hbutton_box = gtk_hbutton_box_new();
@@ -232,7 +246,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hbutton_box),FALSE,FALSE,0);
 
   /* creating buttons */
-  GtkWidget *button = gtk_button_new();
+  button = gtk_button_new();
   gtk_button_set_label(GTK_BUTTON(button),_("Quit"));
   gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
@@ -481,6 +495,29 @@ void KasumiMainWindow::ChangedOption(GtkWidget *widget){
   }
 }
 
+void KasumiMainWindow::FindNextBySound(GtkWidget *widget){
+  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeIter iter;
+  KasumiWord *word;
+  int id;
+
+  if(!gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
+    gtk_tree_model_get_iter_first(model, &iter);
+  }
+  
+  do{
+    gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
+    word = dictionary->getWordWithID(id);
+    
+    if(word->getSoundByUTF8() == string(gtk_entry_get_text(GTK_ENTRY(SearchEntry)))){
+      gtk_tree_selection_select_iter(WordListSelection,&iter);
+      return;
+    }
+  }while(gtk_tree_model_iter_next(model, &iter));
+  cout << "Cannot find." << endl;
+  
+}
+
 void KasumiMainWindow::removedWord(int id){
   refresh();
   modificationFlag = true;  
@@ -705,4 +742,9 @@ void _call_back_changed_word_class_combo(GtkWidget *widget, gpointer data){
 void _call_back_toggled_check(GtkWidget *widget, gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->ChangedOption(widget);
+}
+
+void _call_back_find_next_by_sound(GtkWidget *widget, gpointer data){
+  KasumiMainWindow *window = (KasumiMainWindow *)data;
+  window->FindNextBySound(widget);
 }
