@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-02 22:44+0900\n"
+"POT-Creation-Date: 2005-04-02 21:14+0900\n"
 "PO-Revision-Date: 2004-10-18 08:30+0900\n"
 "Last-Translator: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
 "Language-Team: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
@@ -113,23 +113,23 @@ msgstr "削除"
 msgid "Adding Mode"
 msgstr "単語追加モード"
 
-#: KasumiMainWindow.cxx:422
+#: KasumiMainWindow.cxx:443
 msgid ""
 "Your dictionary went through several changes. Do you save these changes "
 "before Kasumi quits?"
 msgstr "辞書に変更が加えられました。霞を終了する前に保存しますか？"
 
-#: KasumiMainWindow.cxx:534 KasumiAddWindow.cxx:323
+#: KasumiMainWindow.cxx:555 KasumiAddWindow.cxx:323
 msgid ""
 "Sound must consist of only Hiragana characters. You have entered invalid "
 "character: "
 msgstr "読みにひらがな以外の文字を入力することはできません: "
 
-#: KasumiMainWindow.cxx:713
+#: KasumiMainWindow.cxx:734
 msgid "Cannot find a specific word. Search from first?"
 msgstr "検索しても見つかりませんでした。最初から検索しますか？"
 
-#: KasumiMainWindow.cxx:751
+#: KasumiMainWindow.cxx:772
 msgid "Cannot find a specific word."
 msgstr "検索しても見つかりませんでした。"
 
@@ -139,7 +139,7 @@ msgstr "追加"
 
 #: KasumiAddWindow.cxx:187
 msgid "Manage Mode"
-msgstr "辞書管理モード"
+msgstr "辞書管理"
 
 #: KasumiAddWindow.cxx:255
 msgid "Invlid entry for Sound."

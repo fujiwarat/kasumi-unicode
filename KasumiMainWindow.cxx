@@ -376,6 +376,8 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
 }
 
 void KasumiMainWindow::refresh(){
+  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeIter iter;
   int i = 0;
 
   gtk_list_store_clear(WordList);
@@ -402,6 +404,25 @@ void KasumiMainWindow::refresh(){
       exit(1);
     }
   }
+
+  if(!gtk_tree_model_get_iter_first(model, &iter)){
+    // If no words, disable text entries and other visible widgets
+    gtk_widget_set_sensitive(SpellingEntry,false);
+    gtk_widget_set_sensitive(SoundEntry,false);
+    gtk_widget_set_sensitive(FrequencySpin,false);
+    gtk_widget_set_sensitive(WordClassCombo,false);
+    gtk_widget_set_sensitive(NounOptionSaConnectionCheck,false);
+    gtk_widget_set_sensitive(NounOptionNaConnectionCheck,false);
+    gtk_widget_set_sensitive(NounOptionSuruConnectionCheck,false);
+    gtk_widget_set_sensitive(NounOptionGokanCheck,false);
+    gtk_widget_set_sensitive(NounOptionKakujoshiConnectionCheck,false);
+
+    return;
+  }
+
+  // select first word
+  gtk_tree_selection_select_iter(WordListSelection,&iter);  
+
 }
 
 KasumiMainWindow::~KasumiMainWindow(){
@@ -739,7 +760,7 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
               StartIter.user_data3 != iter.user_data3));
     }else{
       gtk_widget_destroy(dialog);
-      gtk_tree_selection_unselect_all(WordListSelection);      
+      //      gtk_tree_selection_unselect_all(WordListSelection);      
       return;
     }
   }
@@ -751,7 +772,7 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
                                   _("Cannot find a specific word."));
   gtk_dialog_run(GTK_DIALOG (dialog));
   gtk_widget_destroy(dialog);
-  gtk_tree_selection_unselect_all(WordListSelection);
+  //  gtk_tree_selection_unselect_all(WordListSelection);
 }
 
 void KasumiMainWindow::removedWord(int id){
@@ -764,6 +785,17 @@ void KasumiMainWindow::appendedWord(int id){
   KasumiWord *word = dictionary->getWordWithID(id);
   
   gtk_list_store_append(WordList,&iter);
+
+  // activate disabled widget
+  gtk_widget_set_sensitive(SpellingEntry,true);
+  gtk_widget_set_sensitive(SoundEntry,true);
+  gtk_widget_set_sensitive(FrequencySpin,true);
+  gtk_widget_set_sensitive(WordClassCombo,true);
+  gtk_widget_set_sensitive(NounOptionSaConnectionCheck,true);
+  gtk_widget_set_sensitive(NounOptionNaConnectionCheck,true);
+  gtk_widget_set_sensitive(NounOptionSuruConnectionCheck,true);
+  gtk_widget_set_sensitive(NounOptionGokanCheck,true);
+  gtk_widget_set_sensitive(NounOptionKakujoshiConnectionCheck,true);
   
   gtk_list_store_set(WordList, &iter,
                      COL_ID, id,

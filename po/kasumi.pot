@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-02 22:44+0900\n"
+"POT-Creation-Date: 2005-04-02 21:14+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -114,23 +114,23 @@ msgstr ""
 msgid "Adding Mode"
 msgstr ""
 
-#: KasumiMainWindow.cxx:422
+#: KasumiMainWindow.cxx:443
 msgid ""
 "Your dictionary went through several changes. Do you save these changes "
 "before Kasumi quits?"
 msgstr ""
 
-#: KasumiMainWindow.cxx:534 KasumiAddWindow.cxx:323
+#: KasumiMainWindow.cxx:555 KasumiAddWindow.cxx:323
 msgid ""
 "Sound must consist of only Hiragana characters. You have entered invalid "
 "character: "
 msgstr ""
 
-#: KasumiMainWindow.cxx:713
+#: KasumiMainWindow.cxx:734
 msgid "Cannot find a specific word. Search from first?"
 msgstr ""
 
-#: KasumiMainWindow.cxx:751
+#: KasumiMainWindow.cxx:772
 msgid "Cannot find a specific word."
 msgstr ""
 
