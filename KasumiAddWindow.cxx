@@ -195,6 +195,10 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                              getAccelKey(key),
                              getModifierType(key),
                              GTK_ACCEL_VISIBLE);
+
+  // get selection at the time of launching
+  g_signal_connect(G_OBJECT(SpellingEntry),"selection_received",
+                   G_CALLBACK(_call_back_selection_data_received),NULL);
   
   gtk_widget_show_all(window);
   gtk_widget_hide(AdvOptionPane);
@@ -226,6 +230,11 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   if(x >= 0 && y >= 0){
     gtk_window_move(GTK_WINDOW(window),x,y);
   }
+
+  if(conf->getPropertyValue("DefaultAddingSpelling") == ""){
+    get_targets(SpellingEntry);
+  }
+
 }
 
 KasumiAddWindow::~KasumiAddWindow(){
@@ -437,4 +446,39 @@ void _call_back_add_window_changed_word_class_combo(GtkWidget *widget,
                                                     gpointer data){
   KasumiAddWindow *window = (KasumiAddWindow *)data;
   window->ChangedWordClassCombo(widget);
+}
+
+// to set selected string to SpellingEntry
+void _call_back_selection_data_received(GtkWidget *widget,
+                                        GtkSelectionData *selection_data,
+                                        gpointer data){
+  GdkAtom *atoms;
+  int i;
+
+  if(selection_data->length < 0){
+    // failed retrieving selection
+    // do nothing
+    return;
+  }
+
+  string atom_name = string(gdk_atom_name(selection_data->type));
+
+  gchar *str;
+  str = reinterpret_cast<gchar*>(selection_data->data);
+
+  if(atom_name == "UTF8_STRING"){
+    gtk_entry_set_text(GTK_ENTRY(widget), str);
+  }
+
+  return;
+} 
+
+// to get selected string
+void get_targets(GtkWidget *data){
+  static GdkAtom targets_atom = GDK_NONE;
+  GtkWidget *window = (GtkWidget *)data;	
+
+  targets_atom = gdk_atom_intern("UTF8_STRING", FALSE);
+  gtk_selection_convert(window, GDK_SELECTION_PRIMARY, targets_atom,
+                        GDK_CURRENT_TIME);
 }

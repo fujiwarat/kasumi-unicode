@@ -22,6 +22,9 @@ class KasumiAddWindow{
                                      gpointer data);
   friend void _call_back_add_window_changed_word_class_combo(GtkWidget *widget,
                                                              gpointer data);
+  friend void _call_back_selection_data_received(GtkWidget *widget,
+                                                 GtkSelectionData *selection_data,
+                                                 gpointer data) ;
 private:
   KasumiDic *dictionary;
   KasumiConfiguration *conf;
@@ -55,5 +58,7 @@ public:
   KasumiAddWindow(KasumiDic *aDictionary, KasumiConfiguration *conf);
   ~KasumiAddWindow();
 };
+
+void get_targets(GtkWidget *data);
 
 #endif

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-02 21:14+0900\n"
+"POT-Creation-Date: 2005-04-04 15:57+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,7 +120,7 @@ msgid ""
 "before Kasumi quits?"
 msgstr ""
 
-#: KasumiMainWindow.cxx:555 KasumiAddWindow.cxx:323
+#: KasumiMainWindow.cxx:555 KasumiAddWindow.cxx:329
 msgid ""
 "Sound must consist of only Hiragana characters. You have entered invalid "
 "character: "
@@ -142,10 +142,10 @@ msgstr ""
 msgid "Manage Mode"
 msgstr ""
 
-#: KasumiAddWindow.cxx:255
+#: KasumiAddWindow.cxx:261
 msgid "Invlid entry for Sound."
 msgstr ""
 
-#: KasumiAddWindow.cxx:269
+#: KasumiAddWindow.cxx:275
 msgid "Invlid entry for Spelling."
 msgstr ""
