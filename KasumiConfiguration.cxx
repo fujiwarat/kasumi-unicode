@@ -50,6 +50,11 @@ void KasumiConfiguration::loadDefaultProperties(){
   config[string("DefaultFrequency")] = string("500");
   config[string("MaxFrequency")] = string("1000");
   config[string("MinFrequency")] = string("1");
+  config[string("QuitShortcutKey")] = string("Ctrl+Q");
+  config[string("StoreShortcutKey")] = string("Ctrl+S");
+  config[string("NewWordShortcutKey")] = string("Ctrl+N");
+  config[string("RemoveShortcutKey")] = string("Ctrl+R");
+  config[string("AddShortcutKey")] = string("Ctrl+A");
 }
 
 void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[]){

@@ -5,6 +5,7 @@
 #include "KasumiDic.hxx"
 #include "KasumiString.hxx"
 #include "KasumiConfiguration.hxx"
+#include "KasumiMainWindow.hxx" // for getModifierType() and getAccelKey()
 #include <gdk/gdkkeysyms.h>
 #include "intl.h"
 
@@ -161,8 +162,11 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                    G_CALLBACK(_call_back_add_window_quit),this);
   GtkAccelGroup *accel = gtk_accel_group_new();
   gtk_window_add_accel_group(GTK_WINDOW(window), accel);
+  string key = conf->getPropertyValue("QuitShortcutKey");
   gtk_widget_add_accelerator(button, "clicked", accel,
-                             GDK_Q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+                             getAccelKey(key),
+                             getModifierType(key),
+                             GTK_ACCEL_VISIBLE);
 
   button = gtk_button_new();
   gtk_button_set_label(GTK_BUTTON(button),_("Add"));
@@ -171,8 +175,11 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                    G_CALLBACK(_call_back_add_window_add),this);
   accel = gtk_accel_group_new();
   gtk_window_add_accel_group(GTK_WINDOW(window), accel);
+  key = conf->getPropertyValue("AddShortcutKey");
   gtk_widget_add_accelerator(button, "clicked", accel,
-                             GDK_A, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+                             getAccelKey(key),
+                             getModifierType(key),
+                             GTK_ACCEL_VISIBLE);
   
   gtk_widget_show_all(window);
   gtk_widget_hide(AdvOptionPane);

@@ -300,8 +300,11 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                    G_CALLBACK(_call_back_quit),this);
   GtkAccelGroup *accel = gtk_accel_group_new();
   gtk_window_add_accel_group(GTK_WINDOW(window), accel);
+  string key = conf->getPropertyValue("QuitShortcutKey");
   gtk_widget_add_accelerator(button, "clicked", accel,
-                             GDK_Q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+                             getAccelKey(key),
+                             getModifierType(key),
+                             GTK_ACCEL_VISIBLE);
 
   button = gtk_button_new();
   gtk_button_set_label(GTK_BUTTON(button),_("Store"));
@@ -310,8 +313,11 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                    G_CALLBACK(_call_back_store),this);
   accel = gtk_accel_group_new();
   gtk_window_add_accel_group(GTK_WINDOW(window), accel);
+  key = conf->getPropertyValue("StoreShortcutKey");
   gtk_widget_add_accelerator(button, "clicked", accel,
-                             GDK_S, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+                             getAccelKey(key),
+                             getModifierType(key),
+                             GTK_ACCEL_VISIBLE);
 
   button = gtk_button_new();
   gtk_button_set_label(GTK_BUTTON(button),_("New Word"));
@@ -320,8 +326,11 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                    G_CALLBACK(_call_back_add),this);
   accel = gtk_accel_group_new();
   gtk_window_add_accel_group(GTK_WINDOW(window), accel);
+  key = conf->getPropertyValue("NewWordShortcutKey");  
   gtk_widget_add_accelerator(button, "clicked", accel,
-                             GDK_A, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+                             getAccelKey(key),
+                             getModifierType(key),
+                             GTK_ACCEL_VISIBLE);
   
   button = gtk_button_new();
   gtk_button_set_label(GTK_BUTTON(button),_("Remove"));
@@ -330,8 +339,11 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                    G_CALLBACK(_call_back_remove),this);
   accel = gtk_accel_group_new();
   gtk_window_add_accel_group(GTK_WINDOW(window), accel);
+  key = conf->getPropertyValue("RemoveShortcutKey");
   gtk_widget_add_accelerator(button, "clicked", accel,
-                             GDK_D, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+                             getAccelKey(key),
+                             getModifierType(key),
+                             GTK_ACCEL_VISIBLE);
   
   gtk_widget_show_all(window);
   gtk_widget_hide(AdvOptionPane);
@@ -1001,3 +1013,69 @@ void _call_back_find_next_by_spelling(GtkWidget *widget,
   window->FindNextBySpelling(widget);
 }
 
+guint getAccelKey(const string &key){
+  unsigned int i;
+
+  i = key.find("+",0);
+
+  string shortkey = key.substr(i+1);
+
+  if(shortkey == "A") return GDK_A;
+  else if(shortkey == "B") return GDK_B;
+  else if(shortkey == "C") return GDK_C;
+  else if(shortkey == "D") return GDK_D;
+  else if(shortkey == "E") return GDK_E;
+  else if(shortkey == "F") return GDK_F;
+  else if(shortkey == "G") return GDK_G;
+  else if(shortkey == "H") return GDK_H;
+  else if(shortkey == "I") return GDK_I;
+  else if(shortkey == "J") return GDK_J;
+  else if(shortkey == "K") return GDK_K;
+  else if(shortkey == "L") return GDK_L;
+  else if(shortkey == "M") return GDK_M;
+  else if(shortkey == "N") return GDK_N;
+  else if(shortkey == "O") return GDK_O;
+  else if(shortkey == "P") return GDK_P;
+  else if(shortkey == "Q") return GDK_Q;
+  else if(shortkey == "R") return GDK_R;
+  else if(shortkey == "S") return GDK_S;
+  else if(shortkey == "T") return GDK_T;
+  else if(shortkey == "U") return GDK_U;
+  else if(shortkey == "V") return GDK_V;
+  else if(shortkey == "W") return GDK_W;
+  else if(shortkey == "X") return GDK_X;
+  else if(shortkey == "Y") return GDK_Y;
+  else if(shortkey == "Z") return GDK_Z;
+  else if(shortkey == "1") return GDK_1;
+  else if(shortkey == "2") return GDK_2;
+  else if(shortkey == "3") return GDK_3;
+  else if(shortkey == "4") return GDK_4;
+  else if(shortkey == "5") return GDK_5;
+  else if(shortkey == "6") return GDK_5;
+  else if(shortkey == "7") return GDK_7;
+  else if(shortkey == "8") return GDK_8;
+  else if(shortkey == "9") return GDK_9;
+  
+  cout << "Invalid shortcut key option: " << key << endl;
+  exit(1);
+}
+
+GdkModifierType getModifierType(const string &key){
+  unsigned int i;
+
+  i = key.find("+",0);
+
+  if(i == key.npos){
+    return (GdkModifierType)0;
+  }
+
+  string mask = key.substr(0,i);
+  if(mask == "Ctrl"){
+    return GDK_CONTROL_MASK;
+  }else if(mask == "Alt"){
+    return GDK_MOD1_MASK;
+  }
+
+  cout << "Invalid mask option: " << key << endl;
+  exit(1);
+}

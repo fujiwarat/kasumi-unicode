@@ -133,6 +133,7 @@ public:
   void modifiedWord(int id);
 };
 
-
+guint getAccelKey(const string &key);
+GdkModifierType getModifierType(const string &key);
 
 #endif
