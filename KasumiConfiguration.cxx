@@ -18,7 +18,6 @@ KasumiConfiguration::KasumiConfiguration(int argc, char *argv[])
   throw(KasumiConfigurationLoadException){
 
   loadDefaultProperties();
-  loadConfigurationFromArgument(argc, argv);
 
   // ~/.kasumi must be encoded in EUC-JP
   
@@ -34,6 +33,8 @@ KasumiConfiguration::KasumiConfiguration(int argc, char *argv[])
   }catch(KasumiConfigurationLoadException e){
     throw e;
   }
+
+  loadConfigurationFromArgument(argc, argv);
 }
 
 KasumiConfiguration::~KasumiConfiguration(){
@@ -63,7 +64,8 @@ void KasumiConfiguration::loadDefaultProperties(){
   config[string("DefaultAddingSpelling")] = string("");
   config[string("DefaultAddingSound")] = string("");
   config[string("DefaultAddingWordClass")] = string(EUCJP_MEISHI);
-  config[string("DefaultWindowPosX")] = string("0");
+  config[string("DefaultWindowPosX")] = string("-1");
+  config[string("DefaultWindowPosY")] = string("-1");
 }
 
 void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[]){
@@ -76,12 +78,14 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[]){
     {"sound", required_argument, NULL, 's'},
     {"spelling", required_argument, NULL, 't'},
     {"wordclass", required_argument, NULL, 'w'},
+    {"x", required_argument, NULL, 'x'},
+    {"y", required_argument, NULL, 'y'},
     {0,0,0,0}
   };
 
   int c;    
   while(1){
-    c = getopt_long(argc, argv, "hvam", long_options, &option_index);
+    c = getopt_long(argc, argv, "hvams:t:w:x:y:", long_options, &option_index);
     if(c == -1) break; // no more argument
 
     switch(c){
@@ -105,6 +109,12 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[]){
       break;
     case 'w':
       setPropertyValue(string("DefaultAddingWordClass"),string(optarg));
+      break;
+    case 'x':
+      setPropertyValue(string("DefaultWindowPosX"),string(optarg));
+      break;
+    case 'y':
+      setPropertyValue(string("DefaultWindowPosY"),string(optarg));
       break;
     case '?':
       cout << "Argument error." << endl;

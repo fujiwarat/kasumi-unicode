@@ -208,7 +208,13 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   // resize window appropriate size
   gtk_window_reshow_with_initial_size(GTK_WINDOW(window));
   gtk_window_set_resizable(GTK_WINDOW(window),true);
-  gtk_window_move(GTK_WINDOW(window),0,0);
+
+  // set default window position
+  int x = conf->getPropertyValueByInt("DefaultWindowPosX");
+  int y = conf->getPropertyValueByInt("DefaultWindowPosY");
+  if(x >= 0 && y >= 0){
+    gtk_window_move(GTK_WINDOW(window),x,y);
+  }
 }
 
 
