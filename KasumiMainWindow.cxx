@@ -27,8 +27,6 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
   gtk_window_set_title(GTK_WINDOW(window), _("Kasumi"));
   g_signal_connect(G_OBJECT(window), "delete_event",
                    G_CALLBACK(_call_back_delete_event), this);
-  g_signal_connect(G_OBJECT(window), "destroy",
-                   G_CALLBACK(_call_back_destroy), this);
 
   // creating top vbox
   GtkWidget *vbox = gtk_vbox_new(FALSE,8);
@@ -407,7 +405,7 @@ void KasumiMainWindow::refresh(){
 }
 
 KasumiMainWindow::~KasumiMainWindow(){
-  dictionary->removeEventListener(this);  
+  dictionary->removeEventListener(this);
   destroy();
 }
 
@@ -415,7 +413,7 @@ void KasumiMainWindow::destroy(){
   gtk_widget_destroy(window);
 }
 
-gboolean KasumiMainWindow::delete_event(GdkEvent *event){
+void KasumiMainWindow::quit(){
   if(modificationFlag){
     GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(window),
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -436,14 +434,8 @@ gboolean KasumiMainWindow::delete_event(GdkEvent *event){
     }
     gtk_widget_destroy (dialog);
   }
-  return FALSE;
-}
-
-void KasumiMainWindow::ClickedQuitButton(){
-  if(!delete_event(NULL)){
-    destroy();
-    gtk_main_quit();
-  }
+  destroy();
+  gtk_main_quit();
 }
 
 void KasumiMainWindow::ClickedStoreButton(){
@@ -988,24 +980,17 @@ void KasumiMainWindow::flipOptionPane(){
   }
 }
 
-void _call_back_destroy(GtkWidget *widget,
-                        gpointer data){
+void _call_back_delete_event(GtkWidget *widget,
+                             GdkEvent *event,
+                             gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
-  window->destroy();
-  gtk_main_quit();
-}
-
-gboolean _call_back_delete_event(GtkWidget *widget,
-                                 GdkEvent *event,
-                                 gpointer data){
-  KasumiMainWindow *window = (KasumiMainWindow *)data;
-  return window->delete_event(event);
+  window->quit();
 }
 
 void _call_back_quit(GtkWidget *widget,
                      gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
-  window->ClickedQuitButton();
+  window->quit();
 }
 
 void _call_back_store(GtkWidget *widget,

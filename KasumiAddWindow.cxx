@@ -25,8 +25,6 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   gtk_window_set_title(GTK_WINDOW(window), _("Kasumi"));
   g_signal_connect(G_OBJECT(window), "delete_event",
                    G_CALLBACK(_call_back_add_window_delete_event), this);
-  g_signal_connect(G_OBJECT(window), "destroy",
-                   G_CALLBACK(_call_back_add_window_destroy), this);
 
   // creating vbox for text entries, spin button and so on.
   GtkWidget *vbox = gtk_vbox_new(FALSE,0);
@@ -238,14 +236,10 @@ void KasumiAddWindow::destroy(){
   gtk_widget_destroy(window);
 }
 
-gboolean KasumiAddWindow::delete_event(GdkEvent *event){
-  return FALSE;
-}
-void KasumiAddWindow::ClickedQuitButton(GtkWidget *widget){
-  if(!delete_event(NULL)){
-    destroy();
-    gtk_main_quit();
-  }
+void KasumiAddWindow::quit(){
+  dictionary->store();
+  destroy();
+  gtk_main_quit();
 }
 
 void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
@@ -317,7 +311,7 @@ void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
     }
 
     dictionary->appendWord(word);
-    dictionary->store();
+    //    dictionary->store();
 
     gtk_entry_set_text(GTK_ENTRY(SoundEntry), "");
     gtk_entry_set_text(GTK_ENTRY(SpellingEntry), "");
@@ -414,24 +408,17 @@ void KasumiAddWindow::SwitchToManageMode(){
   delete this;
 }
 
-void _call_back_add_window_destroy(GtkWidget *widget,
-                                   gpointer data){
-  KasumiAddWindow *window = (KasumiAddWindow *)data;
-  window->destroy();
-  gtk_main_quit();
-}
-
-gboolean _call_back_add_window_delete_event(GtkWidget *widget,
+void _call_back_add_window_delete_event(GtkWidget *widget,
                                             GdkEvent *event,
                                             gpointer data){
   KasumiAddWindow *window = (KasumiAddWindow *)data;
-  return window->delete_event(event);
+  window->quit();
 }
 
 void _call_back_add_window_quit(GtkWidget *widget,
                                 gpointer data){
   KasumiAddWindow *window = (KasumiAddWindow *)data;
-  window->ClickedQuitButton(widget);
+  window->quit();
 }
 
 void _call_back_add_window_add(GtkWidget *widget,

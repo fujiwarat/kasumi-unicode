@@ -27,11 +27,9 @@ enum _SearchByEnum{
 typedef _SearchByEnum SearchBy;
 
 class KasumiMainWindow : public KasumiDicEventListener{
-  friend void _call_back_destroy(GtkWidget *widget,
-                                 gpointer data);
-  friend gboolean _call_back_delete_event(GtkWidget *widget,
-                                          GdkEvent *event,
-                                          gpointer data);
+  friend void _call_back_delete_event(GtkWidget *widget,
+                                      GdkEvent *event,
+                                      gpointer data);
   friend void _call_back_quit(GtkWidget *widget,
                               gpointer data);
   friend void _call_back_store(GtkWidget *widget,
@@ -107,8 +105,7 @@ private:
   string previousSoundEntryText;
   
   void destroy();
-  gboolean delete_event(GdkEvent *event);
-  void ClickedQuitButton();
+  void quit();
   void ClickedStoreButton();
   void ClickedAddButton();
   void ClickedRemoveButton();

@@ -11,9 +11,7 @@
 #include "KasumiConfiguration.hxx"
 
 class KasumiAddWindow{
-  friend void _call_back_add_window_destroy(GtkWidget *widget,
-                                            gpointer data);
-  friend gboolean _call_back_add_window_delete_event(GtkWidget *widget,
+  friend void _call_back_add_window_delete_event(GtkWidget *widget,
                                                      GdkEvent *event,
                                                      gpointer data);
   friend void _call_back_add_window_quit(GtkWidget *widget,
@@ -47,8 +45,7 @@ private:
   GtkWidget *AdvOptionGokanCheck;
   
   void destroy();
-  gboolean delete_event(GdkEvent *event);
-  void ClickedQuitButton(GtkWidget *widget);
+  void quit();
   void ClickedAddButton(GtkWidget *widget);
   void ChangedWordClassCombo(GtkWidget *widget);
   WordClassType getActiveWordClass();
