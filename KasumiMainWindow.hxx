@@ -84,17 +84,17 @@ private:
   
   bool modificationFlag;
   
-  void destroy(GtkWidget *widget);
-  gboolean delete_event(GtkWidget *widget, GdkEvent *event);
-  void ClickedQuitButton(GtkWidget *widget);
-  void ClickedStoreButton(GtkWidget *widget);
-  void ClickedAddButton(GtkWidget *widget);
-  void ClickedRemoveButton(GtkWidget *widget);
-  void ChangedListCursor(GtkWidget *widget);
-  void ChangedSoundEntry(GtkWidget *widget);
-  void ChangedSpellingEntry(GtkWidget *widget);
-  void ChangedFrequencySpin(GtkWidget *widget);
-  void ChangedWordClassCombo(GtkWidget *widget);
+  void destroy();
+  gboolean delete_event(GdkEvent *event);
+  void ClickedQuitButton();
+  void ClickedStoreButton();
+  void ClickedAddButton();
+  void ClickedRemoveButton();
+  void ChangedListCursor();
+  void ChangedSoundEntry();
+  void ChangedSpellingEntry();
+  void ChangedFrequencySpin();
+  void ChangedWordClassCombo();
   void ChangedOption(GtkWidget *widget);
 
   void KasumiMainWindow::FindNextBySound(GtkWidget *widget);
