@@ -38,12 +38,15 @@ string KasumiWord::convertEUCJPToUTF8(const string &aEUCJP){
 }
 
 KasumiWord::KasumiWord(KasumiConfiguration *conf){
-  Sound = string();
-  Sound_UTF8 = string();
+  setSound(conf->getPropertyValue("DefaultSound"));
+  setSpelling(conf->getPropertyValue("DefaultSpelling"));
   Frequency = conf->getPropertyValueByInt("DefaultFrequency");
-  Spelling = string();
-  Spelling_UTF8 = string();
-  WordClass = NOUN;
+  try{
+    setWordClassWithName(conf->getPropertyValue("DefaultWordClass"));
+  }catch(KasumiInvalidWordClassNameException e){
+    cout << e.getMessage() << endl;
+    exit(1);
+  }
 }
 
 void KasumiWord::setSound(const string &aSound){
@@ -112,9 +115,10 @@ void KasumiWord::setWordClassWithName(const string &aWordClass)
   }else if(aWordClass == EUCJP_KEIYOUSHI){
     WordClass = ADJ;
   }else{
-    string message = aWordClass + " cannot be used as Class Name.";
+    string message = "Invalid word class name: " + aWordClass;
     throw KasumiInvalidWordClassNameException(message);
   }
+  
 }
 
 void KasumiWord::setWordClassWithNameByUTF8(const string &aWordClass)

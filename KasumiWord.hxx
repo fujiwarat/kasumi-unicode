@@ -29,9 +29,6 @@ private:
 
   static iconv_t IconvUTF8_To_EUCJP;
   static iconv_t IconvEUCJP_To_UTF8;
-
-  static string convertUTF8ToEUCJP(const string &aEUCJP);
-  static string convertEUCJPToUTF8(const string &aUTF8);  
 public:
   KasumiWord(KasumiConfiguration *conf);
 
@@ -61,6 +58,9 @@ public:
   
   void setOption(const string &aOptionName, bool aOption);
   bool getOption(const string &aOptionName);
+
+  static string convertUTF8ToEUCJP(const string &aEUCJP);
+  static string convertEUCJPToUTF8(const string &aUTF8);  
 };
 
 #endif

@@ -39,6 +39,8 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
   SpellingEntry = gtk_entry_new();
+  gtk_entry_set_text(GTK_ENTRY(SpellingEntry),
+                     KasumiWord::convertEUCJPToUTF8(conf->getPropertyValue("DefaultAddingSpelling")).c_str());
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(SpellingEntry),FALSE,FALSE,0);
 
   // creating text entries for "Sound"
@@ -48,6 +50,8 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
   SoundEntry = gtk_entry_new();
+  gtk_entry_set_text(GTK_ENTRY(SoundEntry),
+                     KasumiWord::convertEUCJPToUTF8(conf->getPropertyValue("DefaultAddingSound")).c_str());
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(SoundEntry),FALSE,FALSE,0);
 
   // creating spin button for "Frequency"
@@ -84,8 +88,8 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   gtk_box_pack_start(GTK_BOX(vbox),
                      GTK_WIDGET(WordClassCombo),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(WordClassCombo), "changed",
-                   G_CALLBACK(_call_back_add_window_changed_word_class_combo), this);
-  
+                  G_CALLBACK(_call_back_add_window_changed_word_class_combo), this);
+
   // creating noun option pane
   NounOptionPane = gtk_vbox_new(FALSE,0);
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(NounOptionPane),
@@ -183,6 +187,23 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   
   gtk_widget_show_all(window);
   gtk_widget_hide(AdvOptionPane);
+
+  // set default word classes after option panes are initialized
+  string wordclass = conf->getPropertyValue("DefaultAddingWordClass");
+  if(wordclass == string(EUCJP_MEISHI)){
+    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),0);
+  }else if(wordclass == string(EUCJP_FUKUSHI)){
+    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),1);
+  }else if(wordclass == string(EUCJP_JINNMEI)){
+    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),2);
+  }else if(wordclass == string(EUCJP_CHIMEI)){
+    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),3);
+  }else if(wordclass == string(EUCJP_KEIYOUSHI)){
+    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),4);
+  }else{
+    cout << "Invalid word class: " << wordclass << endl;
+    exit(1);
+  }
   
   // resize window appropriate size
   gtk_window_resize(GTK_WINDOW(window),1,1);

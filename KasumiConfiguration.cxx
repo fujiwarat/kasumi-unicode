@@ -19,6 +19,8 @@ KasumiConfiguration::KasumiConfiguration(int argc, char *argv[])
 
   loadDefaultProperties();
   loadConfigurationFromArgument(argc, argv);
+
+  // ~/.kasumi must be encoded in EUC-JP
   
   char *home = getenv("HOME");
   if(home == NULL){
@@ -55,6 +57,12 @@ void KasumiConfiguration::loadDefaultProperties(){
   config[string("NewWordShortcutKey")] = string("Ctrl+N");
   config[string("RemoveShortcutKey")] = string("Ctrl+R");
   config[string("AddShortcutKey")] = string("Ctrl+A");
+  config[string("DefaultSpelling")] = string("");
+  config[string("DefaultSound")] = string("");
+  config[string("DefaultWordClass")] = string(EUCJP_MEISHI);
+  config[string("DefaultAddingSpelling")] = string("");
+  config[string("DefaultAddingSound")] = string("");
+  config[string("DefaultAddingWordClass")] = string(EUCJP_MEISHI);
 }
 
 void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[]){
