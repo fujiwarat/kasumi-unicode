@@ -29,12 +29,18 @@ private:
 
   static iconv_t IconvUTF8_To_EUCJP;
   static iconv_t IconvEUCJP_To_UTF8;
+  
+  // confirms if the given sound consists of only Hiragana
+  // if no invalid character, returns empty string
+  static string extractInvalidCharacterFromSound(string soundByUTF8);
 public:
   KasumiWord(KasumiConfiguration *conf);
 
   // property functions
-  void setSound(const string &aSound);
-  void setSoundByUTF8(const string &aSound);
+  void setSound(const string &aSound)
+    throw(KasumiInvalidCharacterForSoundException);
+  void setSoundByUTF8(const string &aSound)
+    throw(KasumiInvalidCharacterForSoundException);
   string getSound();
   string getSoundByUTF8();
 

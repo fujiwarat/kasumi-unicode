@@ -119,6 +119,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
   HandlerIDOfSoundEntry = g_signal_connect(G_OBJECT(SoundEntry), "changed",
                G_CALLBACK(_call_back_changed_sound_entry), this);
   gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(SoundEntry),FALSE,FALSE,0);
+  previousSoundEntryText = string(gtk_entry_get_text(GTK_ENTRY(SoundEntry)));
 
   // creating spin button for "Frequency"
   label = gtk_label_new(_("Frequency"));
@@ -489,6 +490,7 @@ void KasumiMainWindow::ChangedListCursor(){
                        word->getSpellingByUTF8().c_str());
     gtk_entry_set_text(GTK_ENTRY(SoundEntry),
                        word->getSoundByUTF8().c_str());
+    previousSoundEntryText = string(gtk_entry_get_text(GTK_ENTRY(SoundEntry)));
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),
                               word->getFrequency());
     setActiveWordClass(word->getWordClass());
@@ -507,6 +509,7 @@ void KasumiMainWindow::ChangedListCursor(){
     
     gtk_entry_set_text(GTK_ENTRY(SpellingEntry),"");
     gtk_entry_set_text(GTK_ENTRY(SoundEntry),"");
+    previousSoundEntryText = string(gtk_entry_get_text(GTK_ENTRY(SoundEntry)));
     const int FREQ_DEFAULT = conf->getPropertyValueByInt("DefaultFrequency");
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),FREQ_DEFAULT);
     setActiveWordClass(NOUN);
@@ -530,9 +533,30 @@ void KasumiMainWindow::ChangedSoundEntry(){
   if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
-    word->setSoundByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))));
-    //    modifiedWord(id);
-    dictionary->modifyWord(id);
+    try{
+      word->setSoundByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))));
+      dictionary->modifyWord(id);
+      previousSoundEntryText = string(gtk_entry_get_text(GTK_ENTRY(SoundEntry)));
+    }catch(KasumiInvalidCharacterForSoundException e){
+      string message;
+      message = string(_("Sound must consist of only Hiragana characters. You have entered invalid character: "));
+      message += e.getInvalidCharacter();
+      
+      GtkWidget *dialog = gtk_message_dialog_new
+        (GTK_WINDOW(window),
+         GTK_DIALOG_DESTROY_WITH_PARENT,
+         GTK_MESSAGE_ERROR,
+         GTK_BUTTONS_OK,
+         message.c_str());
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+
+      // take back invalid entry
+      g_signal_handler_block(SoundEntry, HandlerIDOfSoundEntry);
+      gtk_entry_set_text(GTK_ENTRY(SoundEntry),
+                         previousSoundEntryText.c_str());
+      g_signal_handler_unblock(SoundEntry, HandlerIDOfSoundEntry);
+    }
   }
 }
 

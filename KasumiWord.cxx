@@ -37,6 +37,64 @@ string KasumiWord::convertEUCJPToUTF8(const string &aEUCJP){
   return string(utf8);
 }
 
+string KasumiWord::extractInvalidCharacterFromSound(string soundByUTF8){
+  const char *str = soundByUTF8.c_str();
+  unsigned char first,second,third;
+  char res[5];
+  int i,size;
+
+  size = soundByUTF8.size();
+
+  for(i=0;i<size;i+=3){
+    first = static_cast<unsigned char> (str[i]);
+    second = static_cast<unsigned char> (str[i+1]);
+    third = static_cast<unsigned char> (str[i+2]);
+    
+    if(first <= 0x7f){
+      res[0] = str[i];
+      res[1] = 0;
+      return string(res);
+    }else if(first >= 0x80 && first <= 0xc1){
+      // Even it is not encoded in UTF-8
+      string("non-UTF8 code detected");
+    }else if(first >= 0xc2 && first <= 0xdf){
+      res[0] = str[i];
+      res[1] = str[i+1];
+      res[2] = 0;
+      return string(res);
+    }else if(first >= 0xe0 && first <= 0xef){
+      if(first == 0xe3 && second == 0x83 && third == 0xbc){
+        // dash
+        continue;
+      }else if(first == 0xe3 && second == 0x81 && third >= 0x81 && third <= 0xbf){
+        // hiragana from "A" to "MI"
+        continue;
+      }else if(first == 0xe3 && second == 0x82 && third >= 0x80 && third <= 0x94){
+        // the rest of hiragana
+        continue;
+      }else{
+        res[0] = str[i];
+        res[1] = str[i+1];
+        res[2] = str[i+2];
+        res[3] = 0;
+        return string(res);
+      }
+    }else if(first >= 0xf0 && first <= 0xf4){
+      res[0] = str[i];
+      res[1] = str[i+1];
+      res[2] = str[i+2];
+      res[3] = str[i+3];
+      res[4] = 0;
+      return string(res);
+    }else{
+      // Even it is not encoded in UTF-8
+      string("non-UTF8 code detected");
+    }
+  }
+
+  return string();
+}
+
 KasumiWord::KasumiWord(KasumiConfiguration *conf){
   setSound(conf->getPropertyValue("DefaultSound"));
   setSpelling(conf->getPropertyValue("DefaultSpelling"));
@@ -49,12 +107,27 @@ KasumiWord::KasumiWord(KasumiConfiguration *conf){
   }
 }
 
-void KasumiWord::setSound(const string &aSound){
+void KasumiWord::setSound(const string &aSound)
+  throw(KasumiInvalidCharacterForSoundException){
+  string tmp = convertEUCJPToUTF8(Sound);
+  string invalidChar = extractInvalidCharacterFromSound(tmp);
+
+  if(invalidChar != ""){
+    throw KasumiInvalidCharacterForSoundException(tmp,invalidChar);
+  }
+  
   Sound = aSound;
   Sound_UTF8 = convertEUCJPToUTF8(Sound);
 }
 
-void KasumiWord::setSoundByUTF8(const string &aSound){
+void KasumiWord::setSoundByUTF8(const string &aSound)
+  throw(KasumiInvalidCharacterForSoundException){
+  string invalidChar = extractInvalidCharacterFromSound(aSound);
+
+  if(invalidChar != ""){
+    throw KasumiInvalidCharacterForSoundException(aSound,invalidChar);
+  }
+  
   Sound_UTF8 = aSound;
   Sound = convertUTF8ToEUCJP(Sound_UTF8);
 }

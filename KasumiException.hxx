@@ -70,4 +70,18 @@ public:
   string getMessage() { return message; }
 };
 
+class KasumiInvalidCharacterForSoundException{
+private:
+  string InvalidString;
+  string InvalidCharacter;
+public:
+  KasumiInvalidCharacterForSoundException(string aInvalidStr, string aInvalidChar){
+    InvalidString = aInvalidStr;
+    InvalidCharacter = aInvalidChar;
+  }
+  string getInvalidString() { return InvalidString; }
+  string getInvalidCharacter() { return InvalidCharacter; }
+};
+
+
 #endif

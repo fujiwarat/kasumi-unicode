@@ -104,6 +104,7 @@ private:
   GtkWidget *SearchEntry;
   
   bool modificationFlag;
+  string previousSoundEntryText;
   
   void destroy();
   gboolean delete_event(GdkEvent *event);

@@ -1,3 +1,8 @@
+2005-01-08  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - do not accept non-Hiragana character in Sound entry
+
 2005-01-07  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* New feature

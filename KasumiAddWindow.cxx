@@ -250,77 +250,95 @@ void KasumiAddWindow::ClickedQuitButton(GtkWidget *widget){
 
 void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
   KasumiWord *word = new KasumiWord(conf);
+  try{
 
-  if(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))) == ""){
-    GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(window),
-                                                GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                GTK_MESSAGE_ERROR,
-                                                GTK_BUTTONS_CLOSE,
-                                                _("Invlid entry for Sound."));
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-    delete(word);
-    return;
+
+    if(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))) == ""){
+      GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(window),
+                                                  GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                  GTK_MESSAGE_ERROR,
+                                                  GTK_BUTTONS_CLOSE,
+                                                  _("Invlid entry for Sound."));
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      delete(word);
+      return;
+    }
+    word->setSoundByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))));
+
+
+    if(string(gtk_entry_get_text(GTK_ENTRY(SpellingEntry))) == ""){
+      GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(window),
+                                                  GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                  GTK_MESSAGE_ERROR,
+                                                  GTK_BUTTONS_CLOSE,
+                                                  _("Invlid entry for Spelling.")
+                                                  );
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      delete(word);
+      return;
+    }
+    word->setSpellingByUTF8(string(gtk_entry_get_text(
+                                                      GTK_ENTRY(SpellingEntry))));
+    word->setFrequency(gtk_spin_button_get_value_as_int(
+                                                        GTK_SPIN_BUTTON(FrequencySpin)));
+    word->setWordClass(getActiveWordClass());
+
+    if(word->getWordClass() == NOUN){
+      word->setOption(string(EUCJP_SASETSUZOKU),
+                      gtk_toggle_button_get_active(
+                                                   GTK_TOGGLE_BUTTON(NounOptionSaConnectionCheck)));
+      word->setOption(string(EUCJP_NASETSUZOKU),
+                      gtk_toggle_button_get_active(
+                                                   GTK_TOGGLE_BUTTON(NounOptionNaConnectionCheck)));
+      word->setOption(string(EUCJP_SURUSETSUZOKU),
+                      gtk_toggle_button_get_active(
+                                                   GTK_TOGGLE_BUTTON(NounOptionSuruConnectionCheck)));
+      word->setOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU),
+                      gtk_toggle_button_get_active(
+                                                   GTK_TOGGLE_BUTTON(NounOptionGokanCheck)));
+      word->setOption(string(EUCJP_KAKUJOSHISETSUZOKU),
+                      gtk_toggle_button_get_active(
+                                                   GTK_TOGGLE_BUTTON(NounOptionKakujoshiConnectionCheck)));
+    }else if(word->getWordClass() == ADV){
+      word->setOption(string(EUCJP_TOSETSUZOKU),
+                      gtk_toggle_button_get_active(
+                                                   GTK_TOGGLE_BUTTON(AdvOptionToConnectionCheck)));
+      word->setOption(string(EUCJP_TARUSETSUZOKU),
+                      gtk_toggle_button_get_active(
+                                                   GTK_TOGGLE_BUTTON(AdvOptionTaruConnectionCheck)));
+      word->setOption(string(EUCJP_SURUSETSUZOKU),
+                      gtk_toggle_button_get_active(
+                                                   GTK_TOGGLE_BUTTON(AdvOptionSuruConnectionCheck)));
+      word->setOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU),
+                      gtk_toggle_button_get_active(
+                                                   GTK_TOGGLE_BUTTON(AdvOptionGokanCheck)));
+    }
+
+    dictionary->appendWord(word);
+    dictionary->store();
+
+    gtk_entry_set_text(GTK_ENTRY(SoundEntry), "");
+    gtk_entry_set_text(GTK_ENTRY(SpellingEntry), "");
+    const int FREQ_DEFAULT = conf->getPropertyValueByInt("DefaultFrequency");
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),FREQ_DEFAULT);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),0);
+  }catch(KasumiInvalidCharacterForSoundException e){
+      string message;
+      message = string(_("Sound must consist of only Hiragana characters. You have entered invalid character: "));
+      message += e.getInvalidCharacter();
+      
+      GtkWidget *dialog = gtk_message_dialog_new
+        (GTK_WINDOW(window),
+         GTK_DIALOG_DESTROY_WITH_PARENT,
+         GTK_MESSAGE_ERROR,
+         GTK_BUTTONS_OK,
+         message.c_str());
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      delete (word);
   }
-  word->setSoundByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))));
-
-  if(string(gtk_entry_get_text(GTK_ENTRY(SpellingEntry))) == ""){
-    GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(window),
-                                                GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                GTK_MESSAGE_ERROR,
-                                                GTK_BUTTONS_CLOSE,
-                                                _("Invlid entry for Spelling.")
-                                                );
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-    delete(word);
-    return;
-  }
-  word->setSpellingByUTF8(string(gtk_entry_get_text(
-    GTK_ENTRY(SpellingEntry))));
-  word->setFrequency(gtk_spin_button_get_value_as_int(
-    GTK_SPIN_BUTTON(FrequencySpin)));
-  word->setWordClass(getActiveWordClass());
-
-  if(word->getWordClass() == NOUN){
-    word->setOption(string(EUCJP_SASETSUZOKU),
-                    gtk_toggle_button_get_active(
-                      GTK_TOGGLE_BUTTON(NounOptionSaConnectionCheck)));
-    word->setOption(string(EUCJP_NASETSUZOKU),
-                    gtk_toggle_button_get_active(
-                      GTK_TOGGLE_BUTTON(NounOptionNaConnectionCheck)));
-    word->setOption(string(EUCJP_SURUSETSUZOKU),
-                    gtk_toggle_button_get_active(
-                      GTK_TOGGLE_BUTTON(NounOptionSuruConnectionCheck)));
-    word->setOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU),
-                    gtk_toggle_button_get_active(
-                      GTK_TOGGLE_BUTTON(NounOptionGokanCheck)));
-    word->setOption(string(EUCJP_KAKUJOSHISETSUZOKU),
-                    gtk_toggle_button_get_active(
-                      GTK_TOGGLE_BUTTON(NounOptionKakujoshiConnectionCheck)));
-  }else if(word->getWordClass() == ADV){
-    word->setOption(string(EUCJP_TOSETSUZOKU),
-                    gtk_toggle_button_get_active(
-                      GTK_TOGGLE_BUTTON(AdvOptionToConnectionCheck)));
-    word->setOption(string(EUCJP_TARUSETSUZOKU),
-                    gtk_toggle_button_get_active(
-                      GTK_TOGGLE_BUTTON(AdvOptionTaruConnectionCheck)));
-    word->setOption(string(EUCJP_SURUSETSUZOKU),
-                    gtk_toggle_button_get_active(
-                      GTK_TOGGLE_BUTTON(AdvOptionSuruConnectionCheck)));
-    word->setOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU),
-                    gtk_toggle_button_get_active(
-                      GTK_TOGGLE_BUTTON(AdvOptionGokanCheck)));
-  }
-
-  dictionary->appendWord(word);
-  dictionary->store();
-
-  gtk_entry_set_text(GTK_ENTRY(SoundEntry), "");
-  gtk_entry_set_text(GTK_ENTRY(SpellingEntry), "");
-  const int FREQ_DEFAULT = conf->getPropertyValueByInt("DefaultFrequency");
-  gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),FREQ_DEFAULT);
-  gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),0);
 }
 
 void KasumiAddWindow::ChangedWordClassCombo(GtkWidget *widget){
