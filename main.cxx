@@ -31,16 +31,18 @@ int main(int argc, char *argv[])
   bind_textdomain_codeset(PACKAGE, "UTF-8");
   textdomain(PACKAGE);
 
+  int option_index = 0;
+  static struct option long_options[] = {
+    {"help", no_argument, NULL, 'h'},
+    {"version", no_argument, NULL, 'v'},
+    {"add", no_argument, NULL, 'a'},
+    {"main", no_argument, NULL, 'm'},
+    {0,0,0,0}
+  };
+  
   while(1){
-    int option_index = 0;
-    static struct option long_options[] = {
-      {"help", no_argument, NULL, 'h'},
-      {"version", no_argument, NULL, 'v'},
-      {"add", no_argument, NULL, 'a'}
-    };
-    
-    c = getopt_long(argc, argv, "hv", long_options, &option_index);
-    if(c == -1) break;
+    c = getopt_long(argc, argv, "hvam", long_options, &option_index);
+    if(c == -1) break; // no more argument
 
     switch(c){
     case 'h':
@@ -52,13 +54,6 @@ int main(int argc, char *argv[])
       cout << "  -a --add        Run Kasumi with Add window." << endl;
       cout << "  -m --main       Run Kasumi with default window." << endl;
       cout << "                  You may abbreviate this option." << endl;
-      cout << endl;
-      cout << "This program read ${HOME}/.anthy/private-dic.src automatically"\
-        "when it starts. If you have existing dictionary which is not"\
-        "located there, copy your dictionary to "\
-        "${HOME}/.anthy/private-dic.src before you launch this program."\
-        "If you have no dictionary, the new dictionary will be created"\
-        "implicitly.";
       cout << endl;
       exit(0);
       break;
