@@ -189,7 +189,10 @@ void KasumiConfiguration::checkValidity()
   throw(KasumiConfigurationLoadException){
   unsigned int i;
   
-  if(config[string("StartupMode")] != string("MANAGE") && config[string("StartupMode")] != string("ADD")){
+  if(config[string("StartupMode")] != string("MANAGE") &&
+     config[string("StartupMode")] != string("ADD") &&
+     config[string("StartupMode")] != string("HELP") &&
+     config[string("StartupMode")] != string("VERSION")){
     throw KasumiConfigurationLoadException(string("StartupMode variable must be \"MANAGE\" or \"ADD\""));
   }
 
