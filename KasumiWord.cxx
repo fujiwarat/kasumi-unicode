@@ -12,7 +12,7 @@ using namespace std;
 iconv_t KasumiWord::IconvUTF8_To_EUCJP = iconv_open("EUC-JP", "UTF-8");
 iconv_t KasumiWord::IconvEUCJP_To_UTF8 = iconv_open("UTF-8", "EUC-JP");
 
-string KasumiWord::convertUTF8ToEUCJP(string aUTF8){
+string KasumiWord::convertUTF8ToEUCJP(const string &aUTF8){
   char *utf8 = (char*)malloc(strlen(aUTF8.c_str())+1);
   strcpy(utf8, aUTF8.c_str());
   size_t len = strlen(utf8)+1;
@@ -24,7 +24,7 @@ string KasumiWord::convertUTF8ToEUCJP(string aUTF8){
   return string(eucjp);
 }
 
-string KasumiWord::convertEUCJPToUTF8(string aEUCJP){
+string KasumiWord::convertEUCJPToUTF8(const string &aEUCJP){
   char *eucjp = (char*)malloc(strlen(aEUCJP.c_str())+1);
   strcpy(eucjp, aEUCJP.c_str());
   size_t len = strlen(eucjp)+1;
@@ -45,12 +45,12 @@ KasumiWord::KasumiWord(){
   WordClass = NOUN;
 }
 
-void KasumiWord::setSound(string aSound){
+void KasumiWord::setSound(const string &aSound){
   Sound = aSound;
   Sound_UTF8 = convertEUCJPToUTF8(Sound);
 }
 
-void KasumiWord::setSoundByUTF8(string aSound){
+void KasumiWord::setSoundByUTF8(const string &aSound){
   Sound_UTF8 = aSound;
   Sound = convertUTF8ToEUCJP(Sound_UTF8);
 }
@@ -72,12 +72,12 @@ int KasumiWord::getFrequency(){
 }
 
 
-void KasumiWord::setSpelling(string aSpelling){
+void KasumiWord::setSpelling(const string &aSpelling){
   Spelling = aSpelling;
   Spelling_UTF8 = convertEUCJPToUTF8(Spelling);
 }
 
-void KasumiWord::setSpellingByUTF8(string aSpelling){
+void KasumiWord::setSpellingByUTF8(const string &aSpelling){
   Spelling_UTF8 = aSpelling;
   Spelling = convertUTF8ToEUCJP(Spelling_UTF8);
 }
@@ -98,7 +98,7 @@ WordClassType KasumiWord::getWordClass(){
   return WordClass;
 }
 
-void KasumiWord::setWordClassWithName(string aWordClass)
+void KasumiWord::setWordClassWithName(const string &aWordClass)
   throw(KasumiInvalidWordClassNameException){
   if(aWordClass == EUCJP_MEISHI){
     WordClass = NOUN;
@@ -111,12 +111,12 @@ void KasumiWord::setWordClassWithName(string aWordClass)
   }else if(aWordClass == EUCJP_KEIYOUSHI){
     WordClass = ADJ;
   }else{
-    aWordClass += " cannot be used as Class Name.";
-    throw KasumiInvalidWordClassNameException(aWordClass);
+    string message = aWordClass + " cannot be used as Class Name.";
+    throw KasumiInvalidWordClassNameException(message);
   }
 }
 
-void KasumiWord::setWordClassWithNameByUTF8(string aWordClass)
+void KasumiWord::setWordClassWithNameByUTF8(const string &aWordClass)
   throw(KasumiInvalidWordClassNameException){
   try{
     string euc = convertUTF8ToEUCJP(aWordClass);
@@ -173,7 +173,7 @@ string KasumiWord::getStringOfWordClassByUTF8(){
   return "";
 }
 
-void KasumiWord::setOption(string aOptionName, bool aOption){
+void KasumiWord::setOption(const string &aOptionName, bool aOption){
   map<string,bool>::iterator p;
 
   p = Option.find(aOptionName);
@@ -185,7 +185,7 @@ void KasumiWord::setOption(string aOptionName, bool aOption){
   }
 }
 
-bool KasumiWord::getOption(string aOptionName){
+bool KasumiWord::getOption(const string &aOptionName){
   map<string, bool>::iterator p;
 
   p = Option.find(aOptionName);

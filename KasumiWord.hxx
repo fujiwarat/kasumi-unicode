@@ -33,37 +33,37 @@ private:
   static iconv_t IconvUTF8_To_EUCJP;
   static iconv_t IconvEUCJP_To_UTF8;
 
-  static string convertUTF8ToEUCJP(string aEUCJP);
-  static string convertEUCJPToUTF8(string aUTF8);  
+  static string convertUTF8ToEUCJP(const string &aEUCJP);
+  static string convertEUCJPToUTF8(const string &aUTF8);  
 public:
   KasumiWord();
 
   // property functions
-  void setSound(string aSound);
-  void setSoundByUTF8(string aSound);
+  void setSound(const string &aSound);
+  void setSoundByUTF8(const string &aSound);
   string getSound();
   string getSoundByUTF8();
 
   void setFrequency(int aFrequency);
   int getFrequency();
 
-  void setSpelling(string aSpelling);
-  void setSpellingByUTF8(string aSpelling);  
+  void setSpelling(const string &aSpelling);
+  void setSpellingByUTF8(const string &aSpelling);  
   string getSpelling();
   string getSpellingByUTF8();  
 
   void setWordClass(WordClassType aWordClass);
   WordClassType getWordClass();
 
-  void setWordClassWithName(string aWordClass)
+  void setWordClassWithName(const string &aWordClass)
     throw(KasumiInvalidWordClassNameException);
-  void setWordClassWithNameByUTF8(string aWordClass)
+  void setWordClassWithNameByUTF8(const string &aWordClass)
     throw(KasumiInvalidWordClassNameException);
   string getStringOfWordClass();
   string getStringOfWordClassByUTF8();  
   
-  void setOption(string aOptionName, bool aOption);
-  bool getOption(string aOptionName);
+  void setOption(const string &aOptionName, bool aOption);
+  bool getOption(const string &aOptionName);
 };
 
 #endif
