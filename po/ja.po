@@ -91,7 +91,7 @@ msgstr "次を読みで検索"
 
 #: KasumiMainWindow.cxx:244
 msgid "Find Next By Spelling"
-msgstr "次を読みで検索"
+msgstr "次を単語で検索"
 
 #: KasumiMainWindow.cxx:256 KasumiAddWindow.cxx:143
 msgid "Quit"
