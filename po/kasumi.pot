@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-07 10:31+0900\n"
+"POT-Creation-Date: 2005-01-08 01:47+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,103 +28,109 @@ msgstr ""
 msgid "Sound"
 msgstr ""
 
-#: KasumiMainWindow.cxx:66 KasumiMainWindow.cxx:124 KasumiAddWindow.cxx:58
+#: KasumiMainWindow.cxx:66 KasumiMainWindow.cxx:125 KasumiAddWindow.cxx:58
 msgid "Frequency"
 msgstr ""
 
-#: KasumiMainWindow.cxx:72 KasumiMainWindow.cxx:151 KasumiAddWindow.cxx:76
+#: KasumiMainWindow.cxx:72 KasumiMainWindow.cxx:152 KasumiAddWindow.cxx:76
 msgid "Word Class"
 msgstr ""
 
-#: KasumiMainWindow.cxx:157 KasumiAddWindow.cxx:82
+#: KasumiMainWindow.cxx:158 KasumiAddWindow.cxx:82
 msgid "Noun"
 msgstr ""
 
-#: KasumiMainWindow.cxx:158 KasumiAddWindow.cxx:83
+#: KasumiMainWindow.cxx:159 KasumiAddWindow.cxx:83
 msgid "Adverb"
 msgstr ""
 
-#: KasumiMainWindow.cxx:159 KasumiAddWindow.cxx:84
+#: KasumiMainWindow.cxx:160 KasumiAddWindow.cxx:84
 msgid "Person's name"
 msgstr ""
 
-#: KasumiMainWindow.cxx:160 KasumiAddWindow.cxx:85
+#: KasumiMainWindow.cxx:161 KasumiAddWindow.cxx:85
 msgid "Place-name"
 msgstr ""
 
-#: KasumiMainWindow.cxx:161 KasumiAddWindow.cxx:86
+#: KasumiMainWindow.cxx:162 KasumiAddWindow.cxx:86
 msgid "Adjective"
 msgstr ""
 
-#: KasumiMainWindow.cxx:175 KasumiAddWindow.cxx:99
+#: KasumiMainWindow.cxx:176 KasumiAddWindow.cxx:99
 msgid "NA connection"
 msgstr ""
 
-#: KasumiMainWindow.cxx:184 KasumiAddWindow.cxx:105
+#: KasumiMainWindow.cxx:185 KasumiAddWindow.cxx:105
 msgid "SA connection"
 msgstr ""
 
-#: KasumiMainWindow.cxx:193 KasumiMainWindow.cxx:243 KasumiAddWindow.cxx:111
+#: KasumiMainWindow.cxx:194 KasumiMainWindow.cxx:244 KasumiAddWindow.cxx:111
 #: KasumiAddWindow.cxx:145
 msgid "SURU connection"
 msgstr ""
 
-#: KasumiMainWindow.cxx:202 KasumiMainWindow.cxx:252 KasumiAddWindow.cxx:117
+#: KasumiMainWindow.cxx:203 KasumiMainWindow.cxx:253 KasumiAddWindow.cxx:117
 #: KasumiAddWindow.cxx:151
 msgid "Can be Bunnsetsu"
 msgstr ""
 
-#: KasumiMainWindow.cxx:211 KasumiAddWindow.cxx:122
+#: KasumiMainWindow.cxx:212 KasumiAddWindow.cxx:122
 msgid "KAKUJOSHI connection"
 msgstr ""
 
-#: KasumiMainWindow.cxx:225 KasumiAddWindow.cxx:133
+#: KasumiMainWindow.cxx:226 KasumiAddWindow.cxx:133
 msgid "TO connection"
 msgstr ""
 
-#: KasumiMainWindow.cxx:234 KasumiAddWindow.cxx:139
+#: KasumiMainWindow.cxx:235 KasumiAddWindow.cxx:139
 msgid "TARU connection"
 msgstr ""
 
-#: KasumiMainWindow.cxx:281
+#: KasumiMainWindow.cxx:282
 msgid "Find By Spelling"
 msgstr ""
 
-#: KasumiMainWindow.cxx:287
+#: KasumiMainWindow.cxx:288
 msgid "Find By Sound"
 msgstr ""
 
-#: KasumiMainWindow.cxx:300 KasumiAddWindow.cxx:163
+#: KasumiMainWindow.cxx:301 KasumiAddWindow.cxx:163
 msgid "Quit"
 msgstr ""
 
-#: KasumiMainWindow.cxx:313
+#: KasumiMainWindow.cxx:314
 msgid "Store"
 msgstr ""
 
-#: KasumiMainWindow.cxx:326
+#: KasumiMainWindow.cxx:327
 msgid "New Word"
 msgstr ""
 
-#: KasumiMainWindow.cxx:339
+#: KasumiMainWindow.cxx:340
 msgid "Remove"
 msgstr ""
 
-#: KasumiMainWindow.cxx:352
+#: KasumiMainWindow.cxx:353
 msgid "Adding Mode"
 msgstr ""
 
-#: KasumiMainWindow.cxx:423
+#: KasumiMainWindow.cxx:424
 msgid ""
 "Your dictionary went through several changes. Do you save these changes "
 "before Kasumi quits?"
 msgstr ""
 
-#: KasumiMainWindow.cxx:697
+#: KasumiMainWindow.cxx:542 KasumiAddWindow.cxx:329
+msgid ""
+"Sound must consist of only Hiragana characters. You have entered invalid "
+"character: "
+msgstr ""
+
+#: KasumiMainWindow.cxx:721
 msgid "Cannot find a specific word. Search from first?"
 msgstr ""
 
-#: KasumiMainWindow.cxx:735
+#: KasumiMainWindow.cxx:759
 msgid "Cannot find a specific word."
 msgstr ""
 
@@ -136,10 +142,10 @@ msgstr ""
 msgid "Manage Mode"
 msgstr ""
 
-#: KasumiAddWindow.cxx:259
+#: KasumiAddWindow.cxx:261
 msgid "Invlid entry for Sound."
 msgstr ""
 
-#: KasumiAddWindow.cxx:272
+#: KasumiAddWindow.cxx:275
 msgid "Invlid entry for Spelling."
 msgstr ""
