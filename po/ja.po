@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-04 02:44+0900\n"
+"POT-Creation-Date: 2004-11-05 17:09+0900\n"
 "PO-Revision-Date: 2004-10-18 08:30+0900\n"
 "Last-Translator: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
 "Language-Team: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
@@ -15,86 +15,104 @@ msgstr ""
 "Content-Type: text/plain; charset=EUC-JP\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: KasumiMainWindow.cxx:18
+#: KasumiMainWindow.cxx:19 KasumiAddWindow.cxx:18
 msgid "Kasumi"
 msgstr "霞"
 
-#: KasumiMainWindow.cxx:45 KasumiMainWindow.cxx:85 KasumiMainWindow.cxx:288
+#: KasumiMainWindow.cxx:46 KasumiMainWindow.cxx:86 KasumiMainWindow.cxx:340
+#: KasumiAddWindow.cxx:29
 msgid "Spelling"
 msgstr "単語"
 
-#: KasumiMainWindow.cxx:51 KasumiMainWindow.cxx:96 KasumiMainWindow.cxx:289
+#: KasumiMainWindow.cxx:52 KasumiMainWindow.cxx:97 KasumiMainWindow.cxx:341
+#: KasumiAddWindow.cxx:38
 msgid "Sound"
 msgstr "読み"
 
-#: KasumiMainWindow.cxx:57 KasumiMainWindow.cxx:107
+#: KasumiMainWindow.cxx:58 KasumiMainWindow.cxx:108 KasumiAddWindow.cxx:47
 msgid "Frequency"
 msgstr "頻度"
 
-#: KasumiMainWindow.cxx:63 KasumiMainWindow.cxx:119
+#: KasumiMainWindow.cxx:64 KasumiMainWindow.cxx:120 KasumiAddWindow.cxx:57
 msgid "Word Class"
 msgstr "品詞"
 
-#: KasumiMainWindow.cxx:125
+#: KasumiMainWindow.cxx:126 KasumiAddWindow.cxx:63
 msgid "Noun"
 msgstr "名詞"
 
-#: KasumiMainWindow.cxx:126
+#: KasumiMainWindow.cxx:127 KasumiAddWindow.cxx:64
 msgid "Adverb"
 msgstr "副詞"
 
-#: KasumiMainWindow.cxx:127
+#: KasumiMainWindow.cxx:128 KasumiAddWindow.cxx:65
 msgid "Person's name"
 msgstr "人名"
 
-#: KasumiMainWindow.cxx:128
+#: KasumiMainWindow.cxx:129 KasumiAddWindow.cxx:66
 msgid "Place-name"
 msgstr "地名"
 
-#: KasumiMainWindow.cxx:129
+#: KasumiMainWindow.cxx:130 KasumiAddWindow.cxx:67
 msgid "Adjective"
 msgstr "形容詞"
 
-#: KasumiMainWindow.cxx:140
+#: KasumiMainWindow.cxx:144 KasumiAddWindow.cxx:80
 msgid "NA connection"
 msgstr "な接続"
 
-#: KasumiMainWindow.cxx:146
+#: KasumiMainWindow.cxx:153 KasumiAddWindow.cxx:86
 msgid "SA connection"
 msgstr "さ接続"
 
-#: KasumiMainWindow.cxx:152 KasumiMainWindow.cxx:187
+#: KasumiMainWindow.cxx:162 KasumiMainWindow.cxx:212 KasumiAddWindow.cxx:92
+#: KasumiAddWindow.cxx:126
 msgid "SURU connection"
 msgstr "する接続"
 
-#: KasumiMainWindow.cxx:158 KasumiMainWindow.cxx:193
+#: KasumiMainWindow.cxx:171 KasumiMainWindow.cxx:221 KasumiAddWindow.cxx:98
+#: KasumiAddWindow.cxx:132
 msgid "Can be Bunnsetsu"
 msgstr "語幹のみで文節"
 
-#: KasumiMainWindow.cxx:164
+#: KasumiMainWindow.cxx:180 KasumiAddWindow.cxx:103
 msgid "KAKUJOSHI connection"
 msgstr "格助詞接続"
 
-#: KasumiMainWindow.cxx:175
+#: KasumiMainWindow.cxx:194 KasumiAddWindow.cxx:114
 msgid "TO connection"
 msgstr "と接続"
 
-#: KasumiMainWindow.cxx:181
+#: KasumiMainWindow.cxx:203 KasumiAddWindow.cxx:120
 msgid "TARU connection"
 msgstr "たる接続"
 
-#: KasumiMainWindow.cxx:206
+#: KasumiMainWindow.cxx:236 KasumiAddWindow.cxx:143
 msgid "Quit"
 msgstr "終了"
 
-#: KasumiMainWindow.cxx:212
+#: KasumiMainWindow.cxx:242
 msgid "Store"
 msgstr "保存"
 
-#: KasumiMainWindow.cxx:218
+#: KasumiMainWindow.cxx:248 KasumiAddWindow.cxx:149
 msgid "Add"
 msgstr "追加"
 
-#: KasumiMainWindow.cxx:224
+#: KasumiMainWindow.cxx:254
 msgid "Remove"
 msgstr "削除"
+
+#: KasumiMainWindow.cxx:307
+msgid ""
+"Your dictionary went through several changes. Do you save these changes "
+"before Kasumi quits?"
+msgstr "辞書に変更が加えられました。霞を終了する前に保存しますか？"
+
+#: KasumiAddWindow.cxx:180
+msgid "Invlid entry for Sound."
+msgstr "「読み」の項目を正しく入力してください"
+
+#: KasumiAddWindow.cxx:193
+msgid "Invlid entry for Spelling."
+msgstr "「単語」の項目を正しく入力してください"

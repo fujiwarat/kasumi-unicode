@@ -6,6 +6,7 @@ kasumi_SOURCES = main.cxx intl.h \
 				 KasumiString.cxx KasumiString.hxx \
 				 KasumiException.hxx \
 				 KasumiMainWindow.cxx KasumiMainWindow.hxx \
+				 KasumiAddWindow.cxx KasumiAddWindow.hxx \
 				 KasumiDicEventListener.hxx
 
 AM_CPPFLAGS=-DLOCALEDIR='"$(localedir)"'

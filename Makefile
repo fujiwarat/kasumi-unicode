@@ -94,7 +94,7 @@ localedir = ${prefix}/share/locale
 
 bin_PROGRAMS = kasumi
 
-kasumi_SOURCES = main.cxx intl.h                  KasumiDic.cxx KasumiDic.hxx                  KasumiWord.cxx KasumiWord.hxx 				 KasumiString.cxx KasumiString.hxx 				 KasumiException.hxx 				 KasumiMainWindow.cxx KasumiMainWindow.hxx 				 KasumiDicEventListener.hxx
+kasumi_SOURCES = main.cxx intl.h                  KasumiDic.cxx KasumiDic.hxx                  KasumiWord.cxx KasumiWord.hxx 				 KasumiString.cxx KasumiString.hxx 				 KasumiException.hxx 				 KasumiMainWindow.cxx KasumiMainWindow.hxx 				 KasumiAddWindow.cxx KasumiAddWindow.hxx 				 KasumiDicEventListener.hxx
 
 
 AM_CPPFLAGS = -DLOCALEDIR='"$(localedir)"'
@@ -115,7 +115,7 @@ CPPFLAGS =  -I/usr/include/gtk-2.0 -I/usr/lib/gtk-2.0/include -I/usr/X11R6/inclu
 LDFLAGS =  
 LIBS =  -Wl,--export-dynamic -lgtk-x11-2.0 -lgdk-x11-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangoxft-1.0 -lpangox-1.0 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0  
 kasumi_OBJECTS =  main.o KasumiDic.o KasumiWord.o KasumiString.o \
-KasumiMainWindow.o
+KasumiMainWindow.o KasumiAddWindow.o
 kasumi_LDADD = $(LDADD)
 kasumi_DEPENDENCIES = 
 kasumi_LDFLAGS = 
@@ -137,8 +137,9 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/KasumiDic.P .deps/KasumiMainWindow.P \
-.deps/KasumiString.P .deps/KasumiWord.P .deps/main.P
+DEP_FILES =  .deps/KasumiAddWindow.P .deps/KasumiDic.P \
+.deps/KasumiMainWindow.P .deps/KasumiString.P .deps/KasumiWord.P \
+.deps/main.P
 SOURCES = $(kasumi_SOURCES)
 OBJECTS = $(kasumi_OBJECTS)
 

@@ -70,6 +70,7 @@ private:
   gulong HandlerIDOfAdvOptionSuruConnectionCheck;
   gulong HandlerIDOfAdvOptionGokanCheck;
 
+  bool modificationFlag;
   
   void destroy(GtkWidget *widget);
   gboolean delete_event(GtkWidget *widget, GdkEvent *event);
@@ -85,9 +86,11 @@ private:
   void ChangedOption(GtkWidget *widget);
 
   GtkTreeIter *findCorrespondingIter(int id);
-  
+
+  void synchronizeOptionCheckButton(KasumiWord *word);
   void setActiveWordClass(WordClassType type);
   WordClassType getActiveWordClass();
+  void flipOptionPane();
 public:
   KasumiMainWindow(KasumiDic *aDictionary);
   void refresh();

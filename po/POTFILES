@@ -5,6 +5,9 @@
      .././KasumiWord.hxx \
      .././KasumiWord.cxx \
      .././KasumiString.cxx \
+     .././KasumiString.hxx \
      .././KasumiException.hxx \
      .././KasumiMainWindow.hxx \
-     .././KasumiMainWindow.cxx
+     .././KasumiMainWindow.cxx \
+     .././KasumiAddWindow.hxx \
+     .././KasumiAddWindow.cxx

@@ -30,7 +30,14 @@ void KasumiDic::load() throw(KasumiDicExaminationException){
   ifstream DicFile(DicFileName.c_str());
 
   if(!DicFile.is_open()){
-          throw KasumiDicExaminationException("Cannot open Anthy dicitionary file.", 0);
+    DicFile.close();    
+    ofstream NewDicFile(DicFileName.c_str());
+    NewDicFile.close();
+    DicFile.open(DicFileName.c_str());
+  }
+  
+  if(!DicFile.is_open()){
+    throw KasumiDicExaminationException("Cannot open Anthy dicitionary file.", 0);
   }
 
   // analyze Anthy Dictionary reading each line

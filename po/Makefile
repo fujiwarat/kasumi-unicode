@@ -56,10 +56,12 @@ POTFILES = \
      .././KasumiWord.hxx \
      .././KasumiWord.cxx \
      .././KasumiString.cxx \
+     .././KasumiString.hxx \
      .././KasumiException.hxx \
      .././KasumiMainWindow.hxx \
-     .././KasumiMainWindow.cxx
-
+     .././KasumiMainWindow.cxx \
+     .././KasumiAddWindow.hxx \
+     .././KasumiAddWindow.cxx
 CATALOGS =  ja.gmo
 
 # Makevars gets inserted here. (Don't remove this line!)

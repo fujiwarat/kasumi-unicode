@@ -9,6 +9,7 @@
 #include <string>
 #include "KasumiDic.hxx"
 #include "KasumiMainWindow.hxx"
+#include "KasumiAddWindow.hxx"
 #include "KasumiException.hxx"
 #include "intl.h"
 
@@ -19,7 +20,7 @@ int main(int argc, char *argv[])
   int c;
   char *contents;
   char *home;
-  enum {TOP,ADD} mode = TOP;
+  enum {MAIN,ADD} mode = MAIN;
   string dic_filename;
   
   gtk_init(&argc, &argv);
@@ -44,7 +45,23 @@ int main(int argc, char *argv[])
 
     switch(c){
     case 'h':
-      cout << "Show help!" << endl;
+      cout << "Usage: kasumi [option]" << endl;
+      cout << "Option:" << endl;
+      cout << "  -h --help       Show this message." << endl;
+      cout << "  -v --versoin    Show Kasumi's version and copyright" << endl;;
+      cout << "                  infomation" << endl;
+      cout << "  -a --add        Run Kasumi with Add window." << endl;
+      cout << "  -m --main       Run Kasumi with default window." << endl;
+      cout << "                  You may abbreviate this option." << endl;
+      cout << endl;
+      cout << "This program read ${HOME}/.anthy/private-dic.src automatically"\
+        "when it starts. If you have existing dictionary which is not"\
+        "located there, copy your dictionary to "\
+        "${HOME}/.anthy/private-dic.src before you launch this program."\
+        "If you have no dictionary, the new dictionary will be created"\
+        "implicitly.";
+      cout << endl;
+      exit(0);
       break;
     case 'v':
       cout << "kasumi " << VERSION << endl;
@@ -59,9 +76,12 @@ int main(int argc, char *argv[])
     case 'a':
       mode = ADD;
       break;
+    case 'm':
+      mode = MAIN;
+      break;
     case '?':
       cout << "Argument error." << endl;
-      exit(0);
+      exit(1);
       break;
     }
   }
@@ -83,17 +103,19 @@ int main(int argc, char *argv[])
     cout << "Cannot find $HOME environment variable." << endl;
   }
 
+  KasumiDic *dic;
   try{
-    KasumiDic *dic = new KasumiDic(dic_filename);
-
-    KasumiMainWindow window = KasumiMainWindow(dic);
+    dic = new KasumiDic(dic_filename);
   }catch(KasumiDicExaminationException e){
     cout << "line " << e.getLine() << ":" << e.getMessage() << endl;
-    return 0;
-  }catch(KasumiDicStoreException e){
-    cout <<  e.getMessage() << endl;
-    return 0;
+    exit(1);
   }
-
-  gtk_main();
+  
+  if(mode == MAIN){
+    KasumiMainWindow window = KasumiMainWindow(dic);
+    gtk_main();
+  }else if(mode == ADD){
+    KasumiAddWindow window = KasumiAddWindow(dic);
+    gtk_main();
+  }
 }
