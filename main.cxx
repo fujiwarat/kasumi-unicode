@@ -21,13 +21,13 @@ void showHelp(){
   cout << "Option:" << endl;
   cout << "  -h --help        Show this message." << endl;
   cout << "  -v --versoin     Show Kasumi's version and copyright" << endl;;
-  cout << "                   infomation" << endl;
+  cout << "                   information" << endl;
   cout << "  -m --manage      Run Kasumi in Manage mode." << endl;
   cout << "                   You may abbreviate this option." << endl;
   cout << "  -a --add         Run Kasumi in Add mode." << endl;
-  cout << "  --sound val      Set defalut sound entry (only in Add mode)" << endl;
-  cout << "  --spelling val   Set defalut spelling entry (only in Add mode)" << endl;
-  cout << "  --wordclass val  Set defalut word class entry (only in Add mode)" << endl;
+  cout << "  --sound val      Set default sound entry (only in Add mode)" << endl;
+  cout << "  --spelling val   Set default spelling entry (only in Add mode)" << endl;
+  cout << "  --wordclass val  Set default word class entry (only in Add mode)" << endl;
   cout << "  -x val           Set default horizontal window position" << endl;
   cout << "  -y val           Set default vertical window position" << endl;
   cout << endl;
