@@ -1,0 +1,72 @@
+# Kasumi's Japanese translated message
+# Copyright (C) 2004 Takashi Nakamoto
+# This file is distributed under the same license as the Kasumi package.
+# Takashi Nakamoto <bluedwarf@openoffice.org>, 2004
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-10-25 20:59+0900\n"
+"PO-Revision-Date: 2004-10-18 08:30+0900\n"
+"Last-Translator: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
+"Language-Team: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=EUC-JP\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: KasumiMainWindow.cxx:16
+msgid "Kasumi"
+msgstr "霞"
+
+#: KasumiMainWindow.cxx:43 KasumiMainWindow.cxx:78
+msgid "Spelling"
+msgstr "単語"
+
+#: KasumiMainWindow.cxx:49 KasumiMainWindow.cxx:87
+msgid "Sound"
+msgstr "読み"
+
+#: KasumiMainWindow.cxx:55 KasumiMainWindow.cxx:96
+msgid "Frequency"
+msgstr "頻度"
+
+#: KasumiMainWindow.cxx:61 KasumiMainWindow.cxx:106
+msgid "Word Class"
+msgstr "品詞"
+
+#: KasumiMainWindow.cxx:112
+msgid "Noun"
+msgstr "名詞"
+
+#: KasumiMainWindow.cxx:113
+msgid "Adverb"
+msgstr "副詞"
+
+#: KasumiMainWindow.cxx:114
+msgid "Person's name"
+msgstr "人名"
+
+#: KasumiMainWindow.cxx:115
+msgid "Place-name"
+msgstr "地名"
+
+#: KasumiMainWindow.cxx:116
+msgid "Adjective"
+msgstr "形容詞"
+
+#: KasumiMainWindow.cxx:127
+msgid "Quit"
+msgstr "終了"
+
+#: KasumiMainWindow.cxx:133
+msgid "Store"
+msgstr "保存"
+
+#: KasumiMainWindow.cxx:139
+msgid "Add"
+msgstr "追加"
+
+#: KasumiMainWindow.cxx:145
+msgid "Remove"
+msgstr "削除"
