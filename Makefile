@@ -111,7 +111,7 @@ PROGRAMS =  $(bin_PROGRAMS)
 
 
 DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I.
-CPPFLAGS =  -I/usr/include/gtk-2.0 -I/usr/lib/gtk-2.0/include -I/usr/X11R6/include -I/usr/include/atk-1.0 -I/usr/include/pango-1.0 -I/usr/include/freetype2 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include  
+CPPFLAGS =  -Wall -I/usr/include/gtk-2.0 -I/usr/lib/gtk-2.0/include -I/usr/X11R6/include -I/usr/include/atk-1.0 -I/usr/include/pango-1.0 -I/usr/include/freetype2 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include  
 LDFLAGS =  
 LIBS =  -Wl,--export-dynamic -lgtk-x11-2.0 -lgdk-x11-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangoxft-1.0 -lpangox-1.0 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0  
 kasumi_OBJECTS =  main.o KasumiDic.o KasumiWord.o KasumiString.o \

@@ -88,7 +88,7 @@ void KasumiDic::load() throw(KasumiDicExaminationException){
 }
 
 int KasumiDic::appendWord(KasumiWord *word){
-  int i;
+  size_t i;
   
   WordList.push_back(word);
   
@@ -99,8 +99,8 @@ int KasumiDic::appendWord(KasumiWord *word){
   return getUpperBoundOfWordID();
 }
 
-void KasumiDic::removeWord(int id) throw(KasumiOutOfBoundException){
-  int i;
+void KasumiDic::removeWord(size_t id) throw(KasumiOutOfBoundException){
+  size_t i;
   
   if(id >= WordList.size() || id < 0){
     throw new KasumiOutOfBoundException("Out of Bound!");
@@ -118,7 +118,7 @@ void KasumiDic::removeWord(int id) throw(KasumiOutOfBoundException){
 }
 
 void KasumiDic::store() throw(KasumiDicStoreException){
-  int i;
+  size_t i;
   ofstream DicFile(DicFileName.c_str());
   if(!DicFile.is_open()){
     cout << "Cannot overwrite data to" << DicFileName << "." << endl;
@@ -164,6 +164,8 @@ void KasumiDic::store() throw(KasumiDicStoreException){
     ret += "\n";
   }
 
+  cout << ret;
+
   DicFile << ret;
   DicFile.close();
 
@@ -180,7 +182,7 @@ void KasumiDic::registerEventListener(KasumiDicEventListener *listener){
   EventListeners.push_back(listener);  
 }
 
-KasumiWord *KasumiDic::getWordWithID(int id) throw(KasumiOutOfBoundException){
+KasumiWord *KasumiDic::getWordWithID(size_t id) throw(KasumiOutOfBoundException){
   if(id >= WordList.size() || id < 0){
     throw new KasumiOutOfBoundException("Out of Bound!");
   }

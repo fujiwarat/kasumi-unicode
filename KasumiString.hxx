@@ -34,7 +34,7 @@ public:
   bool isKeyValLine();
   
   string getSound();
-  int getFrequency();
+  unsigned int getFrequency();
   string getSpelling();
   string getKey();  
   string getVal();

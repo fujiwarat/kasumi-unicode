@@ -27,11 +27,11 @@ public:
   KasumiDic(const string aDicFileName) throw(KasumiDicExaminationException);
   void store() throw(KasumiDicStoreException);
   int appendWord(KasumiWord *word); // returns this word's ID
-  void removeWord(int id) throw(KasumiOutOfBoundException);
+  void removeWord(size_t id) throw(KasumiOutOfBoundException);
 
   void registerEventListener(KasumiDicEventListener *listener);
 
-  KasumiWord *getWordWithID(int id) throw(KasumiOutOfBoundException);
+  KasumiWord *getWordWithID(size_t id) throw(KasumiOutOfBoundException);
   int getUpperBoundOfWordID();
 };
 

@@ -1,4 +1,5 @@
 #include "KasumiString.hxx"
+#include <iostream>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ bool KasumiString::isEmptyLine(){
 }
 
 bool KasumiString::isEntryLine(){
-  int i;
+  unsigned int i;
 
   if(isKeyValLine()){
     return false;
@@ -45,7 +46,7 @@ bool KasumiString::isEntryLine(){
 }
 
 bool KasumiString::isKeyValLine(){
-  int i;
+  unsigned int i;
 
   i = find("=",0);
 
@@ -57,7 +58,7 @@ bool KasumiString::isKeyValLine(){
 }
 
 string KasumiString::getSound(){
-  int i;
+  unsigned int i;
 
   if(isEntryLine()){
     i = find(" ",0);
@@ -67,8 +68,8 @@ string KasumiString::getSound(){
   return NULL;
 }
 
-int KasumiString::getFrequency(){
-  int i,j,ret;
+unsigned int KasumiString::getFrequency(){
+  unsigned int i,j,ret = 0;
   string sub;
 
   if(isEntryLine()){
@@ -99,7 +100,7 @@ string KasumiString::getKey(){
 
   if(isKeyValLine()){
     i = find("=",0);
-    while(c_str()[i-1] == ' '){
+    while(c_str()[i-1] == ' ' || c_str()[i-1] == '\t'){
       i--;
     }
     
@@ -114,7 +115,7 @@ string KasumiString::getVal(){
 
   if(isKeyValLine()){
     i = find("=",0);
-    while(c_str()[i+1] == ' '){
+    while(c_str()[i+1] == ' ' || c_str()[i-1] == '\t'){
       i++;
     }
 

@@ -69,7 +69,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
   gtk_tree_view_set_model(GTK_TREE_VIEW(WordListView),GTK_TREE_MODEL(WordList));
 
   WordListSelection = gtk_tree_view_get_selection(GTK_TREE_VIEW(WordListView));
-  gtk_tree_selection_set_mode(WordListSelection, GTK_SELECTION_BROWSE);
+  gtk_tree_selection_set_mode(WordListSelection, GTK_SELECTION_SINGLE);
   g_signal_connect(G_OBJECT(WordListSelection), "changed",
                    G_CALLBACK(_call_back_changed_list_cursor), this);
 
@@ -275,7 +275,6 @@ void KasumiMainWindow::refresh(){
 
       if(word != NULL && word->getFrequency() != 0){
         GtkTreeIter iter;
-        GtkTreePath *path;
       
         gtk_list_store_append(WordList,&iter);
       
@@ -338,10 +337,10 @@ void KasumiMainWindow::ClickedStoreButton(GtkWidget *widget){
 
 void KasumiMainWindow::ClickedAddButton(GtkWidget *widget){
   KasumiWord *word = new KasumiWord();
-  word->setSpellingByUTF8(_("Spelling"));
-  word->setSoundByUTF8(_("Sound"));
-  word->setFrequency(1);
-  word->setWordClass(NOUN);
+  word->setSoundByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))));  
+  word->setSpellingByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SpellingEntry))));
+  word->setFrequency(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(FrequencySpin)));
+  word->setWordClass(getActiveWordClass());  
 
   dictionary->appendWord(word);
 }
@@ -488,7 +487,6 @@ void KasumiMainWindow::removedWord(int id){
 }
 
 void KasumiMainWindow::appendedWord(int id){
-  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
   GtkTreeIter iter;
   KasumiWord *word = dictionary->getWordWithID(id);
   
@@ -509,7 +507,6 @@ void KasumiMainWindow::appendedWord(int id){
 }
 
 void KasumiMainWindow::modifiedWord(int id){
-  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
   GtkTreeIter *iter = findCorrespondingIter(id);
 
   if(iter != NULL){
