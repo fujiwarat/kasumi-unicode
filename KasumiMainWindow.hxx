@@ -8,6 +8,7 @@
 #include <gtk/gtk.h>
 #include "KasumiDic.hxx"
 #include "KasumiDicEventListener.hxx"
+#include "KasumiConfiguration.hxx"
 
 enum column_name{
   COL_ID = 0,
@@ -124,7 +125,7 @@ private:
   WordClassType getActiveWordClass();
   void flipOptionPane();
 public:
-  KasumiMainWindow(KasumiDic *aDictionary);
+  KasumiMainWindow(KasumiDic *aDictionary, KasumiConfiguration *conf);
   void refresh();
   void removedWord(int id);
   void appendedWord(int id);

@@ -1,3 +1,8 @@
+2004-12-08  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - configuration framework
+
 2004-12-07  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* KasumiMainWindow.cxx: Feature

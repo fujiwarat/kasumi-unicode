@@ -4,6 +4,7 @@
 #include "KasumiWord.hxx"
 #include "KasumiDic.hxx"
 #include "KasumiString.hxx"
+#include "KasumiConfiguration.hxx"
 #include <gdk/gdkkeysyms.h>
 #include "intl.h"
 
@@ -13,7 +14,8 @@
 
 using namespace std;
 
-KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary){
+KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
+                                 KasumiConfiguration *conf){
   dictionary = aDictionary;
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);

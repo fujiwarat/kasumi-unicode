@@ -11,6 +11,7 @@
 #include "KasumiDic.hxx"
 #include "KasumiMainWindow.hxx"
 #include "KasumiAddWindow.hxx"
+#include "KasumiConfiguration.hxx"
 #include "KasumiException.hxx"
 #include "intl.h"
 
@@ -95,24 +96,26 @@ int main(int argc, char *argv[])
   }
 
   dic_filename = string(home) + "/.anthy/private-dic.src.tmp";
-  free(home);  
-  
-  KasumiDic *dic;
+  free(home);
+
   try{
-    dic = new KasumiDic(dic_filename);
+    KasumiConfiguration *conf = new KasumiConfiguration();
+
+    KasumiDic *dic = new KasumiDic(dic_filename);
+  
+    if(mode == MAIN){
+      KasumiMainWindow window = KasumiMainWindow(dic,conf);
+      gtk_main();
+    }else if(mode == ADD){
+      KasumiAddWindow window = KasumiAddWindow(dic,conf);
+      gtk_main();
+    }
+  }catch(KasumiConfigurationLoadException e){
+    cout << "line " << e.getLine() << ": " << e.getMessage() << endl;
+    exit(1);
   }catch(KasumiDicExaminationException e){
-    cout << "line " << e.getLine() << ":" << e.getMessage() << endl;
+    cout << "line " << e.getLine() << ": " << e.getMessage() << endl;
     exit(1);
   }
-  
-  if(mode == MAIN){
-    KasumiMainWindow window = KasumiMainWindow(dic);
-    gtk_main();
-  }else if(mode == ADD){
-    KasumiAddWindow window = KasumiAddWindow(dic);
-    gtk_main();
-  }
-
-
 }
 

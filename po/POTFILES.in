@@ -11,3 +11,5 @@
 ./KasumiMainWindow.cxx
 ./KasumiAddWindow.hxx
 ./KasumiAddWindow.cxx
+./KasumiConfiguration.cxx
+./KasumiConfiguration.hxx

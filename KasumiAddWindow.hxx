@@ -8,6 +8,7 @@
 #include <gtk/gtk.h>
 #include "KasumiDic.hxx"
 #include "KasumiWord.hxx"
+#include "KasumiConfiguration.hxx"
 
 class KasumiAddWindow{
   friend void _call_back_add_window_destroy(GtkWidget *widget,
@@ -50,7 +51,7 @@ private:
   void ChangedWordClassCombo(GtkWidget *widget);
   WordClassType getActiveWordClass();
 public:
-  KasumiAddWindow(KasumiDic *aDictionary);
+  KasumiAddWindow(KasumiDic *aDictionary, KasumiConfiguration *conf);
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include "KasumiWord.hxx"
 #include "KasumiDic.hxx"
 #include "KasumiString.hxx"
+#include "KasumiConfiguration.hxx"
 #include <gdk/gdkkeysyms.h>
 #include "intl.h"
 
@@ -14,7 +15,8 @@
 
 using namespace std;
 
-KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary){
+KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
+                                   KasumiConfiguration *conf){
   dictionary = aDictionary;
   modificationFlag = false;
   

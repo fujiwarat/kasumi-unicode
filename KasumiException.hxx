@@ -50,5 +50,27 @@ public:
   string getMessage() { return message; }
 };
 
+class KasumiConfigurationLoadException{
+private:
+  int line;
+  string message;
+public:
+  KasumiConfigurationLoadException(string aMessage, int aLine){
+    line = aLine;
+    message = aMessage;
+  }
+  string getMessage() { return message; }
+  int getLine() { return line; }
+};
+
+class KasumiConfigurationSaveException{
+private:
+  string message;
+public:
+  KasumiConfigurationSaveException(string aMessage){
+    message = aMessage;
+  }
+  string getMessage() { return message; }
+};
 
 #endif
