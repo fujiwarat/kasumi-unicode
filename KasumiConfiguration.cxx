@@ -187,7 +187,6 @@ void KasumiConfiguration::saveConfiguration()
 
 void KasumiConfiguration::checkValidity()
   throw(KasumiConfigurationLoadException){
-  unsigned int i;
   
   if(config[string("StartupMode")] != string("MANAGE") &&
      config[string("StartupMode")] != string("ADD") &&

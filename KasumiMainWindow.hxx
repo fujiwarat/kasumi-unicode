@@ -126,7 +126,7 @@ private:
   void flipOptionPane();
 public:
   KasumiMainWindow(KasumiDic *aDictionary, KasumiConfiguration *conf);
-  ~KasumiMainWindow();
+  virtual ~KasumiMainWindow();
   void refresh();
   void removedWord(int id);
   void appendedWord(int id);

@@ -1,3 +1,8 @@
+2005-04-07  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - trivial change for no-warning compilation
+
 2005-04-06  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* New feature

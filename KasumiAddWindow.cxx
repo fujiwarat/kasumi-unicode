@@ -5,7 +5,7 @@
 #include "KasumiDic.hxx"
 #include "KasumiString.hxx"
 #include "KasumiConfiguration.hxx"
-#include "KasumiMainWindow.hxx" // for getModifierType() and getAccelKey()
+#include "KasumiMainWindow.hxx"
 #include <gdk/gdkkeysyms.h>
 #include "intl.h"
 
@@ -247,7 +247,7 @@ void KasumiAddWindow::destroy(){
 
 void KasumiAddWindow::quit(){
   dictionary->store();
-  destroy();
+  delete this;
   gtk_main_quit();
 }
 
@@ -413,7 +413,7 @@ WordClassType KasumiAddWindow::getActiveWordClass(){
 }
 
 void KasumiAddWindow::SwitchToManageMode(){
-  KasumiMainWindow *mainwindow = new KasumiMainWindow(dictionary,conf);
+  new KasumiMainWindow(dictionary,conf);
   delete this;
 }
 
@@ -452,9 +452,6 @@ void _call_back_add_window_changed_word_class_combo(GtkWidget *widget,
 void _call_back_selection_data_received(GtkWidget *widget,
                                         GtkSelectionData *selection_data,
                                         gpointer data){
-  GdkAtom *atoms;
-  int i;
-
   if(selection_data->length < 0){
     // failed retrieving selection
     // do nothing

@@ -455,7 +455,7 @@ void KasumiMainWindow::quit(){
     }
     gtk_widget_destroy (dialog);
   }
-  destroy();
+  delete this;
   gtk_main_quit();
 }
 
@@ -663,7 +663,7 @@ void KasumiMainWindow::ChangedOption(GtkWidget *widget){
 }
 
 void KasumiMainWindow::SwitchToAddingMode(){
-  KasumiAddWindow *addwindow = new KasumiAddWindow(dictionary,conf);
+  new KasumiAddWindow(dictionary,conf);
   delete this;
 }
 

@@ -241,7 +241,7 @@ void KasumiDic::removeEventListener(KasumiDicEventListener *listener){
 
   for(i=EventListeners.begin();i!=EventListeners.end();i++){
     p = *i;
-    if(p = listener){
+    if(p == listener){
       EventListeners.erase(i);
       return;
     }
