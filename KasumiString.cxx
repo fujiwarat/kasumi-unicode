@@ -127,14 +127,48 @@ string KasumiString::getVal(){
 }
 
 int str2int(const string &str){
-   stringstream ss(str);
-   int i;
-   ss >> i;
-   return i;
+  if(isInt(str)){
+    stringstream ss(str);
+    int i;
+    ss >> i;
+    return i;
+  }
+  
+  return 0;
 }
 
 string int2str(int i){
    stringstream ss;
    ss << i;
    return ss.str();
+}
+
+bool isInt(const string &str){
+  int i;
+  
+  if(str == "-" || str == ""){
+    return false;
+  }
+
+  if(str == "0"){
+    return true;
+  }
+
+  if(str.c_str()[0] == '-'){
+    i=1;
+  }else{
+    i=0;
+  }
+
+  if(str.c_str()[i] >= '1' && str.c_str()[i] <= '9'){
+    for(i++;i<str.length();i++){
+      if(str.c_str()[i] < '0' || str.c_str()[i] > '9'){
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  return false;
 }

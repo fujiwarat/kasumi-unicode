@@ -1052,6 +1052,7 @@ guint getAccelKey(const string &key){
   else if(shortkey == "X") return GDK_X;
   else if(shortkey == "Y") return GDK_Y;
   else if(shortkey == "Z") return GDK_Z;
+  else if(shortkey == "0") return GDK_0;
   else if(shortkey == "1") return GDK_1;
   else if(shortkey == "2") return GDK_2;
   else if(shortkey == "3") return GDK_3;

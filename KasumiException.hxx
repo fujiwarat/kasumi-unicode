@@ -52,15 +52,12 @@ public:
 
 class KasumiConfigurationLoadException{
 private:
-  int line;
   string message;
 public:
-  KasumiConfigurationLoadException(string aMessage, int aLine){
-    line = aLine;
+  KasumiConfigurationLoadException(string aMessage){
     message = aMessage;
   }
   string getMessage() { return message; }
-  int getLine() { return line; }
 };
 
 class KasumiConfigurationSaveException{

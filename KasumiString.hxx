@@ -42,5 +42,6 @@ public:
 
 int str2int(const string &str);
 string int2str(int i);
+bool isInt(const string &str);
 
 #endif

@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
       gtk_main();
     }
   }catch(KasumiConfigurationLoadException e){
-    cout << "line " << e.getLine() << ": " << e.getMessage() << endl;
+    cout << e.getMessage() << endl;
     exit(1);
   }catch(KasumiDicExaminationException e){
     cout << "line " << e.getLine() << ": " << e.getMessage() << endl;
