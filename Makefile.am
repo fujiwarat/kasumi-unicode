@@ -1,6 +1,6 @@
 bin_PROGRAMS = kasumi
 
-kasumi_SOURCES = main.cxx \
+kasumi_SOURCES = main.cxx intl.h \
                  KasumiDic.cxx KasumiDic.hxx \
                  KasumiWord.cxx KasumiWord.hxx \
 				 KasumiString.cxx KasumiString.hxx \
