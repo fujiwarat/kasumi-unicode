@@ -1,5 +1,9 @@
 2005-03-02  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
+	* New feature
+	 - A new icon for Kasumi (kasumi.png)
+	   It will be installed in /usr/local/share/kasumi/ by default
+
 	* fix
 	 - launch correctly unless ~/.anthy directory exists
 

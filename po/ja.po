@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 01:47+0900\n"
+"POT-Creation-Date: 2005-03-02 22:44+0900\n"
 "PO-Revision-Date: 2004-10-18 08:30+0900\n"
 "Last-Translator: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
 "Language-Team: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
@@ -19,133 +19,133 @@ msgstr ""
 msgid "Kasumi"
 msgstr "霞"
 
-#: KasumiMainWindow.cxx:54 KasumiMainWindow.cxx:95 KasumiAddWindow.cxx:36
+#: KasumiMainWindow.cxx:52 KasumiMainWindow.cxx:93 KasumiAddWindow.cxx:34
 msgid "Spelling"
 msgstr "単語"
 
-#: KasumiMainWindow.cxx:60 KasumiMainWindow.cxx:113 KasumiAddWindow.cxx:47
+#: KasumiMainWindow.cxx:58 KasumiMainWindow.cxx:111 KasumiAddWindow.cxx:45
 msgid "Sound"
 msgstr "読み"
 
-#: KasumiMainWindow.cxx:66 KasumiMainWindow.cxx:125 KasumiAddWindow.cxx:58
+#: KasumiMainWindow.cxx:64 KasumiMainWindow.cxx:123 KasumiAddWindow.cxx:56
 msgid "Frequency"
 msgstr "頻度"
 
-#: KasumiMainWindow.cxx:72 KasumiMainWindow.cxx:152 KasumiAddWindow.cxx:76
+#: KasumiMainWindow.cxx:70 KasumiMainWindow.cxx:150 KasumiAddWindow.cxx:74
 msgid "Word Class"
 msgstr "品詞"
 
-#: KasumiMainWindow.cxx:158 KasumiAddWindow.cxx:82
+#: KasumiMainWindow.cxx:156 KasumiAddWindow.cxx:80
 msgid "Noun"
 msgstr "名詞"
 
-#: KasumiMainWindow.cxx:159 KasumiAddWindow.cxx:83
+#: KasumiMainWindow.cxx:157 KasumiAddWindow.cxx:81
 msgid "Adverb"
 msgstr "副詞"
 
-#: KasumiMainWindow.cxx:160 KasumiAddWindow.cxx:84
+#: KasumiMainWindow.cxx:158 KasumiAddWindow.cxx:82
 msgid "Person's name"
 msgstr "人名"
 
-#: KasumiMainWindow.cxx:161 KasumiAddWindow.cxx:85
+#: KasumiMainWindow.cxx:159 KasumiAddWindow.cxx:83
 msgid "Place-name"
 msgstr "地名"
 
-#: KasumiMainWindow.cxx:162 KasumiAddWindow.cxx:86
+#: KasumiMainWindow.cxx:160 KasumiAddWindow.cxx:84
 msgid "Adjective"
 msgstr "形容詞"
 
-#: KasumiMainWindow.cxx:176 KasumiAddWindow.cxx:99
+#: KasumiMainWindow.cxx:174 KasumiAddWindow.cxx:97
 msgid "NA connection"
 msgstr "な接続"
 
-#: KasumiMainWindow.cxx:185 KasumiAddWindow.cxx:105
+#: KasumiMainWindow.cxx:183 KasumiAddWindow.cxx:103
 msgid "SA connection"
 msgstr "さ接続"
 
-#: KasumiMainWindow.cxx:194 KasumiMainWindow.cxx:244 KasumiAddWindow.cxx:111
-#: KasumiAddWindow.cxx:145
+#: KasumiMainWindow.cxx:192 KasumiMainWindow.cxx:242 KasumiAddWindow.cxx:109
+#: KasumiAddWindow.cxx:143
 msgid "SURU connection"
 msgstr "する接続"
 
-#: KasumiMainWindow.cxx:203 KasumiMainWindow.cxx:253 KasumiAddWindow.cxx:117
-#: KasumiAddWindow.cxx:151
+#: KasumiMainWindow.cxx:201 KasumiMainWindow.cxx:251 KasumiAddWindow.cxx:115
+#: KasumiAddWindow.cxx:149
 msgid "Can be Bunnsetsu"
 msgstr "語幹のみで文節"
 
-#: KasumiMainWindow.cxx:212 KasumiAddWindow.cxx:122
+#: KasumiMainWindow.cxx:210 KasumiAddWindow.cxx:120
 msgid "KAKUJOSHI connection"
 msgstr "格助詞接続"
 
-#: KasumiMainWindow.cxx:226 KasumiAddWindow.cxx:133
+#: KasumiMainWindow.cxx:224 KasumiAddWindow.cxx:131
 msgid "TO connection"
 msgstr "と接続"
 
-#: KasumiMainWindow.cxx:235 KasumiAddWindow.cxx:139
+#: KasumiMainWindow.cxx:233 KasumiAddWindow.cxx:137
 msgid "TARU connection"
 msgstr "たる接続"
 
-#: KasumiMainWindow.cxx:282
+#: KasumiMainWindow.cxx:280
 msgid "Find By Spelling"
 msgstr "単語で検索"
 
-#: KasumiMainWindow.cxx:288
+#: KasumiMainWindow.cxx:286
 msgid "Find By Sound"
 msgstr "読みで検索"
 
-#: KasumiMainWindow.cxx:301 KasumiAddWindow.cxx:163
+#: KasumiMainWindow.cxx:299 KasumiAddWindow.cxx:161
 msgid "Quit"
 msgstr "終了"
 
-#: KasumiMainWindow.cxx:314
+#: KasumiMainWindow.cxx:312
 msgid "Store"
 msgstr "保存"
 
-#: KasumiMainWindow.cxx:327
+#: KasumiMainWindow.cxx:325
 msgid "New Word"
 msgstr "新規作成"
 
-#: KasumiMainWindow.cxx:340
+#: KasumiMainWindow.cxx:338
 msgid "Remove"
 msgstr "削除"
 
-#: KasumiMainWindow.cxx:353
+#: KasumiMainWindow.cxx:351
 msgid "Adding Mode"
 msgstr "単語追加モード"
 
-#: KasumiMainWindow.cxx:424
+#: KasumiMainWindow.cxx:422
 msgid ""
 "Your dictionary went through several changes. Do you save these changes "
 "before Kasumi quits?"
 msgstr "辞書に変更が加えられました。霞を終了する前に保存しますか？"
 
-#: KasumiMainWindow.cxx:542 KasumiAddWindow.cxx:329
+#: KasumiMainWindow.cxx:534 KasumiAddWindow.cxx:323
 msgid ""
 "Sound must consist of only Hiragana characters. You have entered invalid "
 "character: "
 msgstr "読みにひらがな以外の文字を入力することはできません: "
 
-#: KasumiMainWindow.cxx:721
+#: KasumiMainWindow.cxx:713
 msgid "Cannot find a specific word. Search from first?"
 msgstr "検索しても見つかりませんでした。最初から検索しますか？"
 
-#: KasumiMainWindow.cxx:759
+#: KasumiMainWindow.cxx:751
 msgid "Cannot find a specific word."
 msgstr "検索しても見つかりませんでした。"
 
-#: KasumiAddWindow.cxx:176
+#: KasumiAddWindow.cxx:174
 msgid "Add"
 msgstr "追加"
 
-#: KasumiAddWindow.cxx:189
+#: KasumiAddWindow.cxx:187
 msgid "Manage Mode"
 msgstr "辞書管理モード"
 
-#: KasumiAddWindow.cxx:261
+#: KasumiAddWindow.cxx:255
 msgid "Invlid entry for Sound."
 msgstr "「読み」の項目を正しく入力してください"
 
-#: KasumiAddWindow.cxx:275
+#: KasumiAddWindow.cxx:269
 msgid "Invlid entry for Spelling."
 msgstr "「単語」の項目を正しく入力してください"
 

@@ -94,8 +94,10 @@ localedir = @localedir@
 
 bin_PROGRAMS = kasumi
 
-kasumi_SOURCES = main.cxx intl.h                  KasumiDic.cxx KasumiDic.hxx                  KasumiWord.cxx KasumiWord.hxx 				 KasumiString.cxx KasumiString.hxx 				 KasumiException.hxx 				 KasumiMainWindow.cxx KasumiMainWindow.hxx 				 KasumiAddWindow.cxx KasumiAddWindow.hxx 				 KasumiDicEventListener.hxx 				 KasumiConfiguration.cxx KasumiConfiguration.hxx
+kasumi_SOURCES = main.cxx intl.h                  KasumiDic.cxx KasumiDic.hxx                  KasumiWord.cxx KasumiWord.hxx 				 KasumiString.cxx KasumiString.hxx 				 KasumiException.hxx 				 KasumiMainWindow.cxx KasumiMainWindow.hxx 				 KasumiAddWindow.cxx KasumiAddWindow.hxx 				 KasumiDicEventListener.hxx 				 KasumiConfiguration.cxx KasumiConfiguration.hxx                  kasumi.png
 
+
+pkgdata_DATA = kasumi.png
 
 AM_CPPFLAGS = -DLOCALEDIR='"$(localedir)"'
 SUBDIRS = intl m4 po
@@ -127,6 +129,8 @@ CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+DATA =  $(pkgdata_DATA)
+
 DIST_COMMON =  README ./stamp-h.in ABOUT-NLS AUTHORS COPYING ChangeLog \
 INSTALL Makefile.am Makefile.in NEWS acconfig.h aclocal.m4 config.guess \
 config.h.in config.sub configure configure.in install-sh missing \
@@ -240,6 +244,25 @@ kasumi: $(kasumi_OBJECTS) $(kasumi_DEPENDENCIES)
 	$(CXXLINK) $(kasumi_LDFLAGS) $(kasumi_OBJECTS) $(kasumi_LDADD) $(LIBS)
 .cxx.o:
 	$(CXXCOMPILE) -c $<
+
+install-pkgdataDATA: $(pkgdata_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
+	@list='$(pkgdata_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkgdatadir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkgdatadir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(pkgdatadir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(pkgdatadir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-pkgdataDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(pkgdata_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(pkgdatadir)/$$p; \
+	done
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -458,21 +481,21 @@ all-recursive-am: config.h
 install-exec-am: install-binPROGRAMS
 install-exec: install-exec-recursive
 
-install-data-am:
+install-data-am: install-pkgdataDATA
 install-data: install-data-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-recursive
-uninstall-am: uninstall-binPROGRAMS
+uninstall-am: uninstall-binPROGRAMS uninstall-pkgdataDATA
 uninstall: uninstall-recursive
-all-am: Makefile $(PROGRAMS) config.h
+all-am: Makefile $(PROGRAMS) $(DATA) config.h
 all-redirect: all-recursive-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs: installdirs-recursive
 installdirs-am:
-	$(mkinstalldirs)  $(DESTDIR)$(bindir)
+	$(mkinstalldirs)  $(DESTDIR)$(bindir) $(DESTDIR)$(pkgdatadir)
 
 
 mostlyclean-generic:
@@ -516,8 +539,8 @@ maintainer-clean: maintainer-clean-recursive
 mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
 mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile install-data-recursive \
-uninstall-data-recursive install-exec-recursive \
+maintainer-clean-compile uninstall-pkgdataDATA install-pkgdataDATA \
+install-data-recursive uninstall-data-recursive install-exec-recursive \
 uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
 all-recursive check-recursive installcheck-recursive info-recursive \
 dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
