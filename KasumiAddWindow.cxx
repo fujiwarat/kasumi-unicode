@@ -4,6 +4,7 @@
 #include "KasumiWord.hxx"
 #include "KasumiDic.hxx"
 #include "KasumiString.hxx"
+#include <gdk/gdkkeysyms.h>
 #include "intl.h"
 
 #ifdef HAVE_CONFIG_H
@@ -144,21 +145,31 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary){
   gtk_button_box_set_layout(GTK_BUTTON_BOX(hbutton_box),GTK_BUTTONBOX_SPREAD);
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hbutton_box),FALSE,FALSE,0);
 
-  /* creating buttons */
+  // creating buttons and shortcut key configuration
   GtkWidget *button = gtk_button_new();
   gtk_button_set_label(GTK_BUTTON(button),_("Quit"));
   gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_add_window_quit),this);
+  GtkAccelGroup *accel = gtk_accel_group_new();
+  gtk_window_add_accel_group(GTK_WINDOW(window), accel);
+  gtk_widget_add_accelerator(button, "clicked", accel,
+                             GDK_Q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
   button = gtk_button_new();
   gtk_button_set_label(GTK_BUTTON(button),_("Add"));
   gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_add_window_add),this);
+  accel = gtk_accel_group_new();
+  gtk_window_add_accel_group(GTK_WINDOW(window), accel);
+  gtk_widget_add_accelerator(button, "clicked", accel,
+                             GDK_A, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
   
   gtk_widget_show_all(window);
   gtk_widget_hide(AdvOptionPane);
+  // resize window appropriate size
+  gtk_window_resize(GTK_WINDOW(window),1,1);
 }
 
 
@@ -245,6 +256,8 @@ void KasumiAddWindow::ChangedWordClassCombo(GtkWidget *widget){
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(NounOptionKakujoshiConnectionCheck), false);
     gtk_widget_show(NounOptionPane);
     gtk_widget_hide(AdvOptionPane);
+    // resize window appropriate size
+    gtk_window_resize(GTK_WINDOW(window),1,1);
   }else if(getActiveWordClass() == ADV){
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(AdvOptionToConnectionCheck), false);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(AdvOptionTaruConnectionCheck), false);
@@ -252,9 +265,13 @@ void KasumiAddWindow::ChangedWordClassCombo(GtkWidget *widget){
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(AdvOptionGokanCheck), false);
     gtk_widget_hide(NounOptionPane);
     gtk_widget_show(AdvOptionPane);
+    // resize window appropriate size
+    gtk_window_resize(GTK_WINDOW(window),1,1);
   }else{
     gtk_widget_hide(NounOptionPane);
     gtk_widget_hide(AdvOptionPane);
+    // resize window appropriate size
+    gtk_window_resize(GTK_WINDOW(window),1,1);
   }
 }
 
