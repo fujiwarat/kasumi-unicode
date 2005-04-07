@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-04 15:57+0900\n"
+"POT-Creation-Date: 2005-04-08 08:32+0900\n"
 "PO-Revision-Date: 2004-10-18 08:30+0900\n"
 "Last-Translator: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
 "Language-Team: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
@@ -119,7 +119,7 @@ msgid ""
 "before Kasumi quits?"
 msgstr "辞書に変更が加えられました。霞を終了する前に保存しますか？"
 
-#: KasumiMainWindow.cxx:555 KasumiAddWindow.cxx:329
+#: KasumiMainWindow.cxx:555 KasumiAddWindow.cxx:332
 msgid ""
 "Sound must consist of only Hiragana characters. You have entered invalid "
 "character: "
@@ -141,11 +141,11 @@ msgstr "追加"
 msgid "Manage Mode"
 msgstr "辞書管理"
 
-#: KasumiAddWindow.cxx:261
+#: KasumiAddWindow.cxx:264
 msgid "Invlid entry for Sound."
 msgstr "「読み」の項目を正しく入力してください"
 
-#: KasumiAddWindow.cxx:275
+#: KasumiAddWindow.cxx:278
 msgid "Invlid entry for Spelling."
 msgstr "「単語」の項目を正しく入力してください"
 
