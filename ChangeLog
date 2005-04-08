@@ -1,5 +1,8 @@
 2005-04-08  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
+	* fix
+	 - make the button in adding window smaller
+
 	* preparation for release (ver 0.8)
 
 2005-04-07  Takashi Nakamoto  <bluedwarf@openoffice.org>

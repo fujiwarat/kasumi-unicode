@@ -153,7 +153,7 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   
   // creating box for buttons
   GtkWidget *hbutton_box = gtk_hbutton_box_new();
-  gtk_button_box_set_layout(GTK_BUTTON_BOX(hbutton_box),GTK_BUTTONBOX_SPREAD);
+  gtk_button_box_set_child_size(GTK_BUTTON_BOX(hbutton_box),1,1);
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hbutton_box),FALSE,FALSE,0);
 
   // creating buttons and configure shortcut key
