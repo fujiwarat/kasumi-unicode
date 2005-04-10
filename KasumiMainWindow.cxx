@@ -1146,7 +1146,7 @@ guint getAccelKey(const string &key){
 }
 
 GdkModifierType getModifierType(const string &key){
-  unsigned int i;
+  size_type i;
 
   i = key.find("+",0);
 

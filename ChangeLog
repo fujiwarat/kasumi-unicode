@@ -1,3 +1,9 @@
+2005-04-11  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - avoid comparison with unsigned int value and "npos"
+	   ("npos" can be negative value)
+
 2005-04-08  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* fix
