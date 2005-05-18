@@ -20,7 +20,7 @@ void showHelp(){
   cout << "Usage: kasumi [option]" << endl;
   cout << "Option:" << endl;
   cout << "  -h --help        Show this message." << endl;
-  cout << "  -v --versoin     Show Kasumi's version and copyright" << endl;;
+  cout << "  -v --version     Show Kasumi's version and copyright" << endl;;
   cout << "                   information" << endl;
   cout << "  -m --manage      Run Kasumi in Manage mode." << endl;
   cout << "                   You may abbreviate this option." << endl;

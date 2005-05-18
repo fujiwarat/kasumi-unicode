@@ -1098,7 +1098,7 @@ void _call_back_activate_search_entry(GtkWidget *widget,
 }
 
 guint getAccelKey(const string &key){
-  unsigned int i;
+  string::size_type i;
 
   i = key.find("+",0);
 
@@ -1146,7 +1146,7 @@ guint getAccelKey(const string &key){
 }
 
 GdkModifierType getModifierType(const string &key){
-  size_type i;
+  string::size_type i;
 
   i = key.find("+",0);
 

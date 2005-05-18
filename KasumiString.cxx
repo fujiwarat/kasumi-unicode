@@ -22,7 +22,7 @@ bool KasumiString::isEmptyLine(){
 }
 
 bool KasumiString::isEntryLine(){
-  size_type i;
+  string::size_type i;
 
   if(isKeyValLine()){
     return false;
@@ -47,7 +47,7 @@ bool KasumiString::isEntryLine(){
 }
 
 bool KasumiString::isKeyValLine(){
-  size_type i;
+  string::size_type i;
 
   i = find("=",0);
 
@@ -59,7 +59,7 @@ bool KasumiString::isKeyValLine(){
 }
 
 string KasumiString::getSound(){
-  unsigned int i;
+  string::size_type i;
 
   if(isEntryLine()){
     i = find(" ",0);
@@ -70,7 +70,8 @@ string KasumiString::getSound(){
 }
 
 unsigned int KasumiString::getFrequency(){
-  unsigned int i,j,ret = 0;
+  string::size_type i,j;
+  unsigned int ret=0;
   string sub;
 
   if(isEntryLine()){

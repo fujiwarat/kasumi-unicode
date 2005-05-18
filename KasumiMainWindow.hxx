@@ -6,6 +6,7 @@
 #endif
 
 #include <gtk/gtk.h>
+#include <string>
 #include "KasumiDic.hxx"
 #include "KasumiDicEventListener.hxx"
 #include "KasumiConfiguration.hxx"
