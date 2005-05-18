@@ -320,7 +320,7 @@ void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
     }
 
     dictionary->appendWord(word);
-    //    dictionary->store();
+    dictionary->store();
 
     gtk_entry_set_text(GTK_ENTRY(SoundEntry), "");
     gtk_entry_set_text(GTK_ENTRY(SpellingEntry), "");

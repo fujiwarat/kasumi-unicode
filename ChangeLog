@@ -1,5 +1,8 @@
 2005-05-18  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
+	* enhancement
+	 - save dictionary when "Add" button clicked in "Adding" mode
+
 	* fix
 	 - typo: "versoin" -> "version"
 	 - type definition "size_type" -> "string::size_type"
