@@ -1,5 +1,9 @@
 2005-05-23  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
+	* fix
+	 - changed behavior when changing a word class in adding mode
+	   not to jump to unconcerned position
+
 	* enhancement
 	 - Verb registration support
 

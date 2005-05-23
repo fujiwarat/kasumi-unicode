@@ -408,7 +408,10 @@ void KasumiAddWindow::ChangedWordClassCombo(GtkWidget *widget){
     gtk_widget_hide(VerbOptionPane);
 
     // resize window appropriate size
-    gtk_window_reshow_with_initial_size(GTK_WINDOW(window));    
+    int x,y;
+    gtk_window_get_position(GTK_WINDOW(window),&x,&y);
+    gtk_window_reshow_with_initial_size(GTK_WINDOW(window));
+    gtk_window_move(GTK_WINDOW(window),x,y);
   }else if(getActiveWordClass() == ADV){
     gtk_toggle_button_set_active(
       GTK_TOGGLE_BUTTON(AdvOptionToConnectionCheck),
@@ -428,7 +431,10 @@ void KasumiAddWindow::ChangedWordClassCombo(GtkWidget *widget){
     gtk_widget_hide(VerbOptionPane);
     
     // resize window appropriate size
+    int x,y;
+    gtk_window_get_position(GTK_WINDOW(window),&x,&y);
     gtk_window_reshow_with_initial_size(GTK_WINDOW(window));
+    gtk_window_move(GTK_WINDOW(window),x,y);
   }else if(getActiveWordClass() == VERB){
     gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo),0);
     gtk_toggle_button_set_active(
@@ -440,14 +446,20 @@ void KasumiAddWindow::ChangedWordClassCombo(GtkWidget *widget){
     gtk_widget_show(VerbOptionPane);
 
     // resize window appropriate size
+    int x,y;
+    gtk_window_get_position(GTK_WINDOW(window),&x,&y);
     gtk_window_reshow_with_initial_size(GTK_WINDOW(window));
+    gtk_window_move(GTK_WINDOW(window),x,y);
   }else{
     gtk_widget_hide(NounOptionPane);
     gtk_widget_hide(AdvOptionPane);
     gtk_widget_hide(VerbOptionPane);
     
     // resize window appropriate size
-    gtk_window_reshow_with_initial_size(GTK_WINDOW(window));    
+    int x,y;
+    gtk_window_get_position(GTK_WINDOW(window),&x,&y);
+    gtk_window_reshow_with_initial_size(GTK_WINDOW(window));
+    gtk_window_move(GTK_WINDOW(window),x,y);
   }
 }
 
