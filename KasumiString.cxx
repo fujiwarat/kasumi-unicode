@@ -38,12 +38,7 @@ bool KasumiString::isEntryLine(){
     return false;
   }
 
-  i = find(" ",i+1);
-  if(i == npos){
-    return true;
-  }
-
-  return false;
+  return true;
 }
 
 bool KasumiString::isKeyValLine(){
@@ -90,7 +85,8 @@ string KasumiString::getSpelling(){
   int i;
   
   if(isEntryLine()){
-    i = rfind(" ",npos);
+    i = find(" ",0);
+    i = find(" ",i+1);
     return substr(i+1);
   }
 

@@ -40,6 +40,16 @@ public:
   string getMessage() { return message; }
 };
 
+class KasumiInvalidVerbTypeNameException{
+private:
+  string message;
+public:
+  KasumiInvalidVerbTypeNameException(string aMessage){
+    message = aMessage;
+  }
+  string getMessage() { return message; }
+};
+
 class KasumiOutOfBoundException{
 private:
   string message;

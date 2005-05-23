@@ -13,8 +13,11 @@
 
 using namespace std;
 
-enum _WordClassEnum {NOUN, ADV, PERSON, PLACE, ADJ};
+enum _WordClassEnum {NOUN, ADV, PERSON, PLACE, ADJ, VERB};
 typedef _WordClassEnum WordClassType;
+
+enum _VerbTypeEnum {B5, G5, K5, M5, N5, R5, S5, T5, W5};
+typedef _VerbTypeEnum VerbType;
 
 class KasumiWord{
 private:
@@ -24,6 +27,7 @@ private:
   string Spelling; // corresponding "Tango"
   string Spelling_UTF8;
   WordClassType WordClass; // corresponding "Hinshi"
+  VerbType eVerbType; // corresponding "KATSUYOU"
   map<string, bool> Option; // corresponding "** Setsuzoku = (y or n)"
                                       // ("y" -> true, "n" -> false)
 
@@ -64,6 +68,15 @@ public:
   
   void setOption(const string &aOptionName, bool aOption);
   bool getOption(const string &aOptionName);
+
+  void setVerbType(VerbType aVerbType);
+  void setVerbTypeWithName(const string &aVerbType)
+    throw(KasumiInvalidVerbTypeNameException);
+  void setVerbTypeWithNameByUTF8(const string &aVerbType)
+    throw(KasumiInvalidVerbTypeNameException);
+  VerbType getVerbType();
+  string getStringOfVerbType();
+  string getStringOfVerbTypeByUTF8();
 
   static string convertUTF8ToEUCJP(const string &aEUCJP);
   static string convertEUCJPToUTF8(const string &aUTF8);  

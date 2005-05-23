@@ -46,12 +46,17 @@ private:
   GtkWidget *AdvOptionTaruConnectionCheck;
   GtkWidget *AdvOptionSuruConnectionCheck;
   GtkWidget *AdvOptionGokanCheck;
+
+  GtkWidget *VerbOptionPane;
+  GtkWidget *VerbTypeCombo;
+  GtkWidget *VerbOptionRentaiCheck;
   
   void destroy();
   void quit();
   void ClickedAddButton(GtkWidget *widget);
   void ChangedWordClassCombo(GtkWidget *widget);
   WordClassType getActiveWordClass();
+  VerbType getActiveVerbType();
 
   void SwitchToManageMode();
 public:

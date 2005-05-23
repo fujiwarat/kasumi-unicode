@@ -82,6 +82,7 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   gtk_combo_box_append_text(GTK_COMBO_BOX(WordClassCombo), _("Person's name"));
   gtk_combo_box_append_text(GTK_COMBO_BOX(WordClassCombo), _("Place-name"));
   gtk_combo_box_append_text(GTK_COMBO_BOX(WordClassCombo), _("Adjective"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(WordClassCombo), _("Verb"));
   gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo), 0);
   gtk_box_pack_start(GTK_BOX(vbox),
                      GTK_WIDGET(WordClassCombo),FALSE,FALSE,0);
@@ -150,6 +151,39 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   gtk_box_pack_start(GTK_BOX(AdvOptionPane),
                      GTK_WIDGET(AdvOptionGokanCheck),
                      FALSE,FALSE,0);
+
+  // creating verb option pane
+  VerbOptionPane = gtk_vbox_new(FALSE,0);
+  gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(VerbOptionPane),
+                     FALSE,FALSE,0);
+
+  label = gtk_label_new(_("VerbType"));
+  alignment = gtk_alignment_new(0,0.5,0,0);
+  gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
+  gtk_box_pack_start(GTK_BOX(VerbOptionPane),GTK_WIDGET(alignment),
+                             FALSE,FALSE,0);
+
+  VerbTypeCombo = gtk_combo_box_new_text();
+  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ba line, 5 columns"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ga line, 5 columns"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ga line, 5 columns"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ka line, 5 columns"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ma line, 5 columns"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Na line, 5 columns"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ra line, 5 columns"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Sa line, 5 columns"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ta line, 5 columns"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Wa line, 5 columns"));
+  gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo), 0);
+  gtk_box_pack_start(GTK_BOX(VerbOptionPane),
+                     GTK_WIDGET(VerbTypeCombo),
+                     FALSE,FALSE,0);
+
+  VerbOptionRentaiCheck =
+    gtk_check_button_new_with_label(_("TARU connection"));
+  gtk_box_pack_start(GTK_BOX(VerbOptionPane),
+                     GTK_WIDGET(VerbOptionRentaiCheck),
+                     FALSE,FALSE,0);
   
   // creating box for buttons
   GtkWidget *hbutton_box = gtk_hbutton_box_new();
@@ -202,6 +236,7 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   
   gtk_widget_show_all(window);
   gtk_widget_hide(AdvOptionPane);
+  gtk_widget_hide(VerbOptionPane);
 
   // set default word classes after option panes are initialized
   string wordclass = conf->getPropertyValue("DefaultAddingWordClass");
@@ -215,6 +250,8 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
     gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),3);
   }else if(wordclass == string(EUCJP_KEIYOUSHI)){
     gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),4);
+  }else if(wordclass == string(EUCJP_DOUSHI)){
+    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),5);
   }else{
     cout << "Invalid word class: " << wordclass << endl;
     exit(1);
@@ -317,6 +354,10 @@ void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
       word->setOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU),
                       gtk_toggle_button_get_active(
                                                    GTK_TOGGLE_BUTTON(AdvOptionGokanCheck)));
+    }else if(word->getWordClass() == VERB){
+      word->setVerbType(getActiveVerbType());
+      word->setOption(string(EUCJP_RENNYOUKEINOMEISHIKA),
+                      gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(VerbOptionRentaiCheck)));
     }
 
     dictionary->appendWord(word);
@@ -364,6 +405,7 @@ void KasumiAddWindow::ChangedWordClassCombo(GtkWidget *widget){
     
     gtk_widget_show(NounOptionPane);
     gtk_widget_hide(AdvOptionPane);
+    gtk_widget_hide(VerbOptionPane);
 
     // resize window appropriate size
     gtk_window_reshow_with_initial_size(GTK_WINDOW(window));    
@@ -383,12 +425,26 @@ void KasumiAddWindow::ChangedWordClassCombo(GtkWidget *widget){
     
     gtk_widget_hide(NounOptionPane);
     gtk_widget_show(AdvOptionPane);
+    gtk_widget_hide(VerbOptionPane);
     
     // resize window appropriate size
-    gtk_window_reshow_with_initial_size(GTK_WINDOW(window));    
+    gtk_window_reshow_with_initial_size(GTK_WINDOW(window));
+  }else if(getActiveWordClass() == VERB){
+    gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo),0);
+    gtk_toggle_button_set_active(
+      GTK_TOGGLE_BUTTON(VerbOptionRentaiCheck),
+      false);
+
+    gtk_widget_hide(NounOptionPane);
+    gtk_widget_hide(AdvOptionPane);
+    gtk_widget_show(VerbOptionPane);
+
+    // resize window appropriate size
+    gtk_window_reshow_with_initial_size(GTK_WINDOW(window));
   }else{
     gtk_widget_hide(NounOptionPane);
     gtk_widget_hide(AdvOptionPane);
+    gtk_widget_hide(VerbOptionPane);
     
     // resize window appropriate size
     gtk_window_reshow_with_initial_size(GTK_WINDOW(window));    
@@ -396,20 +452,15 @@ void KasumiAddWindow::ChangedWordClassCombo(GtkWidget *widget){
 }
 
 WordClassType KasumiAddWindow::getActiveWordClass(){
-  switch(gtk_combo_box_get_active(GTK_COMBO_BOX(WordClassCombo))){
-  case 0:
-    return NOUN;
-  case 1:
-    return ADV;
-  case 2:
-    return PERSON;
-  case 3:
-    return PLACE;
-  case 4:
-    return ADJ;
-  default:
-    return NOUN;
-  }
+  WordClassType tmp[6] = {NOUN, ADV, PERSON, PLACE, ADJ, VERB};
+  int i = gtk_combo_box_get_active(GTK_COMBO_BOX(WordClassCombo));
+  return tmp[i];
+}
+
+VerbType KasumiAddWindow::getActiveVerbType(){
+  VerbType tmp[9] = {B5, G5, K5, M5, N5, R5, S5, T5, W5};
+  int i = gtk_combo_box_get_active(GTK_COMBO_BOX(WordClassCombo)); 
+  return tmp[i];
 }
 
 void KasumiAddWindow::SwitchToManageMode(){

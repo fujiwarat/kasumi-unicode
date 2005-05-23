@@ -88,6 +88,8 @@ void KasumiDic::load(KasumiConfiguration *conf)
             }catch(KasumiInvalidWordClassNameException e){
               throw KasumiDicExaminationException(e.getMessage(), line);
             }
+          }else if(Buffer.getKey() == EUCJP_KATSUYOU){
+            newWord->setVerbTypeWithName(Buffer.getVal());
           }else{
             if(Buffer.getVal() == "y"){
               newWord->setOption(Buffer.getKey(), true);
@@ -197,8 +199,10 @@ void KasumiDic::store()
     }else if(WordList[i]->getStringOfWordClass() == EUCJP_CHIMEI){
       // nothing to do
     }else if(WordList[i]->getStringOfWordClass() == EUCJP_KEIYOUSHI){
-
       // nothing to do
+    }else if(WordList[i]->getWordClass() == VERB){
+      ret += string(EUCJP_KATSUYOU) + " = " + WordList[i]->getStringOfVerbType() + "\n";
+      ret += OptionOutput(WordList[i], EUCJP_RENNYOUKEINOMEISHIKA) + "\n";
     }else{
       throw KasumiDicStoreException(
               "internal error while saving Anthy Dictionary.");

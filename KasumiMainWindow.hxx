@@ -51,6 +51,8 @@ class KasumiMainWindow : public KasumiDicEventListener{
                                                 gpointer data);
   friend void _call_back_changed_word_class_combo(GtkWidget *widget,
                                                   gpointer data);
+  friend void _call_back_changed_verb_type_combo(GtkWidget *widget,
+                                                 gpointer data);
   friend void _call_back_toggled_check(GtkWidget *widget,
                                        gpointer data);
   friend void _call_back_changed_search_entry(GtkWidget *widget,
@@ -81,6 +83,10 @@ private:
   GtkWidget *AdvOptionTaruConnectionCheck;
   GtkWidget *AdvOptionSuruConnectionCheck;
   GtkWidget *AdvOptionGokanCheck;
+
+  GtkWidget *VerbOptionPane;
+  GtkWidget *VerbTypeCombo;
+  GtkWidget *VerbOptionRentaiCheck;
   
   GtkListStore *WordList;
   GtkTreeSelection *WordListSelection;
@@ -97,6 +103,8 @@ private:
   gulong HandlerIDOfAdvOptionTaruConnectionCheck;
   gulong HandlerIDOfAdvOptionSuruConnectionCheck;
   gulong HandlerIDOfAdvOptionGokanCheck;
+  gulong HandlerIDOfVerbTypeCombo;
+  gulong HandlerIDOfVerbOptionRentaiCheck;
 
   GtkWidget *SearchBySpellingRadio;
   GtkWidget *SearchBySoundRadio;
@@ -115,6 +123,7 @@ private:
   void ChangedSpellingEntry();
   void ChangedFrequencySpin();
   void ChangedWordClassCombo();
+  void ChangedVerbTypeCombo();
   void ChangedOption(GtkWidget *widget);
   void SwitchToAddingMode();
 
@@ -122,6 +131,8 @@ private:
   GtkTreeIter *findCorrespondingIter(int id);
 
   void synchronizeOptionCheckButton(KasumiWord *word);
+  void setActiveVerbType(VerbType type);
+  VerbType getActiveVerbType();
   void setActiveWordClass(WordClassType type);
   WordClassType getActiveWordClass();
   void flipOptionPane();
