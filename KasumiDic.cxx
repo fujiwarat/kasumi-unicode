@@ -170,11 +170,37 @@ void KasumiDic::store()
   }
   string ret = string();
 
+  FILE *fp;
+  char str[256],*ptr;
+
+  fp=popen("anthy-dic-tool --version","r");
+  while(1){
+    fgets(str,256,fp);
+    if(feof(fp)){
+      break;
+    }
+     ptr=strchr(str,'\n');
+    if(ptr!=NULL){
+      *ptr='\0';
+    }
+  }
+  pclose(fp);
+
+  string version_str = string(str).substr(string("Anthy-dic-util ").size(),4);
+  int anthy_version = atoi(version_str.c_str());
+
   for(i=0; i<WordList.size(); i++){
     ostringstream ostr;
 
     if(WordList[i] == NULL)
       continue;
+
+    // anthy 6131 or later support verb registration
+    if(WordList[i]->getWordClass() == VERB && anthy_version < 6131){
+      cout << "Anthy " << anthy_version << " cannot support verb registration.\n";
+      cout << "Skip " << WordList[i]->getSpelling() << "\n";
+      continue;
+    }
 
     ret += WordList[i]->getSound() + " ";
     ostr << WordList[i]->getFrequency();
@@ -204,8 +230,7 @@ void KasumiDic::store()
       ret += string(EUCJP_KATSUYOU) + " = " + WordList[i]->getStringOfVerbType() + "\n";
       ret += OptionOutput(WordList[i], EUCJP_RENNYOUKEINOMEISHIKA) + "\n";
     }else{
-      throw KasumiDicStoreException(
-              "internal error while saving Anthy Dictionary.");
+      throw KasumiDicStoreException("innternal error while saving Anthy Dictionary.");
     }
     
     ret += "\n";
