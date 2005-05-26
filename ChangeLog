@@ -1,5 +1,7 @@
 2005-05-27  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
+ 	* preparation for release (ver 0.9)
+
 	* fix
 	 - verb can be registered only with anthy 6131 or later
 
