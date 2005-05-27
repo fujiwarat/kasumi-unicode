@@ -85,6 +85,8 @@ string KasumiString::getSpelling(){
   int i;
   
   if(isEntryLine()){
+    // allow spelling to contain space
+    // thanks to pinkmonky http://d.hatena.ne.jp/pinkmonkey/20050411
     i = find(" ",0);
     i = find(" ",i+1);
     return substr(i+1);

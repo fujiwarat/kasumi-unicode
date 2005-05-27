@@ -22,6 +22,8 @@
 	* fix
 	 - typo: "versoin" -> "version"
 	 - type definition "size_type" -> "string::size_type"
+	 - for http://kasumi.sourceforge.jp/index?%A5%D0%A5%B0%CA%F3%B9%F0%2F45
+	   thanks to pinkmonkey http://d.hatena.ne.jp/pinkmonkey/20050411
 
 2005-04-11  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
