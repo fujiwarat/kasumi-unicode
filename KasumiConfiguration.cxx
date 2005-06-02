@@ -333,7 +333,7 @@ int KasumiConfiguration::getPropertyValueByInt(const string &name){
 }
 
 bool isValidShortcutKey(const string &key){
-  unsigned int i;
+  string::size_type i;
   
   i = key.find("+",0);
   string shortkey = key.substr(i+1);

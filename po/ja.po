@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-21 14:14+0900\n"
+"POT-Creation-Date: 2005-05-30 01:30+0900\n"
 "PO-Revision-Date: 2005-05-21 14:17+0900\n"
 "Last-Translator: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
 "Language-Team: Takashi Nakamoto <bluedwarf@openoffice.org>\n"
@@ -89,97 +89,97 @@ msgstr "と接続"
 msgid "TARU connection"
 msgstr "たる接続"
 
-#: KasumiMainWindow.cxx:266 KasumiAddWindow.cxx:167
+#: KasumiMainWindow.cxx:265 KasumiAddWindow.cxx:160
+msgid "VerbType"
+msgstr "活用形"
+
+#: KasumiMainWindow.cxx:272 KasumiAddWindow.cxx:167
 msgid "Ba line, 5 columns"
 msgstr "バ行五段活用"
 
-#: KasumiMainWindow.cxx:267 KasumiAddWindow.cxx:168 KasumiAddWindow.cxx:169
+#: KasumiMainWindow.cxx:273 KasumiAddWindow.cxx:168 KasumiAddWindow.cxx:169
 msgid "Ga line, 5 columns"
 msgstr "ガ行五段活用"
 
-#: KasumiMainWindow.cxx:268 KasumiAddWindow.cxx:170
+#: KasumiMainWindow.cxx:274 KasumiAddWindow.cxx:170
 msgid "Ka line, 5 columns"
 msgstr "カ行五段活用"
 
-#: KasumiMainWindow.cxx:269 KasumiAddWindow.cxx:171
+#: KasumiMainWindow.cxx:275 KasumiAddWindow.cxx:171
 msgid "Ma line, 5 columns"
 msgstr "マ行五段活用"
 
-#: KasumiMainWindow.cxx:270 KasumiAddWindow.cxx:172
+#: KasumiMainWindow.cxx:276 KasumiAddWindow.cxx:172
 msgid "Na line, 5 columns"
 msgstr "ナ行五段活用"
 
-#: KasumiMainWindow.cxx:271 KasumiAddWindow.cxx:173
+#: KasumiMainWindow.cxx:277 KasumiAddWindow.cxx:173
 msgid "Ra line, 5 columns"
 msgstr "ラ行五段活用"
 
-#: KasumiMainWindow.cxx:272 KasumiAddWindow.cxx:174
+#: KasumiMainWindow.cxx:278 KasumiAddWindow.cxx:174
 msgid "Sa line, 5 columns"
 msgstr "サ行五段活用"
 
-#: KasumiMainWindow.cxx:273 KasumiAddWindow.cxx:175
+#: KasumiMainWindow.cxx:279 KasumiAddWindow.cxx:175
 msgid "Ta line, 5 columns"
 msgstr "タ行五段活用"
 
-#: KasumiMainWindow.cxx:274 KasumiAddWindow.cxx:176
+#: KasumiMainWindow.cxx:280 KasumiAddWindow.cxx:176
 msgid "Wa line, 5 columns"
 msgstr "ワ行五段活用"
 
-#: KasumiMainWindow.cxx:284
+#: KasumiMainWindow.cxx:290
 msgid "Can be Meishi when Renyou type"
 msgstr "連用形の名詞化"
 
-#: KasumiMainWindow.cxx:314
+#: KasumiMainWindow.cxx:320
 msgid "Find By Spelling"
 msgstr "単語で検索"
 
-#: KasumiMainWindow.cxx:320
+#: KasumiMainWindow.cxx:326
 msgid "Find By Sound"
 msgstr "読みで検索"
 
-#: KasumiMainWindow.cxx:333 KasumiAddWindow.cxx:195
+#: KasumiMainWindow.cxx:339 KasumiAddWindow.cxx:195
 msgid "Quit"
 msgstr "終了"
 
-#: KasumiMainWindow.cxx:346
+#: KasumiMainWindow.cxx:352
 msgid "Store"
 msgstr "保存"
 
-#: KasumiMainWindow.cxx:359
+#: KasumiMainWindow.cxx:365
 msgid "New Word"
 msgstr "新規作成"
 
-#: KasumiMainWindow.cxx:372
+#: KasumiMainWindow.cxx:378
 msgid "Remove"
 msgstr "削除"
 
-#: KasumiMainWindow.cxx:385
+#: KasumiMainWindow.cxx:391
 msgid "Adding Mode"
 msgstr "単語追加モード"
 
-#: KasumiMainWindow.cxx:478
+#: KasumiMainWindow.cxx:484
 msgid ""
 "Your dictionary went through several changes. Do you save these changes "
 "before Kasumi quits?"
 msgstr "辞書に変更が加えられました。霞を終了する前に保存しますか？"
 
-#: KasumiMainWindow.cxx:596 KasumiAddWindow.cxx:373
+#: KasumiMainWindow.cxx:602 KasumiAddWindow.cxx:373
 msgid ""
 "Sound must consist of only Hiragana characters. You have entered invalid "
 "character: "
 msgstr "読みにひらがな以外の文字を入力することはできません: "
 
-#: KasumiMainWindow.cxx:791
+#: KasumiMainWindow.cxx:797
 msgid "Cannot find a specific word. Search from first?"
 msgstr "検索しても見つかりませんでした。最初から検索しますか？"
 
-#: KasumiMainWindow.cxx:829
+#: KasumiMainWindow.cxx:835
 msgid "Cannot find a specific word."
 msgstr "検索しても見つかりませんでした。"
-
-#: KasumiAddWindow.cxx:160
-msgid "VerbType"
-msgstr "活用形"
 
 #: KasumiAddWindow.cxx:208
 msgid "Add"

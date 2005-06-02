@@ -1,3 +1,9 @@
+2005-06-02  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix (in KasumiString.cxx)
+	 - avoid comparison with unsigned int value and "npos"
+	   ("npos" can be negative value
+
 2005-05-27  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
  	* preparation for release (ver 0.9)
