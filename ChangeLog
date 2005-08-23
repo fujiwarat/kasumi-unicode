@@ -1,3 +1,10 @@
+2005-08-23  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* enhancement
+	 - a new option to ignore X selection
+	   thanks to nubata
+	   http://kasumi.sourceforge.jp/index.php?%A5%D0%A5%B0%CA%F3%B9%F0%2F50
+
 2005-06-02  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* fix (in KasumiString.cxx)

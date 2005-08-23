@@ -30,6 +30,8 @@ void showHelp(){
   cout << "  --wordclass val  Set default word class entry (only in Add mode)" << endl;
   cout << "  -x val           Set default horizontal window position" << endl;
   cout << "  -y val           Set default vertical window position" << endl;
+  cout << "  -i --import      Import selected text as a spelling" << endl;
+  cout << "  -I --ignore      Ignore selected text" << endl;
   cout << endl;
 }
 

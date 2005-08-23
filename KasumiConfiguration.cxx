@@ -75,7 +75,7 @@ void KasumiConfiguration::loadDefaultProperties()
   config[string("RemoveShortcutKey")] = string("Ctrl+R");
   config[string("AddShortcutKey")] = string("Ctrl+A");
   config[string("AddingModeShortcutKey")] = string("Ctrl+J");
-  config[string("ManageModeShortcutKey")] = string("Ctrl+M");    
+  config[string("ManageModeShortcutKey")] = string("Ctrl+M");
   config[string("DefaultSpelling")] = string("");
   config[string("DefaultSound")] = string("");
   config[string("DefaultWordClass")] = string(EUCJP_MEISHI);
@@ -84,6 +84,7 @@ void KasumiConfiguration::loadDefaultProperties()
   config[string("DefaultAddingWordClass")] = string(EUCJP_MEISHI);
   config[string("DefaultWindowPosX")] = string("-1");
   config[string("DefaultWindowPosY")] = string("-1");
+  config[string("ImportSelectedText")] = string("true");
 }
 
 void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
@@ -99,12 +100,14 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
     {"wordclass", required_argument, NULL, 'w'},
     {"x", required_argument, NULL, 'x'},
     {"y", required_argument, NULL, 'y'},
+    {"import", no_argument, NULL, 'i'},
+    {"ignore", no_argument, NULL, 'I'},
     {0,0,0,0}
   };
 
   int c;    
   while(1){
-    c = getopt_long(argc, argv, "hvams:t:w:x:y:", long_options, &option_index);
+    c = getopt_long(argc, argv, "hvamiIns:t:w:x:y:", long_options, &option_index);
     if(c == -1) break; // no more argument
 
     switch(c){
@@ -134,6 +137,12 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
       break;
     case 'y':
       setPropertyValue(string("DefaultWindowPosY"),string(optarg));
+      break;
+    case 'i':
+      setPropertyValue(string("ImportSelectedText"),string("true"));
+      break;
+    case 'I':
+      setPropertyValue(string("ImportSelectedText"),string("false"));
       break;
     case '?':
       throw KasumiConfigurationLoadException(string("Found an invalid argument"));
@@ -285,6 +294,20 @@ void KasumiConfiguration::checkValidity()
       throw KasumiConfigurationLoadException(val + string(" is an invalid word class for ") + keyName);
     }
   }
+  
+  // check conrresponding settings being an boolean
+  list<string> booleanValueKeyNames;
+
+  booleanValueKeyNames.push_back(string("ImportSelectedText"));
+  
+  while(!booleanValueKeyNames.empty()){
+    string keyName = booleanValueKeyNames.front();
+    booleanValueKeyNames.pop_front();
+    
+    if(config[keyName] != "true" && config[keyName] != "false"){
+      throw KasumiConfigurationLoadException(keyName + string(" variable must be a boolean"));      
+    }
+  }
 
   // no check for:
   //  DefaultSpelling
@@ -330,6 +353,22 @@ int KasumiConfiguration::getPropertyValueByInt(const string &name){
   }
   
   return str2int(p->second);
+}
+
+bool KasumiConfiguration::getPropertyValueByBool(const string &name){
+  map<string,string>::iterator p;
+
+  p = config.find(name);
+  if(p == config.end()){
+    cout << "error: " << name << " property has not been set yet." << endl;
+    exit(1);
+  }
+  
+  if(p->second == "true"){
+    return true;
+  } else{
+    return false;
+  }
 }
 
 bool isValidShortcutKey(const string &key){

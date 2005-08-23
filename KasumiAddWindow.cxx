@@ -268,7 +268,7 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
     gtk_window_move(GTK_WINDOW(window),x,y);
   }
 
-  if(conf->getPropertyValue("DefaultAddingSpelling") == ""){
+  if(conf->getPropertyValue("DefaultAddingSpelling") == "" && conf->getPropertyValueByBool("ImportSelectedText")){
     get_targets(SpellingEntry);
   }
 

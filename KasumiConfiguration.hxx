@@ -25,6 +25,7 @@ public:
   ~KasumiConfiguration();
   string getPropertyValue(const string &name);
   int getPropertyValueByInt(const string &name);  
+  bool getPropertyValueByBool(const string &name);
 };
 
 bool isValidShortcutKey(const string &key);
