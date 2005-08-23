@@ -59,6 +59,8 @@ class KasumiMainWindow : public KasumiDicEventListener{
                                                 gpointer data);
   friend void _call_back_activate_search_entry(GtkWidget *widget,
                                                gpointer data);
+  friend void _call_back_clicked_column_header(GtkTreeViewColumn *column,
+                                               gpointer data);
 
 private:
   KasumiDic *dictionary;
@@ -89,7 +91,9 @@ private:
   GtkWidget *VerbOptionRentaiCheck;
   
   GtkListStore *WordList;
-  GtkTreeSelection *WordListSelection;
+  GtkTreeModel *SortList;
+  GtkTreeSelection *SortListSelection;
+  GtkTreeViewColumn *FreqColumn;
   gulong HandlerIDOfSoundEntry;
   gulong HandlerIDOfSpellingEntry;
   gulong HandlerIDOfFrequencySpin;
@@ -109,6 +113,8 @@ private:
   GtkWidget *SearchBySpellingRadio;
   GtkWidget *SearchBySoundRadio;
   GtkWidget *SearchEntry;
+
+  GtkWidget *SortCombo;
   
   bool modificationFlag;
   string previousSoundEntryText;
@@ -127,8 +133,10 @@ private:
   void ChangedOption(GtkWidget *widget);
   void SwitchToAddingMode();
 
-  void KasumiMainWindow::FindNext(bool fromCurrent);
+  void FindNext(bool fromCurrent);
   GtkTreeIter *findCorrespondingIter(int id);
+
+  void SortByFreq();
 
   void synchronizeOptionCheckButton(KasumiWord *word);
   void setActiveVerbType(VerbType type);
@@ -147,5 +155,10 @@ public:
 
 guint getAccelKey(const string &key);
 GdkModifierType getModifierType(const string &key);
+
+gint sortFuncByFreq(GtkTreeModel *model,
+                    GtkTreeIter *a,
+                    GtkTreeIter *b,
+                    gpointer user_data);
 
 #endif

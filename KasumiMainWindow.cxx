@@ -52,32 +52,46 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                                               _("Spelling"),renderer,
                                               "text",COL_WORD,
                                               NULL);
-  gtk_tree_view_column_new();
   renderer = gtk_cell_renderer_text_new();
   gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(WordListView),-1,
                                               _("Sound"),renderer,
                                               "text",COL_YOMI,
                                               NULL);
-  gtk_tree_view_column_new();  
   renderer = gtk_cell_renderer_text_new();
+  FreqColumn = gtk_tree_view_column_new_with_attributes(_("Frequency"),
+                                                        renderer,
+                                                        "text",
+                                                        COL_FREQ,
+                                                        NULL);
+  gtk_tree_view_insert_column(GTK_TREE_VIEW(WordListView),FreqColumn,-1);
+  gtk_tree_view_column_set_clickable(FreqColumn, TRUE);
+  g_signal_connect(G_OBJECT(FreqColumn), "clicked",
+                   G_CALLBACK(_call_back_clicked_column_header), this);
+  /*
   gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(WordListView),-1,
                                               _("Frequency"),renderer,
                                               "text",COL_FREQ,
                                               NULL);
-  gtk_tree_view_column_new();  
+  */
   renderer = gtk_cell_renderer_text_new();
   gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(WordListView),-1,
                                               _("Word Class"),renderer,
                                               "text",COL_PART,
                                               NULL);
-  WordList = gtk_list_store_new(NUM_COLS,G_TYPE_UINT,G_TYPE_STRING,
-                                G_TYPE_STRING,G_TYPE_UINT,G_TYPE_STRING);
+  
+  WordList = gtk_list_store_new(NUM_COLS,G_TYPE_UINT,
+                                G_TYPE_STRING,G_TYPE_STRING,
+                                G_TYPE_UINT,G_TYPE_STRING);
+  SortList = gtk_tree_model_sort_new_with_model(GTK_TREE_MODEL(WordList));
+  gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(SortList), COL_FREQ,
+                                  sortFuncByFreq,(gpointer)dictionary,
+                                  NULL);
   gtk_tree_view_set_model(GTK_TREE_VIEW(WordListView),
-                          GTK_TREE_MODEL(WordList));
+                          GTK_TREE_MODEL(SortList));
 
-  WordListSelection = gtk_tree_view_get_selection(GTK_TREE_VIEW(WordListView));
-  gtk_tree_selection_set_mode(WordListSelection, GTK_SELECTION_SINGLE);
-  g_signal_connect(G_OBJECT(WordListSelection), "changed",
+  SortListSelection = gtk_tree_view_get_selection(GTK_TREE_VIEW(WordListView));
+  gtk_tree_selection_set_mode(SortListSelection, GTK_SELECTION_SINGLE);
+  g_signal_connect(G_OBJECT(SortListSelection), "changed",
                    G_CALLBACK(_call_back_changed_list_cursor), this);
 
   // destroy model automatically with view
@@ -295,10 +309,15 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
     g_signal_connect(G_OBJECT(VerbOptionRentaiCheck),"toggled",
                      G_CALLBACK(_call_back_toggled_check),this);
 
+  GtkWidget *hsep = gtk_hseparator_new();
+  gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hsep),FALSE,FALSE,0);
 
-  // creating box for search function
+  // creating expandable box for search function
+  GtkWidget *search_expander = gtk_expander_new(_("Search"));
+  gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(search_expander),FALSE,FALSE,0);
+
   GtkWidget *search_hbox = gtk_hbox_new(FALSE,8);
-  gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(search_hbox),FALSE,FALSE,0);
+  gtk_container_add(GTK_CONTAINER(search_expander),search_hbox);
 
   // creating Entry and Button for search function
   SearchEntry = gtk_entry_new();
@@ -327,6 +346,8 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
   gtk_box_pack_start(GTK_BOX(search_hbox),SearchBySoundRadio,
                      TRUE,TRUE,0);
 
+  hsep = gtk_hseparator_new();
+  gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hsep),FALSE,FALSE,0);
 
   /* creating box for buttons */
   GtkWidget *hbutton_box = gtk_hbutton_box_new();
@@ -417,7 +438,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
 }
 
 void KasumiMainWindow::refresh(){
-  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
   GtkTreeIter iter;
   int i = 0;
 
@@ -428,8 +449,6 @@ void KasumiMainWindow::refresh(){
       KasumiWord *word = dictionary->getWordWithID(i);
 
       if(word != NULL && word->getFrequency() != 0){
-        GtkTreeIter iter;
-      
         gtk_list_store_append(WordList,&iter);
       
         gtk_list_store_set(WordList,&iter,
@@ -462,7 +481,7 @@ void KasumiMainWindow::refresh(){
   }
 
   // select first word
-  gtk_tree_selection_select_iter(WordListSelection,&iter);  
+  gtk_tree_selection_select_iter(SortListSelection,&iter);  
 
 }
 
@@ -516,22 +535,22 @@ void KasumiMainWindow::ClickedAddButton(){
 }
 
 void KasumiMainWindow::ClickedRemoveButton(){
-  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
   GtkTreeIter iter;
   int id;
   
-  if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
+  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     dictionary->removeWord(id);
   }
 }
 
 void KasumiMainWindow::ChangedListCursor(){
-  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
   GtkTreeIter iter;
   int id;
   
-  if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
+  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
 
@@ -586,11 +605,11 @@ void KasumiMainWindow::ChangedListCursor(){
 }
 
 void KasumiMainWindow::ChangedSoundEntry(){
-  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
   GtkTreeIter iter;
   int id;
   
-  if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
+  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
     try{
@@ -621,11 +640,11 @@ void KasumiMainWindow::ChangedSoundEntry(){
 }
 
 void KasumiMainWindow::ChangedSpellingEntry(){
-  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
   GtkTreeIter iter;
   int id;
   
-  if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
+  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
     word->setSpellingByUTF8(string(gtk_entry_get_text(
@@ -636,11 +655,11 @@ void KasumiMainWindow::ChangedSpellingEntry(){
 }
 
 void KasumiMainWindow::ChangedFrequencySpin(){
-  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
   GtkTreeIter iter;
   int id;
   
-  if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
+  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
     word->setFrequency(gtk_spin_button_get_value_as_int(
@@ -651,11 +670,11 @@ void KasumiMainWindow::ChangedFrequencySpin(){
 }
 
 void KasumiMainWindow::ChangedWordClassCombo(){
-  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
   GtkTreeIter iter;
   int id;
   
-  if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
+  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
     word->setWordClass(getActiveWordClass());
@@ -668,11 +687,11 @@ void KasumiMainWindow::ChangedWordClassCombo(){
 }
 
 void KasumiMainWindow::ChangedVerbTypeCombo(){
- GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+ GtkTreeModel *model = GTK_TREE_MODEL(SortList);
   GtkTreeIter iter;
   int id;
   
-  if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
+  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
     word->setVerbType(getActiveVerbType());
@@ -682,7 +701,7 @@ void KasumiMainWindow::ChangedVerbTypeCombo(){
 }
 
 void KasumiMainWindow::ChangedOption(GtkWidget *widget){
-  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
   GtkTreeIter iter;
   int id;
   string OptionName = string("");
@@ -715,7 +734,7 @@ void KasumiMainWindow::ChangedOption(GtkWidget *widget){
   else
     val = false;
 
-  if(gtk_tree_selection_get_selected(WordListSelection, &model, &iter) &&
+  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter) &&
      (OptionName != "")){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
     KasumiWord *word = dictionary->getWordWithID(id);
@@ -731,7 +750,7 @@ void KasumiMainWindow::SwitchToAddingMode(){
 }
 
 void KasumiMainWindow::FindNext(bool fromCurrent){
-  GtkTreeModel *model = GTK_TREE_MODEL(WordList);
+  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
   GtkTreeIter iter;
   KasumiWord *word;
   bool fromFirst = false;
@@ -746,7 +765,7 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
     by = SOUND;
   }
 
-  if(!gtk_tree_selection_get_selected(WordListSelection, &model, &iter)){
+  if(!gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
     if(!gtk_tree_model_get_iter_first(model, &iter)){
       // If no words, do nothing.
       return;
@@ -782,7 +801,7 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
 
     if(comparedString.find(searchString,0) == 0){
       // if found, select that word and don't search any more
-      gtk_tree_selection_select_iter(WordListSelection,&iter);
+      gtk_tree_selection_select_iter(SortListSelection,&iter);
       return;
     }
   }while(gtk_tree_model_iter_next(model, &iter));
@@ -814,7 +833,7 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
         }
 
         if(comparedString.find(searchString,0) == 0){
-          gtk_tree_selection_select_iter(WordListSelection,&iter);
+          gtk_tree_selection_select_iter(SortListSelection,&iter);
           return;
         }
       }while(gtk_tree_model_iter_next(model, &iter) &&
@@ -823,7 +842,7 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
               StartIter.user_data3 != iter.user_data3));
     }else{
       gtk_widget_destroy(dialog);
-      //      gtk_tree_selection_unselect_all(WordListSelection);      
+      //      gtk_tree_selection_unselect_all(SortListSelection);      
       return;
     }
   }
@@ -835,7 +854,19 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
                                   _("Cannot find a specific word."));
   gtk_dialog_run(GTK_DIALOG (dialog));
   gtk_widget_destroy(dialog);
-  //  gtk_tree_selection_unselect_all(WordListSelection);
+  //  gtk_tree_selection_unselect_all(SortListSelection);
+}
+
+void KasumiMainWindow::SortByFreq(){
+  gint id;
+  GtkSortType order;
+  gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(SortList),
+                                       &id, &order);
+  order = (order == GTK_SORT_ASCENDING) ? GTK_SORT_DESCENDING : GTK_SORT_ASCENDING;
+  gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(SortList),
+                                       COL_FREQ, order);
+  gtk_tree_view_column_set_sort_indicator(FreqColumn,TRUE);
+  gtk_tree_view_column_set_sort_order(FreqColumn,order);
 }
 
 void KasumiMainWindow::removedWord(int id){
@@ -867,7 +898,10 @@ void KasumiMainWindow::appendedWord(int id){
                      COL_FREQ, word->getFrequency(),
                      COL_PART, word->getStringOfWordClassByUTF8().c_str(),
                      -1);
-  gtk_tree_selection_select_iter(WordListSelection,&iter);
+  GtkTreeIter sort_iter;
+  gtk_tree_model_sort_convert_child_iter_to_iter(GTK_TREE_MODEL_SORT(SortList),
+                                                 &sort_iter,&iter);
+  gtk_tree_selection_select_iter(SortListSelection,&sort_iter);
 
   GtkAdjustment *adjustment =
     gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(ScrolledWindow));
@@ -892,6 +926,7 @@ void KasumiMainWindow::modifiedWord(int id){
   modificationFlag = true;  
 }
 
+// Do not returns iter of SortList but WordList
 GtkTreeIter *KasumiMainWindow::findCorrespondingIter(int id){
   int i;
   GtkTreeModel *model = GTK_TREE_MODEL(WordList);
@@ -1248,6 +1283,13 @@ void _call_back_activate_search_entry(GtkWidget *widget,
   window->FindNext(false);
 }
 
+void _call_back_clicked_column_header(GtkTreeViewColumn *column,
+                                             gpointer data){
+  KasumiMainWindow *window = (KasumiMainWindow *)data;
+  window->SortByFreq();
+}
+
+
 guint getAccelKey(const string &key){
   string::size_type i;
 
@@ -1314,4 +1356,18 @@ GdkModifierType getModifierType(const string &key){
 
   cout << "Invalid mask option: " << key << endl;
   exit(1);
+}
+
+gint sortFuncByFreq(GtkTreeModel *model,
+                    GtkTreeIter *a,
+                    GtkTreeIter *b,
+                    gpointer user_data){
+  KasumiDic *dictionary = (KasumiDic*)user_data;
+  int id_a, id_b;
+  gtk_tree_model_get(model, a, COL_ID, &id_a, -1);
+  gtk_tree_model_get(model, b, COL_ID, &id_b, -1);
+  KasumiWord *word_a = dictionary->getWordWithID(id_a);
+  KasumiWord *word_b = dictionary->getWordWithID(id_b);
+
+  return word_a->getFrequency() - word_b->getFrequency();
 }

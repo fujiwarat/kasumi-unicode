@@ -1,5 +1,10 @@
 2005-08-23  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
+	* feature
+	 - sort function
+	   ( Just supporting sorting by frequency only because it is still
+	     experiment. )
+
 	* enhancement
 	 - a new option to ignore X selection
 	   thanks to nubata
