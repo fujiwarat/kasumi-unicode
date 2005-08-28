@@ -191,8 +191,7 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hbutton_box),FALSE,FALSE,0);
 
   // creating buttons and configure shortcut key
-  GtkWidget *button = gtk_button_new();
-  gtk_button_set_label(GTK_BUTTON(button),_("Quit"));
+  GtkWidget *button = gtk_button_new_from_stock(GTK_STOCK_QUIT);
   gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_add_window_quit),this);
@@ -204,8 +203,7 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                              getModifierType(key),
                              GTK_ACCEL_VISIBLE);
 
-  button = gtk_button_new();
-  gtk_button_set_label(GTK_BUTTON(button),_("Add"));
+  button = gtk_button_new_from_stock(GTK_STOCK_ADD);
   gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_add_window_add),this);

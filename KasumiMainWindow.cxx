@@ -356,8 +356,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
 
 
   // creating buttons and shortcut key configuration
-  GtkWidget *button = gtk_button_new();
-  gtk_button_set_label(GTK_BUTTON(button),_("Quit"));
+  GtkWidget *button = gtk_button_new_from_stock(GTK_STOCK_QUIT);
   gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_quit),this);
@@ -369,8 +368,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                              getModifierType(key),
                              GTK_ACCEL_VISIBLE);
 
-  button = gtk_button_new();
-  gtk_button_set_label(GTK_BUTTON(button),_("Store"));
+  button = gtk_button_new_from_stock(GTK_STOCK_SAVE);
   gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_store),this);
@@ -382,8 +380,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                              getModifierType(key),
                              GTK_ACCEL_VISIBLE);
 
-  button = gtk_button_new();
-  gtk_button_set_label(GTK_BUTTON(button),_("New Word"));
+  button = gtk_button_new_from_stock(GTK_STOCK_ADD);
   gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_add),this);
@@ -395,8 +392,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                              getModifierType(key),
                              GTK_ACCEL_VISIBLE);
   
-  button = gtk_button_new();
-  gtk_button_set_label(GTK_BUTTON(button),_("Remove"));
+  button = gtk_button_new_from_stock(GTK_STOCK_REMOVE);
   gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_remove),this);
