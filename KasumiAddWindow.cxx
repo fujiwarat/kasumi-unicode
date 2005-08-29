@@ -187,12 +187,15 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   
   // creating box for buttons
   GtkWidget *hbutton_box = gtk_hbutton_box_new();
-  gtk_button_box_set_child_size(GTK_BUTTON_BOX(hbutton_box),1,1);
+  gtk_button_box_set_layout(GTK_BUTTON_BOX(hbutton_box),GTK_BUTTONBOX_SPREAD);
   gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hbutton_box),FALSE,FALSE,0);
 
   // creating buttons and configure shortcut key
-  GtkWidget *button = gtk_button_new_from_stock(GTK_STOCK_QUIT);
-  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
+  GtkWidget *button = gtk_button_new();
+  GtkWidget *button_image = gtk_image_new_from_stock(GTK_STOCK_QUIT,
+                                                     GTK_ICON_SIZE_BUTTON);
+  gtk_container_add(GTK_CONTAINER(button),button_image);
+  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),TRUE,TRUE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_add_window_quit),this);
   GtkAccelGroup *accel = gtk_accel_group_new();
@@ -203,8 +206,11 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                              getModifierType(key),
                              GTK_ACCEL_VISIBLE);
 
-  button = gtk_button_new_from_stock(GTK_STOCK_ADD);
-  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
+  button = gtk_button_new();
+  button_image = gtk_image_new_from_stock(GTK_STOCK_ADD,
+                                          GTK_ICON_SIZE_BUTTON);
+  gtk_container_add(GTK_CONTAINER(button),button_image);
+  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),TRUE,TRUE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_add_window_add),this);
   accel = gtk_accel_group_new();
@@ -216,8 +222,10 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                              GTK_ACCEL_VISIBLE);
 
   button = gtk_button_new();
-  gtk_button_set_label(GTK_BUTTON(button),_("Manage Mode"));
-  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
+  button_image = gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,
+                                          GTK_ICON_SIZE_BUTTON);
+  gtk_container_add(GTK_CONTAINER(button),button_image);
+  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),TRUE,TRUE,0);
   g_signal_connect(G_OBJECT(button),"clicked",
                    G_CALLBACK(_call_back_manage_mode),this);
   accel = gtk_accel_group_new();

@@ -1,6 +1,9 @@
 2005-08-29  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* enhancement
+	 - make adding mode buttons not to display string for neat appearance
+
+	* enhancement
 	 - sort function for word class
 
 	* enhancement
