@@ -93,6 +93,7 @@ private:
   GtkListStore *WordList;
   GtkTreeModel *SortList;
   GtkTreeSelection *SortListSelection;
+  GtkTreeViewColumn *SoundColumn;
   GtkTreeViewColumn *FreqColumn;
   gulong HandlerIDOfSoundEntry;
   gulong HandlerIDOfSpellingEntry;
@@ -136,7 +137,7 @@ private:
   void FindNext(bool fromCurrent);
   GtkTreeIter *findCorrespondingIter(int id);
 
-  void SortByFreq();
+  void SortBy(GtkTreeViewColumn *column);
 
   void synchronizeOptionCheckButton(KasumiWord *word);
   void setActiveVerbType(VerbType type);
@@ -160,5 +161,9 @@ gint sortFuncByFreq(GtkTreeModel *model,
                     GtkTreeIter *a,
                     GtkTreeIter *b,
                     gpointer user_data);
+gint sortFuncBySound(GtkTreeModel *model,
+                     GtkTreeIter *a,
+                     GtkTreeIter *b,
+                     gpointer user_data);
 
 #endif

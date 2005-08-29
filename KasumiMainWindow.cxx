@@ -53,10 +53,21 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                                               "text",COL_WORD,
                                               NULL);
   renderer = gtk_cell_renderer_text_new();
+  SoundColumn = gtk_tree_view_column_new_with_attributes(_("Sound"),
+                                                         renderer,
+                                                         "text",
+                                                         COL_YOMI,
+                                                         NULL);
+  gtk_tree_view_insert_column(GTK_TREE_VIEW(WordListView),SoundColumn,-1);
+  gtk_tree_view_column_set_clickable(SoundColumn,TRUE);
+  g_signal_connect(G_OBJECT(SoundColumn), "clicked",
+                   G_CALLBACK(_call_back_clicked_column_header), this);
+  /*
   gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(WordListView),-1,
                                               _("Sound"),renderer,
                                               "text",COL_YOMI,
                                               NULL);
+  */
   renderer = gtk_cell_renderer_text_new();
   FreqColumn = gtk_tree_view_column_new_with_attributes(_("Frequency"),
                                                         renderer,
@@ -83,6 +94,9 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                                 G_TYPE_STRING,G_TYPE_STRING,
                                 G_TYPE_UINT,G_TYPE_STRING);
   SortList = gtk_tree_model_sort_new_with_model(GTK_TREE_MODEL(WordList));
+  gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(SortList), COL_YOMI,
+                                  sortFuncBySound,(gpointer)dictionary,
+                                  NULL);
   gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(SortList), COL_FREQ,
                                   sortFuncByFreq,(gpointer)dictionary,
                                   NULL);
@@ -97,7 +111,11 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
   // destroy model automatically with view
   g_object_unref(GTK_TREE_MODEL(WordList));
 
-  gtk_container_add(GTK_CONTAINER(ScrolledWindow),GTK_WIDGET(WordListView));  
+  gtk_container_add(GTK_CONTAINER(ScrolledWindow),GTK_WIDGET(WordListView));
+
+  // separator between word list box and text entries
+  GtkWidget *vsep = gtk_vseparator_new();
+  gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(vsep),FALSE,FALSE,0);
 
   // creating vbox for text entries
   GtkWidget *entry_vbox = gtk_vbox_new(FALSE,0);
@@ -853,16 +871,25 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
   //  gtk_tree_selection_unselect_all(SortListSelection);
 }
 
-void KasumiMainWindow::SortByFreq(){
-  gint id;
+void KasumiMainWindow::SortBy(GtkTreeViewColumn *column){
   GtkSortType order;
-  gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(SortList),
-                                       &id, &order);
-  order = (order == GTK_SORT_ASCENDING) ? GTK_SORT_DESCENDING : GTK_SORT_ASCENDING;
-  gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(SortList),
-                                       COL_FREQ, order);
-  gtk_tree_view_column_set_sort_indicator(FreqColumn,TRUE);
-  gtk_tree_view_column_set_sort_order(FreqColumn,order);
+
+  order = gtk_tree_view_column_get_sort_order(column);
+  order = (order == GTK_SORT_ASCENDING) ?
+    GTK_SORT_DESCENDING : GTK_SORT_ASCENDING;
+  
+  gtk_tree_view_column_set_sort_indicator(SoundColumn,FALSE);
+  gtk_tree_view_column_set_sort_indicator(FreqColumn,FALSE);
+
+  if(column == SoundColumn){
+    gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(SortList),
+                                         COL_YOMI, order);
+  }else if(column == FreqColumn){
+    gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(SortList),
+                                         COL_FREQ, order);
+  }
+  gtk_tree_view_column_set_sort_indicator(column,TRUE);
+  gtk_tree_view_column_set_sort_order(column,order);
 }
 
 void KasumiMainWindow::removedWord(int id){
@@ -1282,7 +1309,7 @@ void _call_back_activate_search_entry(GtkWidget *widget,
 void _call_back_clicked_column_header(GtkTreeViewColumn *column,
                                              gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
-  window->SortByFreq();
+  window->SortBy(column);
 }
 
 
@@ -1366,4 +1393,70 @@ gint sortFuncByFreq(GtkTreeModel *model,
   KasumiWord *word_b = dictionary->getWordWithID(id_b);
 
   return word_a->getFrequency() - word_b->getFrequency();
+}
+
+gint sortFuncBySound(GtkTreeModel *model,
+                     GtkTreeIter *iter_a,
+                     GtkTreeIter *iter_b,
+                     gpointer user_data){
+  KasumiDic *dictionary = (KasumiDic*)user_data;
+  int id_a, id_b;
+  gtk_tree_model_get(model, iter_a, COL_ID, &id_a, -1);
+  gtk_tree_model_get(model, iter_b, COL_ID, &id_b, -1);
+  KasumiWord *word_a = dictionary->getWordWithID(id_a);
+  KasumiWord *word_b = dictionary->getWordWithID(id_b);
+  const char *str_a = word_a->getSoundByUTF8().c_str();
+  const char *str_b = word_b->getSoundByUTF8().c_str();
+  int size_a = word_a->getSound().size();
+  int size_b = word_b->getSound().size();
+  int size = (size_a > size_b) ? size_a : size_b;
+  int i,a,b;
+  unsigned char first_a,second_a,third_a;
+  unsigned char first_b,second_b,third_b;
+  
+  // compare Hiragana string encoded in UTF8
+  for(i=0;i<size;i+=3){
+    first_a = static_cast<unsigned char> (str_a[i]);
+    second_a = static_cast<unsigned char> (str_a[i+1]);
+    third_a = static_cast<unsigned char> (str_a[i+2]);
+    first_b = static_cast<unsigned char> (str_b[i]);
+    second_b = static_cast<unsigned char> (str_b[i+1]);
+    third_b = static_cast<unsigned char> (str_b[i+2]);
+
+    // confirm that current characters are Hiragana
+    if(first_a == 0xe3 && first_b == 0xe3){
+      if((second_a == 0x81 && third_a >= 0x81 && third_a <= 0xbf) ||
+         (second_a == 0x82 && third_a >= 0x80 && third_a <= 0x94) ||
+         (second_a == 0x83 && third_a == 0xbc)){
+        a = second_a * 256 + third_a;
+      }else{
+        cout << "invalid character or not hiragana" << endl;
+        cout << str_a << endl;
+        exit(1);
+      }
+
+      if((second_b == 0x81 && third_b >= 0x81 && third_b <= 0xbf) ||
+         (second_b == 0x82 && third_b >= 0x80 && third_b <= 0x94) ||
+         (second_b == 0x83 && third_b == 0xbc)){
+        b = second_b * 256 + third_b;
+      }else{
+        cout << "invalid character or not hiragana" << endl;
+        cout << str_b << endl;
+        exit(1);
+      }
+
+      if(a != b){
+        return a - b;
+      }
+    }else{
+        cout << "invalid character or not hiragana" << endl;
+        cout << str_a << endl;
+        cout << str_b << endl;
+        exit(1);
+    }
+  }
+  
+  // one string is the beginning part of another string
+  // compare string size
+  return size_a - size_b;
 }
