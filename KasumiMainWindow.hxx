@@ -95,6 +95,7 @@ private:
   GtkTreeSelection *SortListSelection;
   GtkTreeViewColumn *SoundColumn;
   GtkTreeViewColumn *FreqColumn;
+  GtkTreeViewColumn *WordClassColumn;
   gulong HandlerIDOfSoundEntry;
   gulong HandlerIDOfSpellingEntry;
   gulong HandlerIDOfFrequencySpin;
@@ -165,5 +166,9 @@ gint sortFuncBySound(GtkTreeModel *model,
                      GtkTreeIter *a,
                      GtkTreeIter *b,
                      gpointer user_data);
+gint sortFuncByWordClass(GtkTreeModel *model,
+                         GtkTreeIter *a,
+                         GtkTreeIter *b,
+                         gpointer user_data);
 
 #endif

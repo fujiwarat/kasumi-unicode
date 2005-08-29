@@ -62,12 +62,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
   gtk_tree_view_column_set_clickable(SoundColumn,TRUE);
   g_signal_connect(G_OBJECT(SoundColumn), "clicked",
                    G_CALLBACK(_call_back_clicked_column_header), this);
-  /*
-  gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(WordListView),-1,
-                                              _("Sound"),renderer,
-                                              "text",COL_YOMI,
-                                              NULL);
-  */
+
   renderer = gtk_cell_renderer_text_new();
   FreqColumn = gtk_tree_view_column_new_with_attributes(_("Frequency"),
                                                         renderer,
@@ -85,10 +80,15 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                                               NULL);
   */
   renderer = gtk_cell_renderer_text_new();
-  gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(WordListView),-1,
-                                              _("Word Class"),renderer,
-                                              "text",COL_PART,
-                                              NULL);
+  WordClassColumn = gtk_tree_view_column_new_with_attributes(_("WordClass"),
+                                                             renderer,
+                                                             "text",
+                                                             COL_PART,
+                                                             NULL);
+  gtk_tree_view_insert_column(GTK_TREE_VIEW(WordListView),WordClassColumn,-1);
+  gtk_tree_view_column_set_clickable(WordClassColumn, TRUE);
+  g_signal_connect(G_OBJECT(WordClassColumn), "clicked",
+                   G_CALLBACK(_call_back_clicked_column_header), this);
   
   WordList = gtk_list_store_new(NUM_COLS,G_TYPE_UINT,
                                 G_TYPE_STRING,G_TYPE_STRING,
@@ -99,6 +99,9 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                                   NULL);
   gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(SortList), COL_FREQ,
                                   sortFuncByFreq,(gpointer)dictionary,
+                                  NULL);
+  gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(SortList), COL_PART,
+                                  sortFuncByWordClass,(gpointer)dictionary,
                                   NULL);
   gtk_tree_view_set_model(GTK_TREE_VIEW(WordListView),
                           GTK_TREE_MODEL(SortList));
@@ -880,6 +883,7 @@ void KasumiMainWindow::SortBy(GtkTreeViewColumn *column){
   
   gtk_tree_view_column_set_sort_indicator(SoundColumn,FALSE);
   gtk_tree_view_column_set_sort_indicator(FreqColumn,FALSE);
+  gtk_tree_view_column_set_sort_indicator(WordClassColumn,FALSE);
 
   if(column == SoundColumn){
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(SortList),
@@ -887,6 +891,9 @@ void KasumiMainWindow::SortBy(GtkTreeViewColumn *column){
   }else if(column == FreqColumn){
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(SortList),
                                          COL_FREQ, order);
+  }else if(column == WordClassColumn){
+    gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(SortList),
+                                         COL_PART, order);
   }
   gtk_tree_view_column_set_sort_indicator(column,TRUE);
   gtk_tree_view_column_set_sort_order(column,order);
@@ -1459,4 +1466,18 @@ gint sortFuncBySound(GtkTreeModel *model,
   // one string is the beginning part of another string
   // compare string size
   return size_a - size_b;
+}
+
+gint sortFuncByWordClass(GtkTreeModel *model,
+                         GtkTreeIter *iter_a,
+                         GtkTreeIter *iter_b,
+                         gpointer user_data){
+  KasumiDic *dictionary = (KasumiDic*)user_data;
+  int id_a, id_b;
+  gtk_tree_model_get(model, iter_a, COL_ID, &id_a, -1);
+  gtk_tree_model_get(model, iter_b, COL_ID, &id_b, -1);
+  KasumiWord *word_a = dictionary->getWordWithID(id_a);
+  KasumiWord *word_b = dictionary->getWordWithID(id_b);
+
+  return word_a->getWordClass() - word_b->getWordClass();
 }
