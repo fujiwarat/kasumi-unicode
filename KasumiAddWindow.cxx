@@ -180,7 +180,7 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                      FALSE,FALSE,0);
 
   VerbOptionRentaiCheck =
-    gtk_check_button_new_with_label(_("TARU connection"));
+    gtk_check_button_new_with_label(_("Can be Meishi when Renyou type"));
   gtk_box_pack_start(GTK_BOX(VerbOptionPane),
                      GTK_WIDGET(VerbOptionRentaiCheck),
                      FALSE,FALSE,0);
