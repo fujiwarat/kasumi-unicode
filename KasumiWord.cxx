@@ -5,6 +5,7 @@
 #include "KasumiException.hxx"
 #include "KasumiConfiguration.hxx"
 #include "KasumiString.hxx" // for EUCJP_***(constant string)
+#include "intl.h"
 
 #include <iostream>
 
@@ -101,19 +102,22 @@ KasumiWord::KasumiWord(KasumiConfiguration *conf){
   Frequency = conf->getPropertyValueByInt("DefaultFrequency");
   try{
     setWordClassWithName(conf->getPropertyValue("DefaultWordClass"));
-  }catch(KasumiInvalidWordClassNameException e){
+  }catch(KasumiException e){
     cout << e.getMessage() << endl;
     exit(1);
   }
 }
 
 void KasumiWord::setSound(const string &aSound)
-  throw(KasumiInvalidCharacterForSoundException){
+  throw(KasumiException){
   string tmp = convertEUCJPToUTF8(Sound);
   string invalidChar = extractInvalidCharacterFromSound(tmp);
 
   if(invalidChar != ""){
-    throw KasumiInvalidCharacterForSoundException(tmp,invalidChar);
+      string message;
+      message = string(_("Sound must consist of only Hiragana characters. You have entered invalid character: "));
+      message += invalidChar;
+      throw KasumiException(message, ERR_DIALOG, ALERT_ONLY);
   }
   
   Sound = aSound;
@@ -121,11 +125,14 @@ void KasumiWord::setSound(const string &aSound)
 }
 
 void KasumiWord::setSoundByUTF8(const string &aSound)
-  throw(KasumiInvalidCharacterForSoundException){
+  throw(KasumiException){
   string invalidChar = extractInvalidCharacterFromSound(aSound);
 
   if(invalidChar != ""){
-    throw KasumiInvalidCharacterForSoundException(aSound,invalidChar);
+      string message;
+      message = string(_("Sound must consist of only Hiragana characters. You have entered invalid character: "));
+      message += invalidChar;
+      throw KasumiException(message, ERR_DIALOG, ALERT_ONLY);
   }
   
   Sound_UTF8 = aSound;
@@ -176,7 +183,7 @@ WordClassType KasumiWord::getWordClass(){
 }
 
 void KasumiWord::setWordClassWithName(const string &aWordClass)
-  throw(KasumiInvalidWordClassNameException){
+  throw(KasumiException){
   if(aWordClass == EUCJP_MEISHI){
     WordClass = NOUN;
   }else if(aWordClass == EUCJP_FUKUSHI){
@@ -191,17 +198,17 @@ void KasumiWord::setWordClassWithName(const string &aWordClass)
     WordClass = VERB;
   }else{
     string message = string("Invalid word class name: ") + aWordClass;
-    throw KasumiInvalidWordClassNameException(message);
+    throw KasumiException(message, ERR_DIALOG, ALERT_ONLY);
   }
   
 }
 
 void KasumiWord::setWordClassWithNameByUTF8(const string &aWordClass)
-  throw(KasumiInvalidWordClassNameException){
+  throw(KasumiException){
   try{
     string euc = convertUTF8ToEUCJP(aWordClass);
     setWordClassWithName(euc);
-  }catch(KasumiInvalidWordClassNameException e){
+  }catch(KasumiException e){
     throw e;
   }
 }
@@ -235,7 +242,7 @@ void KasumiWord::setVerbType(VerbType aVerbType){
 }
 
 void KasumiWord::setVerbTypeWithName(const string &aVerbType)
-  throw(KasumiInvalidVerbTypeNameException){
+  throw(KasumiException){
     if(aVerbType == EUCJP_BAGYOUGODAN){
       eVerbType = B5;
     }else if(aVerbType == EUCJP_GAGYOUGODAN){
@@ -256,16 +263,16 @@ void KasumiWord::setVerbTypeWithName(const string &aVerbType)
       eVerbType = W5;
     }else{
       string message = string("Invalid verb type name: ") + aVerbType;
-      throw KasumiInvalidVerbTypeNameException(message);
+      throw KasumiException(message, ERR_DIALOG, ALERT_ONLY);
     }
 }
 
 void KasumiWord::setVerbTypeWithNameByUTF8(const string &aVerbType)
-  throw(KasumiInvalidVerbTypeNameException){
+  throw(KasumiException){
   try{
     string euc = convertUTF8ToEUCJP(aVerbType);
     setVerbTypeWithName(euc);
-  }catch(KasumiInvalidVerbTypeNameException e){
+  }catch(KasumiException e){
     throw e;
   }
 }

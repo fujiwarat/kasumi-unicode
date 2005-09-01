@@ -1,5 +1,8 @@
 2005-09-01  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
+	* fix
+	 - changed exception handling system
+
 	* fix (in KasumiAddWindow.cxx)
 	 - wrong string for verb option
 

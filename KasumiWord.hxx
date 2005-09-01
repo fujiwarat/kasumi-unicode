@@ -42,9 +42,9 @@ public:
 
   // property functions
   void setSound(const string &aSound)
-    throw(KasumiInvalidCharacterForSoundException);
+    throw(KasumiException);
   void setSoundByUTF8(const string &aSound)
-    throw(KasumiInvalidCharacterForSoundException);
+    throw(KasumiException);
   string getSound();
   string getSoundByUTF8();
 
@@ -60,9 +60,9 @@ public:
   WordClassType getWordClass();
 
   void setWordClassWithName(const string &aWordClass)
-    throw(KasumiInvalidWordClassNameException);
+    throw(KasumiException);
   void setWordClassWithNameByUTF8(const string &aWordClass)
-    throw(KasumiInvalidWordClassNameException);
+    throw(KasumiException);
   string getStringOfWordClass();
   string getStringOfWordClassByUTF8();  
   
@@ -71,9 +71,9 @@ public:
 
   void setVerbType(VerbType aVerbType);
   void setVerbTypeWithName(const string &aVerbType)
-    throw(KasumiInvalidVerbTypeNameException);
+    throw(KasumiException);
   void setVerbTypeWithNameByUTF8(const string &aVerbType)
-    throw(KasumiInvalidVerbTypeNameException);
+    throw(KasumiException);
   VerbType getVerbType();
   string getStringOfVerbType();
   string getStringOfVerbTypeByUTF8();

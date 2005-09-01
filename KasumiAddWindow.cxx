@@ -374,20 +374,8 @@ void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
     const int FREQ_DEFAULT = conf->getPropertyValueByInt("DefaultFrequency");
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),FREQ_DEFAULT);
     gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),0);
-  }catch(KasumiInvalidCharacterForSoundException e){
-      string message;
-      message = string(_("Sound must consist of only Hiragana characters. You have entered invalid character: "));
-      message += e.getInvalidCharacter();
-      
-      GtkWidget *dialog = gtk_message_dialog_new
-        (GTK_WINDOW(window),
-         GTK_DIALOG_DESTROY_WITH_PARENT,
-         GTK_MESSAGE_ERROR,
-         GTK_BUTTONS_OK,
-         message.c_str());
-      gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_destroy (dialog);
-      delete (word);
+  }catch(KasumiException e){
+    handleException(e);
   }
 }
 

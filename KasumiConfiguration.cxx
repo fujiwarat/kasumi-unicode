@@ -30,7 +30,7 @@ using namespace std;
 //     to loadConfigurationFromArgument method
 
 KasumiConfiguration::KasumiConfiguration(int argc, char *argv[])
-  throw(KasumiConfigurationLoadException){
+  throw(KasumiException){
 
   try{  
     loadDefaultProperties();
@@ -39,13 +39,15 @@ KasumiConfiguration::KasumiConfiguration(int argc, char *argv[])
   
     char *home = getenv("HOME");
     if(home == NULL){
-      throw KasumiConfigurationLoadException(string("Cannot find $HOME environment variable."));
+      throw KasumiException(string("Cannot find $HOME environment variable."),
+                            STDERR,
+                            KILL);
     }
 
     ConfFileName = string(home) + "/.kasumi";
 
     loadConfigurationFile();
-  }catch(KasumiConfigurationLoadException e){
+  }catch(KasumiException e){
     throw e;
   }
 
@@ -57,11 +59,12 @@ KasumiConfiguration::~KasumiConfiguration(){
   saveConfiguration();
 }
 
-void KasumiConfiguration::loadDefaultProperties() 
-  throw(KasumiConfigurationLoadException){
+void KasumiConfiguration::loadDefaultProperties() throw(KasumiException){
   char *home = getenv("HOME");
   if(home == NULL){
-    throw KasumiConfigurationLoadException(string("Cannot find $HOME environment variable."));
+      throw KasumiException(string("Cannot find $HOME environment variable."),
+                            STDERR,
+                            KILL);
   }
   
   config[string("StartupMode")] = string("MANAGE");
@@ -88,7 +91,7 @@ void KasumiConfiguration::loadDefaultProperties()
 }
 
 void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
- throw(KasumiConfigurationLoadException){
+  throw(KasumiException){
   int option_index = 0;
   static struct option long_options[] = {
     {"help", no_argument, NULL, 'h'},
@@ -105,6 +108,7 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
     {0,0,0,0}
   };
 
+  string message;
   int c;    
   while(1){
     c = getopt_long(argc, argv, "hvamiIns:t:w:x:y:", long_options, &option_index);
@@ -145,22 +149,25 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
       setPropertyValue(string("ImportSelectedText"),string("false"));
       break;
     case '?':
-      throw KasumiConfigurationLoadException(string("Found an invalid argument"));
+    case ':':
+      message = string("Invalid argument error. Try '") + argv[0] +
+        string(" --help' for more information.");
+      throw KasumiException(message, STDERR, KILL);
       break;
     }
   }
 
   if(optind < argc){
-    cout << "non-option ARGV-elements: ";
-    while (optind < argc)
-      cout << argv[optind++];
-    cout << endl;
+    message = string("Found non-option argument '") + argv[optind] +
+      string("'. Try '") + argv[0] +
+      string(" --help' for more information.");
+    throw KasumiException(message, STDERR, KILL);
   }
 }
 
 
 void KasumiConfiguration::loadConfigurationFile()
-  throw(KasumiConfigurationLoadException){
+  throw(KasumiException){
 
   int line = 0;
   string Contents = string();
@@ -184,24 +191,28 @@ void KasumiConfiguration::loadConfigurationFile()
       config[Buffer.getKey()] = Buffer.getVal();
     }else{
       // not classfied line; configuration file is invalid!
-      throw KasumiConfigurationLoadException(string("line ") + int2str(line) + string(": Invalid entry in configuration file (" + ConfFileName + ")"));
+      string message = ConfFileName + string(":") + int2str(line)
+        + string(": invalid entry in configuration file.");
+      throw KasumiException(message, STDERR, KILL);
     }
   }
 }
 
+// ToDo: implement saveConfiguration method
 void KasumiConfiguration::saveConfiguration()
-  throw(KasumiConfigurationSaveException){
+  throw(KasumiException){
 
 }
 
 void KasumiConfiguration::checkValidity()
-  throw(KasumiConfigurationLoadException){
+  throw(KasumiException){
   
   if(config[string("StartupMode")] != string("MANAGE") &&
      config[string("StartupMode")] != string("ADD") &&
      config[string("StartupMode")] != string("HELP") &&
      config[string("StartupMode")] != string("VERSION")){
-    throw KasumiConfigurationLoadException(string("StartupMode variable must be \"MANAGE\" or \"ADD\""));
+    string message("StartupMode variable must be \"MANAGE\" or \"ADD\"");
+    throw KasumiException(message, STDERR, KILL);
   }
 
   // check conrresponding settings being an integer
@@ -218,7 +229,8 @@ void KasumiConfiguration::checkValidity()
     intValueKeyNames.pop_front();
     
     if(!isInt(config[keyName])){
-    throw KasumiConfigurationLoadException(keyName + string(" variable must be an integer"));      
+      string message = keyName + string(" variable must be an integer");
+      throw KasumiException(message, STDERR, KILL);
     }
   }
 
@@ -227,21 +239,27 @@ void KasumiConfiguration::checkValidity()
   int max = str2int(config[string("MaxFrequency")]);
   int min = str2int(config[string("MinFrequency")]);
   if(min < 1){
-    throw KasumiConfigurationLoadException(string("MinFrequency must be greater than 0"));
+    throw KasumiException(string("MinFrequency must be greater than 0"),
+                          STDERR, KILL);
   }else if(max < min){
-    throw KasumiConfigurationLoadException(string("MinFrequency must not be greater than MaxFrequency."));
+    throw KasumiException(string("MinFrequency must not be greater than MaxFrequency."),
+                          STDERR, KILL);
   }else if(def > max){
-    throw KasumiConfigurationLoadException(string("DefaultFrequency must not be greater than MaxFrequency"));
+    throw KasumiException(string("DefaultFrequency must not be greater than MaxFrequency"),
+                          STDERR, KILL);
   }else if(def < min){
-    throw KasumiConfigurationLoadException(string("DefaultFrequency must not be less than MinFrequency"));
+    throw KasumiException(string("DefaultFrequency must not be less than MinFrequency"),
+                          STDERR, KILL);
   }
 
   int x = str2int(config[string("DefaultWindowPosX")]);
   int y = str2int(config[string("DefaultWindowPosY")]);
   if(x < -1){
-    throw KasumiConfigurationLoadException(string("DefaultWindowPosX must be -1 or more"));
+    throw KasumiException(string("DefaultWindowPosX must be -1 or more"),
+                          STDERR, KILL);
   }else if(y < -1){
-    throw KasumiConfigurationLoadException(string("DefaultWindowPosY must be -1 or more"));
+    throw KasumiException(string("DefaultWindowPosY must be -1 or more"),
+                          STDERR, KILL);
   }
 
   // check key configurations
@@ -263,12 +281,15 @@ void KasumiConfiguration::checkValidity()
 
     string shortKey = config[string(keyName)];
     if(!isValidShortcutKey(shortKey)){
-      throw KasumiConfigurationLoadException(string("Invalid shortcut key configuration for ") + keyName + string(": ") + shortKey);
+      string message = string("Invalid shortcut key configuration for ") +
+        keyName + string(": ") + shortKey;
+      throw KasumiException(message, STDERR, KILL);
     }
     if(registeredKey.find(shortKey) == registeredKey.end()){
       registeredKey.insert(make_pair(shortKey,keyName));
     }else{
-      throw KasumiConfigurationLoadException(string("Failed to set ") + keyName + string(" variable; ") + shortKey + string(" has been already registered as ") + registeredKey[shortKey]);
+      string message = string("Failed to set ") + keyName + string(" variable; ") + shortKey + string(" has been already registered as ") + registeredKey[shortKey];
+      throw KasumiException(message, STDERR, KILL);
     }
   }
 
@@ -291,7 +312,8 @@ void KasumiConfiguration::checkValidity()
     string val = config[keyName];
 
     if(validWordClass.find(val) == validWordClass.end()){
-      throw KasumiConfigurationLoadException(val + string(" is an invalid word class for ") + keyName);
+      string message = val + string(" is an invalid word class for ") + keyName;
+      throw KasumiException(message, STDERR, KILL);
     }
   }
   
@@ -305,7 +327,8 @@ void KasumiConfiguration::checkValidity()
     booleanValueKeyNames.pop_front();
     
     if(config[keyName] != "true" && config[keyName] != "false"){
-      throw KasumiConfigurationLoadException(keyName + string(" variable must be a boolean"));      
+      throw KasumiException(keyName + string(" variable must be a boolean"),
+                            STDERR, KILL);
     }
   }
 

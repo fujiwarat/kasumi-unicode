@@ -94,7 +94,7 @@ localedir = @localedir@
 
 bin_PROGRAMS = kasumi
 
-kasumi_SOURCES = main.cxx intl.h                  KasumiDic.cxx KasumiDic.hxx                  KasumiWord.cxx KasumiWord.hxx 				 KasumiString.cxx KasumiString.hxx 				 KasumiException.hxx 				 KasumiMainWindow.cxx KasumiMainWindow.hxx 				 KasumiAddWindow.cxx KasumiAddWindow.hxx 				 KasumiDicEventListener.hxx 				 KasumiConfiguration.cxx KasumiConfiguration.hxx                  kasumi.png
+kasumi_SOURCES = main.cxx intl.h                  KasumiDic.cxx KasumiDic.hxx                  KasumiWord.cxx KasumiWord.hxx 				 KasumiString.cxx KasumiString.hxx 				 KasumiException.cxx KasumiException.hxx 				 KasumiMainWindow.cxx KasumiMainWindow.hxx 				 KasumiAddWindow.cxx KasumiAddWindow.hxx 				 KasumiDicEventListener.hxx 				 KasumiConfiguration.cxx KasumiConfiguration.hxx                  kasumi.png
 
 
 pkgdata_DATA = kasumi.png
@@ -117,7 +117,8 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 kasumi_OBJECTS =  main.o KasumiDic.o KasumiWord.o KasumiString.o \
-KasumiMainWindow.o KasumiAddWindow.o KasumiConfiguration.o
+KasumiException.o KasumiMainWindow.o KasumiAddWindow.o \
+KasumiConfiguration.o
 kasumi_LDADD = $(LDADD)
 kasumi_DEPENDENCIES = 
 kasumi_LDFLAGS = 
@@ -142,8 +143,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = tar
 GZIP_ENV = --best
 DEP_FILES =  .deps/KasumiAddWindow.P .deps/KasumiConfiguration.P \
-.deps/KasumiDic.P .deps/KasumiMainWindow.P .deps/KasumiString.P \
-.deps/KasumiWord.P .deps/main.P
+.deps/KasumiDic.P .deps/KasumiException.P .deps/KasumiMainWindow.P \
+.deps/KasumiString.P .deps/KasumiWord.P .deps/main.P
 SOURCES = $(kasumi_SOURCES)
 OBJECTS = $(kasumi_OBJECTS)
 
@@ -276,7 +277,7 @@ uninstall-pkgdataDATA:
 all-recursive install-data-recursive install-exec-recursive \
 installdirs-recursive install-recursive uninstall-recursive  \
 check-recursive installcheck-recursive info-recursive dvi-recursive:
-	@set fnord $(MAKEFLAGS); amf=$$2; \
+	@set fnord $$MAKEFLAGS; amf=$$2; \
 	dot_seen=no; \
 	target=`echo $@ | sed s/-recursive//`; \
 	list='$(SUBDIRS)'; for subdir in $$list; do \
@@ -296,7 +297,7 @@ check-recursive installcheck-recursive info-recursive dvi-recursive:
 
 mostlyclean-recursive clean-recursive distclean-recursive \
 maintainer-clean-recursive:
-	@set fnord $(MAKEFLAGS); amf=$$2; \
+	@set fnord $$MAKEFLAGS; amf=$$2; \
 	dot_seen=no; \
 	rev=''; list='$(SUBDIRS)'; for subdir in $$list; do \
 	  rev="$$subdir $$rev"; \

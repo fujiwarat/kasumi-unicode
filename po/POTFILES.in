@@ -7,6 +7,7 @@
 ./KasumiString.cxx
 ./KasumiString.hxx
 ./KasumiException.hxx
+./KasumiException.cxx
 ./KasumiMainWindow.hxx
 ./KasumiMainWindow.cxx
 ./KasumiAddWindow.hxx

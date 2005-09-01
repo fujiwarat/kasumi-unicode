@@ -7,48 +7,29 @@
 
 using namespace std;
 
-class KasumiDicExaminationException{
+enum _output {STDOUT, STDERR, ERR_DIALOG, WARNING_DIALOG};
+typedef _output Output;
+
+enum _disposal {KILL, QUIT, ALERT_ONLY};
+typedef _disposal Disposal;
+
+class KasumiException{
 private:
-  int line;
   string message;
+  Output output;
+  Disposal disposal;
 public:
-  KasumiDicExaminationException(string aMessage, int aLine){
-    line = aLine;
+  KasumiException(string aMessage, Output aOutput, Disposal aDisposal){
     message = aMessage;
+    output = aOutput;
+    disposal = aDisposal;
   }
   string getMessage() { return message; }
-  int getLine() { return line; }
+  Output getOutput() { return output; }
+  Disposal getDisposal() { return disposal; }
 };
 
-class KasumiDicStoreException{
-private:
-  string message;
-public:
-  KasumiDicStoreException(string aMessage){
-    message = aMessage;
-  }
-  string getMessage() { return message; }
-};
-
-class KasumiInvalidWordClassNameException{
-private:
-  string message;
-public:
-  KasumiInvalidWordClassNameException(string aMessage){
-    message = aMessage;
-  }
-  string getMessage() { return message; }
-};
-
-class KasumiInvalidVerbTypeNameException{
-private:
-  string message;
-public:
-  KasumiInvalidVerbTypeNameException(string aMessage){
-    message = aMessage;
-  }
-  string getMessage() { return message; }
-};
+void handleException(KasumiException e);
 
 class KasumiOutOfBoundException{
 private:
@@ -59,39 +40,5 @@ public:
   }
   string getMessage() { return message; }
 };
-
-class KasumiConfigurationLoadException{
-private:
-  string message;
-public:
-  KasumiConfigurationLoadException(string aMessage){
-    message = aMessage;
-  }
-  string getMessage() { return message; }
-};
-
-class KasumiConfigurationSaveException{
-private:
-  string message;
-public:
-  KasumiConfigurationSaveException(string aMessage){
-    message = aMessage;
-  }
-  string getMessage() { return message; }
-};
-
-class KasumiInvalidCharacterForSoundException{
-private:
-  string InvalidString;
-  string InvalidCharacter;
-public:
-  KasumiInvalidCharacterForSoundException(string aInvalidStr, string aInvalidChar){
-    InvalidString = aInvalidStr;
-    InvalidCharacter = aInvalidChar;
-  }
-  string getInvalidString() { return InvalidString; }
-  string getInvalidCharacter() { return InvalidCharacter; }
-};
-
 
 #endif

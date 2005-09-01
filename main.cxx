@@ -72,12 +72,8 @@ int main(int argc, char *argv[])
       new KasumiAddWindow(dic,conf);
       gtk_main();
     }
-  }catch(KasumiConfigurationLoadException e){
-    cout << e.getMessage() << endl;
-    exit(1);
-  }catch(KasumiDicExaminationException e){
-    cout << "line " << e.getLine() << ": " << e.getMessage() << endl;
-    exit(1);
+  }catch(KasumiException e){
+    handleException(e);
   }
 }
 

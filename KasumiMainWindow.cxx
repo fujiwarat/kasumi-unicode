@@ -540,7 +540,7 @@ void KasumiMainWindow::ClickedStoreButton(){
   try{
     dictionary->store();
     modificationFlag = false;
-  }catch(KasumiDicStoreException e){
+  }catch(KasumiException e){
       cout <<  e.getMessage() << endl;
       exit(1);
   }
@@ -633,19 +633,8 @@ void KasumiMainWindow::ChangedSoundEntry(){
       word->setSoundByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))));
       dictionary->modifyWord(id);
       previousSoundEntryText = string(gtk_entry_get_text(GTK_ENTRY(SoundEntry)));
-    }catch(KasumiInvalidCharacterForSoundException e){
-      string message;
-      message = string(_("Sound must consist of only Hiragana characters. You have entered invalid character: "));
-      message += e.getInvalidCharacter();
-      
-      GtkWidget *dialog = gtk_message_dialog_new
-        (GTK_WINDOW(window),
-         GTK_DIALOG_DESTROY_WITH_PARENT,
-         GTK_MESSAGE_ERROR,
-         GTK_BUTTONS_OK,
-         message.c_str());
-      gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_destroy (dialog);
+    }catch(KasumiException e){
+      handleException(e);
 
       // take back invalid entry
       g_signal_handler_block(SoundEntry, HandlerIDOfSoundEntry);

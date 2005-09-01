@@ -23,11 +23,11 @@ private:
   vector<KasumiWord*> WordList; // manage words with id
   vector<KasumiDicEventListener*> EventListeners;
   
-  void load(KasumiConfiguration *conf) throw (KasumiDicExaminationException);
+  void load(KasumiConfiguration *conf) throw (KasumiException);
 public:
   KasumiDic(const string aDicFileName, KasumiConfiguration *conf)
-    throw(KasumiDicExaminationException);
-  void store() throw(KasumiDicStoreException);
+    throw(KasumiException);
+  void store() throw(KasumiException);
   int appendWord(KasumiWord *word); // returns this word's ID
   void removeWord(size_t id) throw(KasumiOutOfBoundException);
   void modifyWord(size_t id) throw(KasumiOutOfBoundException);

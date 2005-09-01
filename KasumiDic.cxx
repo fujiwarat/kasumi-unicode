@@ -15,19 +15,19 @@ using namespace std;
 #define OptionOutput( Word, OptionName ) (string(OptionName) + " = " + (Word->getOption(OptionName) ? "y" : "n"))
 
 KasumiDic::KasumiDic(const string aDicFileName, KasumiConfiguration *conf)
-  throw(KasumiDicExaminationException){
+  throw(KasumiException){
 
   DicFileName = aDicFileName;
 
   try{
     load(conf);
-  }catch(KasumiDicExaminationException e){
+  }catch(KasumiException e){
     throw e;
   }
 }
 
 void KasumiDic::load(KasumiConfiguration *conf)
-  throw(KasumiDicExaminationException){
+  throw(KasumiException){
   
   int line = 0;
   int freq;
@@ -36,17 +36,16 @@ void KasumiDic::load(KasumiConfiguration *conf)
 
   string command = "anthy-dic-tool --dump > " + DicFileName;
   if(system(command.c_str()) != 0){
-    throw KasumiDicExaminationException(
-            "Cannot dump Anthy dictoinary to " + DicFileName,
-            0);
+    string message = string("Failed to dump Anthy dictionary to ") +
+      DicFileName + string(".");
+    throw KasumiException(message, STDERR, KILL);
   }
 
   ifstream DicFile(DicFileName.c_str());
   
   if(!DicFile.is_open()){
-    throw KasumiDicExaminationException(
-            "Cannot open Anthy dicitionary file.",
-            0);
+    string message = string("Failed to open ") + DicFileName + string(".");
+    throw KasumiException(message, STDERR, KILL);
   }
 
   const int FREQ_LBOUND = conf->getPropertyValueByInt("MinFrequency");  
@@ -85,8 +84,8 @@ void KasumiDic::load(KasumiConfiguration *conf)
           if(Buffer.getKey() == EUCJP_HINNSHI){
             try{
               newWord->setWordClassWithName(Buffer.getVal());
-            }catch(KasumiInvalidWordClassNameException e){
-              throw KasumiDicExaminationException(e.getMessage(), line);
+            }catch(KasumiException e){
+              throw e;
             }
           }else if(Buffer.getKey() == EUCJP_KATSUYOU){
             newWord->setVerbTypeWithName(Buffer.getVal());
@@ -98,18 +97,18 @@ void KasumiDic::load(KasumiConfiguration *conf)
             }
           }
         }else{
-          throw KasumiDicExaminationException(
-                  "Invalid entry in Anthy private dictionary file.",
-                  line);
+          string message = DicFileName + string(":") + int2str(line) +
+            string(": Invalid entry");
+          throw KasumiException(message, STDERR, KILL);
         }
       }
 
       appendWord(newWord);
     }else{
       // not classfied line; Anthy Dicitionary is invalid!
-          throw KasumiDicExaminationException(
-                  "Invalid entry in Anthy private dictionary file.",
-                  line);
+      string message = DicFileName + string(":") + int2str(line) +
+        string(": Invalid entry");
+      throw KasumiException(message, STDERR, KILL);
     }
   }
 
@@ -160,7 +159,7 @@ void KasumiDic::modifyWord(size_t id)
 
 
 void KasumiDic::store()
-  throw(KasumiDicStoreException){
+  throw(KasumiException){
 
   size_t i;
   ofstream DicFile(DicFileName.c_str());
@@ -230,7 +229,8 @@ void KasumiDic::store()
       ret += string(EUCJP_KATSUYOU) + " = " + WordList[i]->getStringOfVerbType() + "\n";
       ret += OptionOutput(WordList[i], EUCJP_RENNYOUKEINOMEISHIKA) + "\n";
     }else{
-      throw KasumiDicStoreException("innternal error while saving Anthy Dictionary.");
+      throw KasumiException(string("Internal error while saving."),
+                            ERR_DIALOG, KILL);
     }
     
     ret += "\n";

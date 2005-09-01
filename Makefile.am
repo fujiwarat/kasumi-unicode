@@ -4,7 +4,7 @@ kasumi_SOURCES = main.cxx intl.h \
                  KasumiDic.cxx KasumiDic.hxx \
                  KasumiWord.cxx KasumiWord.hxx \
 				 KasumiString.cxx KasumiString.hxx \
-				 KasumiException.hxx \
+				 KasumiException.cxx KasumiException.hxx \
 				 KasumiMainWindow.cxx KasumiMainWindow.hxx \
 				 KasumiAddWindow.cxx KasumiAddWindow.hxx \
 				 KasumiDicEventListener.hxx \
