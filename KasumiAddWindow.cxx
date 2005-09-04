@@ -26,6 +26,9 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
   g_signal_connect(G_OBJECT(window), "delete_event",
                    G_CALLBACK(_call_back_add_window_delete_event), this);
 
+  // tooltips for every widget
+  Tooltips = gtk_tooltips_new();
+
   // creating vbox for text entries, spin button and so on.
   GtkWidget *vbox = gtk_vbox_new(FALSE,0);
   gtk_container_add(GTK_CONTAINER(window),vbox);  
@@ -205,6 +208,9 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                              getAccelKey(key),
                              getModifierType(key),
                              GTK_ACCEL_VISIBLE);
+  gtk_tooltips_set_tip(Tooltips, button,
+                       _("Quit this application"),
+                       _("Save dictionary and quit this application."));
 
   button = gtk_button_new();
   button_image = gtk_image_new_from_stock(GTK_STOCK_ADD,
@@ -220,6 +226,9 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                              getAccelKey(key),
                              getModifierType(key),
                              GTK_ACCEL_VISIBLE);
+  gtk_tooltips_set_tip(Tooltips, button,
+                       _("Add entered word"),
+                       _("If all the necessary items are filled in, add entered word."));
 
   button = gtk_button_new();
   button_image = gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,
@@ -235,6 +244,10 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                              getAccelKey(key),
                              getModifierType(key),
                              GTK_ACCEL_VISIBLE);
+  gtk_tooltips_set_tip(Tooltips, button,
+                       _("Manage mode"),
+                       _("Make the shift to manage mode to modify and remove registered words."));
+
 
   // get selection at the time of launching
   g_signal_connect(G_OBJECT(SpellingEntry),"selection_received",

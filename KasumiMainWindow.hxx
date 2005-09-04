@@ -93,6 +93,7 @@ private:
   GtkListStore *WordList;
   GtkTreeModel *SortList;
   GtkTreeSelection *SortListSelection;
+  GtkTreeViewColumn *SpellingColumn;
   GtkTreeViewColumn *SoundColumn;
   GtkTreeViewColumn *FreqColumn;
   GtkTreeViewColumn *WordClassColumn;

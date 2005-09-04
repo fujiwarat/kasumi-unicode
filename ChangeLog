@@ -1,3 +1,10 @@
+2005-09-05  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* enhancement
+	 - tooltips for adding window
+	 - obsolete KasumiOutOfBoundException
+	 - make columns resizable
+
 2005-09-01  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* fix

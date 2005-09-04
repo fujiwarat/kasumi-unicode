@@ -33,6 +33,7 @@ private:
   GtkWidget *SoundEntry;
   GtkWidget *FrequencySpin;
   GtkWidget *WordClassCombo;
+  GtkTooltips *Tooltips;
 
   GtkWidget *NounOptionPane;
   GtkWidget *NounOptionSaConnectionCheck;

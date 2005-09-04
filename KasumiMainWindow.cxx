@@ -44,20 +44,24 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
   gtk_widget_set_size_request(GTK_WIDGET(ScrolledWindow),300,300);
   gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(ScrolledWindow),TRUE,TRUE,0);
 
-
   // creating tree(list) view for words
   GtkWidget *WordListView = gtk_tree_view_new();
   GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
-  gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(WordListView),-1,
-                                              _("Spelling"),renderer,
-                                              "text",COL_WORD,
-                                              NULL);
+  SpellingColumn = gtk_tree_view_column_new_with_attributes(_("Spelling"),
+                                                            renderer,
+                                                            "text",
+                                                            COL_WORD,
+                                                            NULL);
+  gtk_tree_view_column_set_resizable(SpellingColumn, true);
+  gtk_tree_view_insert_column(GTK_TREE_VIEW(WordListView),SpellingColumn,-1);
+
   renderer = gtk_cell_renderer_text_new();
   SoundColumn = gtk_tree_view_column_new_with_attributes(_("Sound"),
                                                          renderer,
                                                          "text",
                                                          COL_YOMI,
                                                          NULL);
+  gtk_tree_view_column_set_resizable(SoundColumn, true);
   gtk_tree_view_insert_column(GTK_TREE_VIEW(WordListView),SoundColumn,-1);
   gtk_tree_view_column_set_clickable(SoundColumn,TRUE);
   g_signal_connect(G_OBJECT(SoundColumn), "clicked",
@@ -69,6 +73,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                                                         "text",
                                                         COL_FREQ,
                                                         NULL);
+  gtk_tree_view_column_set_resizable(FreqColumn, true);
   gtk_tree_view_insert_column(GTK_TREE_VIEW(WordListView),FreqColumn,-1);
   gtk_tree_view_column_set_clickable(FreqColumn, TRUE);
   g_signal_connect(G_OBJECT(FreqColumn), "clicked",
@@ -85,6 +90,7 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
                                                              "text",
                                                              COL_PART,
                                                              NULL);
+  gtk_tree_view_column_set_resizable(WordClassColumn, true);
   gtk_tree_view_insert_column(GTK_TREE_VIEW(WordListView),WordClassColumn,-1);
   gtk_tree_view_column_set_clickable(WordClassColumn, TRUE);
   g_signal_connect(G_OBJECT(WordClassColumn), "clicked",
@@ -476,9 +482,8 @@ void KasumiMainWindow::refresh(){
                            COL_PART,word->getStringOfWordClassByUTF8().c_str(),
                            -1);
       }
-    }catch(KasumiOutOfBoundException e){
-      cout << e.getMessage() << endl;
-      exit(1);
+    }catch(KasumiException e){
+      handleException(e);
     }
   }
 

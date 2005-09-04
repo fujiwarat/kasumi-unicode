@@ -127,12 +127,13 @@ int KasumiDic::appendWord(KasumiWord *word){
 }
 
 void KasumiDic::removeWord(size_t id)
-  throw(KasumiOutOfBoundException){
+  throw(KasumiException){
 
   size_t i;
   
   if(id >= WordList.size() || id < 0){
-    throw new KasumiOutOfBoundException("Out of Bound!");
+    throw KasumiException("internal error: \"id\" is out of bound!",
+                          ERR_DIALOG, KILL);
   }
 
   KasumiWord *word = WordList[id];
@@ -144,12 +145,13 @@ void KasumiDic::removeWord(size_t id)
 }
 
 void KasumiDic::modifyWord(size_t id)
-  throw(KasumiOutOfBoundException){
+  throw(KasumiException){
 
   size_t i;
   
   if(id >= WordList.size() || id < 0){
-    throw new KasumiOutOfBoundException("Out of Bound!");
+    throw KasumiException("internal error: \"id\" is out of bound!",
+                          ERR_DIALOG, KILL);
   }
 
   for(i=0;i<EventListeners.size();i++){
@@ -278,10 +280,11 @@ void KasumiDic::removeEventListener(KasumiDicEventListener *listener){
 }
 
 KasumiWord *KasumiDic::getWordWithID(size_t id)
-  throw(KasumiOutOfBoundException){
+  throw(KasumiException){
 
   if(id >= WordList.size() || id < 0){
-    throw new KasumiOutOfBoundException("Out of Bound!");
+    throw KasumiException("internal error: \"id\" is out of bound!",
+                          ERR_DIALOG, KILL);
   }
   
   return WordList[id];

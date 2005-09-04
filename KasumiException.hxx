@@ -31,14 +31,4 @@ public:
 
 void handleException(KasumiException e);
 
-class KasumiOutOfBoundException{
-private:
-  string message;
-public:
-  KasumiOutOfBoundException(string aMessage){
-    message = aMessage;
-  }
-  string getMessage() { return message; }
-};
-
 #endif

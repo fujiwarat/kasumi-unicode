@@ -29,13 +29,13 @@ public:
     throw(KasumiException);
   void store() throw(KasumiException);
   int appendWord(KasumiWord *word); // returns this word's ID
-  void removeWord(size_t id) throw(KasumiOutOfBoundException);
-  void modifyWord(size_t id) throw(KasumiOutOfBoundException);
+  void removeWord(size_t id) throw(KasumiException);
+  void modifyWord(size_t id) throw(KasumiException);
 
   void registerEventListener(KasumiDicEventListener *listener);
   void removeEventListener(KasumiDicEventListener *listener);
 
-  KasumiWord *getWordWithID(size_t id) throw(KasumiOutOfBoundException);
+  KasumiWord *getWordWithID(size_t id) throw(KasumiException);
   int getUpperBoundOfWordID();
 };
 
