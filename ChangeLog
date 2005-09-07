@@ -1,3 +1,8 @@
+2005-09-07  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - No save, when add a new word in adding mode
+
 2005-09-05  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
 	* enhancement
