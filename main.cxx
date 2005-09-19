@@ -37,7 +37,7 @@ void showHelp(){
 
 void showVersion(){
   cout << "kasumi " << VERSION << ": a personal dictionary manager for Anthy" << endl;
-  cout << "Copyright (C) 2004 Takashi Nakamoto.\n";
+  cout << "Copyright (C) 2004-2005 Takashi Nakamoto.\n";
   cout << "This program comes with NO WARRANTY, to the extent permitted " \
           "by law. \nYou may redistribute it under the terms of the GNU " \
           "General Public License; \nsee the file named COPYING for " \

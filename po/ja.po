@@ -1,7 +1,7 @@
 # Kasumi's Japanese translated message
-# Copyright (C) 2004 Takashi Nakamoto
+# Copyright (C) 2004-2005 Takashi Nakamoto
 # This file is distributed under the same license as the Kasumi package.
-# Takashi Nakamoto <bluedwarf@openoffice.org>, 2004
+# Takashi Nakamoto <bluedwarf@openoffice.org>, 2005
 #
 msgid ""
 msgstr ""
