@@ -24,7 +24,9 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
   modificationFlag = false;
   
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
   gtk_window_set_title(GTK_WINDOW(window), _("Kasumi"));
+  gtk_window_set_position (GTK_WINDOW(window), GTK_WIN_POS_MOUSE);
   g_signal_connect(G_OBJECT(window), "delete_event",
                    G_CALLBACK(_call_back_delete_event), this);
 
