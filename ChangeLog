@@ -1,3 +1,8 @@
+2005-11-08  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix (KasumiString.cxx)
+	 - load words including "=" properly
+
 2005-10-15  Takuro Ashie <ashie@homa.ne.jp>
 
 	* KasumiMainWindow.cxx, KasumiAddWindow.cxx:

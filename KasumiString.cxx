@@ -24,9 +24,9 @@ bool KasumiString::isEmptyLine(){
 bool KasumiString::isEntryLine(){
   string::size_type i;
 
-  if(isKeyValLine()){
-    return false;
-  }
+  //  if(isKeyValLine()){
+  //    return false;
+  //  }
 
   i = find(" ",0);
   if(i == npos){
