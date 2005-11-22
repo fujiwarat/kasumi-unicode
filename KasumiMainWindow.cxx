@@ -451,11 +451,11 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
   gtk_widget_hide(VerbOptionPane);
 
   // set default window position
-  int x = conf->getPropertyValueByInt("DefaultWindowPosX");
-  int y = conf->getPropertyValueByInt("DefaultWindowPosY");
-  if(x >= 0 && y >= 0){
-    gtk_window_move(GTK_WINDOW(window),x,y);
-  }
+  //  int x = conf->getPropertyValueByInt("DefaultWindowPosX");
+  //  int y = conf->getPropertyValueByInt("DefaultWindowPosY");
+  //  if(x >= 0 && y >= 0){
+  //    gtk_window_move(GTK_WINDOW(window),x,y);
+  //  }
 
   refresh();
 

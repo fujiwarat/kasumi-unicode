@@ -85,8 +85,8 @@ void KasumiConfiguration::loadDefaultProperties() throw(KasumiException){
   config[string("DefaultAddingSpelling")] = string("");
   config[string("DefaultAddingSound")] = string("");
   config[string("DefaultAddingWordClass")] = string(EUCJP_MEISHI);
-  config[string("DefaultWindowPosX")] = string("-1");
-  config[string("DefaultWindowPosY")] = string("-1");
+  //  config[string("DefaultWindowPosX")] = string("-1");
+  //  config[string("DefaultWindowPosY")] = string("-1");
   config[string("ImportSelectedText")] = string("true");
 }
 
@@ -101,8 +101,8 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
     {"sound", required_argument, NULL, 's'},
     {"spelling", required_argument, NULL, 't'},
     {"wordclass", required_argument, NULL, 'w'},
-    {"x", required_argument, NULL, 'x'},
-    {"y", required_argument, NULL, 'y'},
+    //    {"x", required_argument, NULL, 'x'},
+    //    {"y", required_argument, NULL, 'y'},
     {"import", no_argument, NULL, 'i'},
     {"ignore", no_argument, NULL, 'I'},
     {0,0,0,0}
@@ -111,7 +111,8 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
   string message;
   int c;    
   while(1){
-    c = getopt_long(argc, argv, "hvamiIns:t:w:x:y:", long_options, &option_index);
+    //    c = getopt_long(argc, argv, "hvamiIns:t:w:x:y:", long_options, &option_index);
+    c = getopt_long(argc, argv, "hvamiIns:t:w:", long_options, &option_index);
     if(c == -1) break; // no more argument
 
     switch(c){
@@ -136,12 +137,12 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
     case 'w':
       setPropertyValue(string("DefaultAddingWordClass"),string(optarg));
       break;
-    case 'x':
-      setPropertyValue(string("DefaultWindowPosX"),string(optarg));
-      break;
-    case 'y':
-      setPropertyValue(string("DefaultWindowPosY"),string(optarg));
-      break;
+      //    case 'x':
+      //      setPropertyValue(string("DefaultWindowPosX"),string(optarg));
+      //      break;
+      //    case 'y':
+      //      setPropertyValue(string("DefaultWindowPosY"),string(optarg));
+      //      break;
     case 'i':
       setPropertyValue(string("ImportSelectedText"),string("true"));
       break;
@@ -221,8 +222,8 @@ void KasumiConfiguration::checkValidity()
   intValueKeyNames.push_back(string("DefaultFrequency"));
   intValueKeyNames.push_back(string("MaxFrequency"));
   intValueKeyNames.push_back(string("MinFrequency"));
-  intValueKeyNames.push_back(string("DefaultWindowPosX"));
-  intValueKeyNames.push_back(string("DefaultWindowPosY"));
+  //  intValueKeyNames.push_back(string("DefaultWindowPosX"));
+  //  intValueKeyNames.push_back(string("DefaultWindowPosY"));
 
   while(!intValueKeyNames.empty()){
     string keyName = intValueKeyNames.front();
@@ -252,15 +253,15 @@ void KasumiConfiguration::checkValidity()
                           STDERR, KILL);
   }
 
-  int x = str2int(config[string("DefaultWindowPosX")]);
-  int y = str2int(config[string("DefaultWindowPosY")]);
-  if(x < -1){
-    throw KasumiException(string("DefaultWindowPosX must be -1 or more"),
-                          STDERR, KILL);
-  }else if(y < -1){
-    throw KasumiException(string("DefaultWindowPosY must be -1 or more"),
-                          STDERR, KILL);
-  }
+  //  int x = str2int(config[string("DefaultWindowPosX")]);
+  //  int y = str2int(config[string("DefaultWindowPosY")]);
+  //  if(x < -1){
+  //    throw KasumiException(string("DefaultWindowPosX must be -1 or more"),
+  //                          STDERR, KILL);
+  //  }else if(y < -1){
+  //    throw KasumiException(string("DefaultWindowPosY must be -1 or more"),
+  //                          STDERR, KILL);
+  //  }
 
   // check key configurations
   // throws exeption if there is an invalid key or duplication
