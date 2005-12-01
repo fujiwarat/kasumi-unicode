@@ -142,6 +142,7 @@ static GtkWidget *check_duplicated_process (int argc, char *argv[])
       while (gtk_events_pending())
 	gtk_main_iteration();
     gtk_widget_destroy(window);
+    cerr << "Kasumi process is already exists." << endl;
     return NULL;
   }
   g_free(arg_text);
