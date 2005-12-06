@@ -1,0 +1,36 @@
+Installing Kasumi
+*****************
+
+Build Requirements
+==================
+
+To build a complete kasumi from sources, you need:
+
+ * The GIMP Toolkit (Gtk+) 2.4.0 or later.
+
+ * The GNU C++ compiler (g++)
+
+ * A `make' program. GNU make is recommended.
+
+Execution Requirements
+======================
+
+To run Kasumi, you need:
+
+ * Japanese convertion engine, Anthy 6131 or later
+
+Basic Installation
+==================
+
+Basically, to compile and install from sources, you have to enter three
+commands following:
+
+ $ ./configure
+ $ make
+ # make install
+
+Package Installation 
+=================
+
+Some Linux and *BSD distributors and contributors provide useful packages for their environment such as rpm, dpkg, ports and portage. We, however, don't care about them. Please contact distributors who provide the environment you use.
+
