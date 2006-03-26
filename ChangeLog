@@ -1,3 +1,8 @@
+2006-03-26  Ikuya Awashiro <ikuya@fruitsbasket.info>
+	* KasumiMainWindow.hxx, KasumiAddWindow.hxx:
+	Fixed with G++ 4.1: friends not declared
+	Thanks to Martin Michlmayr <tbm@cyrius.com>
+
 2005-12-06  Takashi Nakamoto  <bluedwarf@openoffice.org>
 
  	* preparation for release (ver 1.0)
