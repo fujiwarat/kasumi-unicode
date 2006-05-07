@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include <list>
 #include "KasumiWord.hxx"
 #include "KasumiException.hxx"
 #include "KasumiDicEventListener.hxx"
@@ -19,24 +20,26 @@ using namespace std;
 
 class KasumiDic{
 private:
-  string DicFileName;
-  vector<KasumiWord*> WordList; // manage words with id
+  list<KasumiWord*> mWordList;
   vector<KasumiDicEventListener*> EventListeners;
   
   void load(KasumiConfiguration *conf) throw (KasumiException);
 public:
-  KasumiDic(const string aDicFileName, KasumiConfiguration *conf)
-    throw(KasumiException);
+    KasumiDic(KasumiConfiguration *conf)
+	throw(KasumiException);
   void store() throw(KasumiException);
-  int appendWord(KasumiWord *word); // returns this word's ID
-  void removeWord(size_t id) throw(KasumiException);
-  void modifyWord(size_t id) throw(KasumiException);
+  void appendWord(KasumiWord *word); // returns this word's ID
+    void removeWord(size_t id);
+    void modifyWord(KasumiWord *word);
 
   void registerEventListener(KasumiDicEventListener *listener);
   void removeEventListener(KasumiDicEventListener *listener);
 
-  KasumiWord *getWordWithID(size_t id) throw(KasumiException);
-  int getUpperBoundOfWordID();
+    list<KasumiWord*>::iterator firstWordIter(){ return mWordList.begin(); };
+    list<KasumiWord*>::iterator endWordIter(){ return mWordList.end(); };
+
+//  KasumiWord *getWordWithID(size_t id) throw(KasumiException);
+//  int getUpperBoundOfWordID();
 };
 
 #endif

@@ -3,6 +3,7 @@ bin_PROGRAMS = kasumi
 kasumi_SOURCES = main.cxx intl.h \
                  KasumiDic.cxx KasumiDic.hxx \
                  KasumiWord.cxx KasumiWord.hxx \
+		 KasumiWordType.cxx KasumiWordType.hxx \
 				 KasumiString.cxx KasumiString.hxx \
 				 KasumiException.cxx KasumiException.hxx \
 				 KasumiMainWindow.cxx KasumiMainWindow.hxx \

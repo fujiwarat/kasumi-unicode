@@ -5,14 +5,14 @@
 #include "config.h"
 #endif
 
-#include "KasumiDic.hxx"
+#include "KasumiWord.hxx"
 
 class KasumiDicEventListener{
 private:
 public:
-  virtual void removedWord(int id) = 0;
-  virtual void appendedWord(int id) = 0;
-  virtual void modifiedWord(int id) = 0;
+  virtual void removedWord(size_t id) = 0;
+  virtual void appendedWord(KasumiWord *word) = 0;
+  virtual void modifiedWord(KasumiWord *word) = 0;
 };
 
 #endif

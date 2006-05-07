@@ -21,7 +21,8 @@ AC_DEFINE(ENABLE_NLS, 1, Define as 1 if you want to use NLS.)
 
 dnl Checks for libraries.
 AM_PATH_GTK_2_0(2.4.0, CFLAGS="$CFLAGS $GTK_CFLAGS" CPPFLAGS="$CPPFLAGS $GTK_CFLAGS" LIBS="$LIBS $GTK_LIBS", AC_MSG_ERROR(GTK+ 2.0 not found.))
-AM_ICONV
+AC_CHECK_LIB(iconv, iconv)
+AC_CHECK_LIB(anthydic, anthy_dic_util_init)
 
 CFLAGS="$CFLAGS -Wall"
 CXXFLAGS="$CXXFLAGS -Wall"

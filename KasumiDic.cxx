@@ -1,8 +1,11 @@
 #include "KasumiDic.hxx"
 #include "KasumiWord.hxx"
-#include "KasumiString.hxx"
+//#include "KasumiString.hxx"
 #include "KasumiException.hxx"
 #include "KasumiConfiguration.hxx"
+extern "C"{  // ad-hoc solution for a defect of Anthy
+#include "anthy/dicutil.h"
+}
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -13,11 +16,10 @@
 using namespace std;
 
 #define OptionOutput( Word, OptionName ) (string(OptionName) + " = " + (Word->getOption(OptionName) ? "y" : "n"))
+#define BUFFER_SIZE (255)
 
-KasumiDic::KasumiDic(const string aDicFileName, KasumiConfiguration *conf)
+KasumiDic::KasumiDic(KasumiConfiguration *conf)
   throw(KasumiException){
-
-  DicFileName = aDicFileName;
 
   try{
     load(conf);
@@ -27,227 +29,122 @@ KasumiDic::KasumiDic(const string aDicFileName, KasumiConfiguration *conf)
 }
 
 void KasumiDic::load(KasumiConfiguration *conf)
-  throw(KasumiException){
-  
-  int line = 0;
-  int freq;
-  string DicContents = string();
-  KasumiString Buffer;
-
-  string command = "anthy-dic-tool --dump > " + DicFileName;
-  if(system(command.c_str()) != 0){
-    string message = string("Failed to dump Anthy dictionary to ") +
-      DicFileName + string(".");
-    throw KasumiException(message, STDERR, KILL);
-  }
-
-  ifstream DicFile(DicFileName.c_str());
-  
-  if(!DicFile.is_open()){
-    string message = string("Failed to open ") + DicFileName + string(".");
-    throw KasumiException(message, STDERR, KILL);
-  }
+    throw(KasumiException){
 
   const int FREQ_LBOUND = conf->getPropertyValueByInt("MinFrequency");  
   const int FREQ_UBOUND = conf->getPropertyValueByInt("MaxFrequency");
-  
-  // analyze Anthy Dictionary reading each line
-  while(getline(DicFile, Buffer, '\n')){
-    line++;
 
-    if(Buffer.isCommentLine()){
-      // commented line; nothing to do
-    }else if(Buffer.isEmptyLine()){
-      // empty line; nothing to do
-    }else if(Buffer.isEntryLine()){
-      KasumiWord *newWord = new KasumiWord(conf);
-
-      newWord->setSound(Buffer.getSound());
-      freq = Buffer.getFrequency();
-      if(freq < FREQ_LBOUND){
-        newWord->setFrequency(FREQ_LBOUND);
-      }else if(freq > FREQ_UBOUND){
-        newWord->setFrequency(FREQ_UBOUND);
-      }else{
-        newWord->setFrequency(freq);
-      }
-      newWord->setSpelling(Buffer.getSpelling());
-
-      while(getline(DicFile, Buffer, '\n')){
-        line++;
-        if(Buffer.isCommentLine()){
-          // commented line; nothing to do
-        }else if(Buffer.isEmptyLine()){
-          // empty line; end of entry analysis
-          break;
-        }else if(Buffer.isKeyValLine()){
-          if(Buffer.getKey() == EUCJP_HINNSHI){
-            try{
-              newWord->setWordClassWithName(Buffer.getVal());
-            }catch(KasumiException e){
-              throw e;
-            }
-          }else if(Buffer.getKey() == EUCJP_KATSUYOU){
-            newWord->setVerbTypeWithName(Buffer.getVal());
-          }else{
-            if(Buffer.getVal() == "y"){
-              newWord->setOption(Buffer.getKey(), true);
-            }else{
-              newWord->setOption(Buffer.getKey(), false);
-            }
-          }
-        }else{
-          string message = DicFileName + string(":") + int2str(line) +
-            string(": Invalid entry");
-          throw KasumiException(message, STDERR, KILL);
-        }
+  try{
+      if(anthy_priv_dic_select_first_entry() == -1) {
+	  string message = string("Failed to read private dictionary. This problem might be a problem of Anthy.\n");
+	  throw new KasumiException(message, STDERR, KILL);
       }
 
-      appendWord(newWord);
-    }else{
-      // not classfied line; Anthy Dicitionary is invalid!
-      string message = DicFileName + string(":") + int2str(line) +
-        string(": Invalid entry");
-      throw KasumiException(message, STDERR, KILL);
-    }
+      char sound[BUFFER_SIZE], wt[BUFFER_SIZE], spelling[BUFFER_SIZE];
+      int freq;
+
+      do{
+	  if (anthy_priv_dic_get_index(sound, BUFFER_SIZE) &&
+	      anthy_priv_dic_get_wtype(wt, BUFFER_SIZE) &&
+	      anthy_priv_dic_get_word(spelling, BUFFER_SIZE)) {
+	      freq = anthy_priv_dic_get_freq();
+
+	      // corret frequency value crossing the bounds
+	      if(FREQ_LBOUND > freq)
+		  freq = FREQ_LBOUND;
+	      if(FREQ_UBOUND < freq)
+		  freq = FREQ_UBOUND;
+	      
+	      KasumiWord *newWord = KasumiWord::createNewWord(conf);
+	      
+	      newWord->setSound(string(sound));
+	      newWord->setSpelling(string(spelling));
+	      newWord->setFrequency(freq);
+	      newWord->setWordType(KasumiWordType::getWordTypeFromCannaTab(string(wt)));
+	      
+	      appendWord(newWord);
+	  }
+      }while(anthy_priv_dic_select_next_entry() == 0);
+  }catch(KasumiException e){
+      throw e;
   }
-
 }
 
-int KasumiDic::appendWord(KasumiWord *word){
-  size_t i;
-  
-  WordList.push_back(word);
-  
-  for(i=0;i<EventListeners.size();i++){
-    EventListeners[i]->appendedWord(getUpperBoundOfWordID());
+void KasumiDic::appendWord(KasumiWord *word){
+  // check duplication
+  list<KasumiWord*>::iterator p = mWordList.begin();
+  while(p != mWordList.end() )
+  {
+      if((*p)->getID() == word->getID())
+	  return; // nothing to do
+      p++;
   }
 
-  return getUpperBoundOfWordID();
+  mWordList.push_back(word);
+  
+  for(size_t i=0;i<EventListeners.size();i++){
+      EventListeners[i]->appendedWord(word);
+  }
 }
 
 void KasumiDic::removeWord(size_t id)
-  throw(KasumiException){
+{
+    int flag = 0;
 
-  size_t i;
-  
-  if(id >= WordList.size() || id < 0){
-    throw KasumiException("internal error: \"id\" is out of bound!",
-                          ERR_DIALOG, KILL);
-  }
+    list<KasumiWord*>::iterator p = mWordList.begin();
+    while(p != mWordList.end() )
+    {
+	if((*p)->getID() == id)
+	{
+	    mWordList.erase(p);
+	    free(*p);
+	    flag = 1;
+	    break;
+	}
+	p++;
+    }
 
-  KasumiWord *word = WordList[id];
-  word->setFrequency(0);
-
-  for(i=0;i<EventListeners.size();i++){
-    EventListeners[i]->removedWord(getUpperBoundOfWordID());
-  }
+    if(flag)
+	for(size_t i=0;i<EventListeners.size();i++){
+	    EventListeners[i]->removedWord(id);
+	}
 }
 
-void KasumiDic::modifyWord(size_t id)
-  throw(KasumiException){
-
-  size_t i;
-  
-  if(id >= WordList.size() || id < 0){
-    throw KasumiException("internal error: \"id\" is out of bound!",
-                          ERR_DIALOG, KILL);
-  }
-
-  for(i=0;i<EventListeners.size();i++){
-    EventListeners[i]->modifiedWord(id);
+void KasumiDic::modifyWord(KasumiWord *word)
+{
+  for(size_t i=0;i<EventListeners.size();i++){
+    EventListeners[i]->modifiedWord(word);
   }
 }
-
 
 void KasumiDic::store()
-  throw(KasumiException){
+    throw(KasumiException)
+{
+    list<KasumiWord*>::iterator p = mWordList.begin();
 
-  size_t i;
-  ofstream DicFile(DicFileName.c_str());
-  if(!DicFile.is_open()){
-    cout << "Cannot overwrite data to" << DicFileName << "." << endl;
-    return;
-  }
-  string ret = string();
+    anthy_priv_dic_delete();
 
-  FILE *fp;
-  char str[256],*ptr;
+    while( p != mWordList.end() )
+    {
+	string spelling = (*p)->getSpelling();
+	string sound = (*p)->getSound();
+	string wt = (*p)->getWordType()->getCannaTab();
+	int freq = (*p)->getFrequency();
 
-  fp=popen("anthy-dic-tool --version","r");
-  while(1){
-    fgets(str,256,fp);
-    if(feof(fp)){
-      break;
+	int ret = anthy_priv_dic_add_entry(sound.c_str(),
+					   spelling.c_str(),
+					   wt.c_str(),
+					   freq);
+
+	if (ret == -1)
+	{
+	    throw KasumiException(string("Failed to register") + sound,
+				  ERR_DIALOG,
+				  KILL);
+	}
+
+	p++;
     }
-     ptr=strchr(str,'\n');
-    if(ptr!=NULL){
-      *ptr='\0';
-    }
-  }
-  pclose(fp);
-
-  string version_str = string(str).substr(string("Anthy-dic-util ").size(),4);
-  int anthy_version = atoi(version_str.c_str());
-
-  for(i=0; i<WordList.size(); i++){
-    ostringstream ostr;
-
-    if(WordList[i] == NULL)
-      continue;
-
-    // anthy 6131 or later support verb registration
-    if(WordList[i]->getWordClass() == VERB && anthy_version < 6131){
-      cout << "Anthy " << anthy_version << " cannot support verb registration.\n";
-      cout << "Skip " << WordList[i]->getSpelling() << "\n";
-      continue;
-    }
-
-    ret += WordList[i]->getSound() + " ";
-    ostr << WordList[i]->getFrequency();
-    ret += ostr.str() + " ";
-    ret += WordList[i]->getSpelling() + "\n";
-    ret += string(EUCJP_HINNSHI) + " = " +
-      WordList[i]->getStringOfWordClass() + "\n";
-
-    if(WordList[i]->getWordClass() == NOUN){
-      ret += OptionOutput(WordList[i], EUCJP_NASETSUZOKU) + "\n";
-      ret += OptionOutput(WordList[i], EUCJP_SASETSUZOKU) + "\n";
-      ret += OptionOutput(WordList[i], EUCJP_SURUSETSUZOKU) + "\n";
-      ret += OptionOutput(WordList[i], EUCJP_GOKANNNOMIDEBUNNSETSU) + "\n";
-      ret += OptionOutput(WordList[i], EUCJP_KAKUJOSHISETSUZOKU) + "\n";
-    }else if(WordList[i]->getWordClass() == ADV){
-      ret += OptionOutput(WordList[i], EUCJP_TOSETSUZOKU) + "\n";      
-      ret += OptionOutput(WordList[i], EUCJP_TARUSETSUZOKU) + "\n";      
-      ret += OptionOutput(WordList[i], EUCJP_SURUSETSUZOKU) + "\n";
-      ret += OptionOutput(WordList[i], EUCJP_GOKANNNOMIDEBUNNSETSU) + "\n";
-    }else if(WordList[i]->getStringOfWordClass() == EUCJP_JINNMEI){
-      // nothing to do
-    }else if(WordList[i]->getStringOfWordClass() == EUCJP_CHIMEI){
-      // nothing to do
-    }else if(WordList[i]->getStringOfWordClass() == EUCJP_KEIYOUSHI){
-      // nothing to do
-    }else if(WordList[i]->getWordClass() == VERB){
-      ret += string(EUCJP_KATSUYOU) + " = " + WordList[i]->getStringOfVerbType() + "\n";
-      ret += OptionOutput(WordList[i], EUCJP_RENNYOUKEINOMEISHIKA) + "\n";
-    }else{
-      throw KasumiException(string("Internal error while saving."),
-                            ERR_DIALOG, KILL);
-    }
-    
-    ret += "\n";
-  }
-
-  DicFile << ret;
-  DicFile.close();
-
-  string command = "cat " + DicFileName + "|anthy-dic-tool --load";
-  if(system(command.c_str()) == 0){
-    cout << "correctly registered dictionary" << endl;
-  }else{
-    cout << "cannot register dicitionary for some reason" << endl;
-    exit(1);
-  }
 }
 
 void KasumiDic::registerEventListener(KasumiDicEventListener *listener){
@@ -278,18 +175,34 @@ void KasumiDic::removeEventListener(KasumiDicEventListener *listener){
     }
   }
 }
-
-KasumiWord *KasumiDic::getWordWithID(size_t id)
-  throw(KasumiException){
-
-  if(id >= WordList.size() || id < 0){
-    throw KasumiException("internal error: \"id\" is out of bound!",
-                          ERR_DIALOG, KILL);
-  }
-  
-  return WordList[id];
+/*
+// for debug
+// 
+// % g++ -g KasumiDic.cxx KasumiWord.cxx KasumiException.cxx KasumiConfiguration.cxx KasumiWordType.cxx KasumiString.cxx `pkg-config --libs --cflags anthy gtk+-2.0`
+void output(KasumiDic *dic)
+{
+    list<KasumiWord*>::iterator p = dic->firstWordIter();
+    while(p != dic->endWordIter()){
+	cout << (*p)->getID() << " " << (*p)->getSpelling() << endl;
+	p++;
+    }
 }
 
-int KasumiDic::getUpperBoundOfWordID(){
-  return WordList.size()-1;
+int main(int argc, char *argv[])
+{
+    anthy_dic_util_init();
+
+    KasumiConfiguration *conf = new KasumiConfiguration(argc, argv);
+    KasumiDic *dic = new KasumiDic(conf);
+    KasumiWord *word = KasumiWord::createNewWord(conf);
+    word->setSpellingByUTF8("テスト");
+    word->setSoundByUTF8("てすと");
+    dic->appendWord(word);
+    dic->appendWord(word);
+    output(dic);
+
+//    dic->removeWord(1);
+//    output(dic);
 }
+
+*/

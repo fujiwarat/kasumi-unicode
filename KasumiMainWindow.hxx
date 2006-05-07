@@ -11,7 +11,8 @@
 #include "KasumiDicEventListener.hxx"
 #include "KasumiConfiguration.hxx"
 
-enum column_name{
+enum column_name
+{
   COL_ID = 0,
   COL_WORD,
   COL_YOMI,
@@ -20,159 +21,114 @@ enum column_name{
   NUM_COLS
 };
 
-enum _SearchByEnum{
-  SOUND = 0,
-  SPELLING
+enum wordtype_column_name
+{
+    COL_UI_STRING = 0,
+    COL_WORDTYPE_POINTER,
+    WORDTYPE_NUM_COLS
 };
 
-typedef _SearchByEnum SearchBy;
+enum _TextColumnEnum
+{
+    SOUND = 0,
+    SPELLING
+};
 
-void _call_back_delete_event(GtkWidget *widget, GdkEvent *event,
-                             gpointer data);
-void _call_back_quit(GtkWidget *widget, gpointer data);
-void _call_back_store(GtkWidget *widget, gpointer data);
-void _call_back_add(GtkWidget *widget, gpointer data);
-void _call_back_remove(GtkWidget *widget, gpointer data);
-void _call_back_adding_mode(GtkWidget *widget, gpointer data);
-void _call_back_changed_list_cursor(GtkWidget *widget, gpointer data);
-void _call_back_changed_sound_entry(GtkWidget *widget, gpointer data);
-void _call_back_changed_spelling_entry(GtkWidget *widget, gpointer data);
-void _call_back_changed_frequency_spin(GtkWidget *widget, gpointer data);
-void _call_back_changed_word_class_combo(GtkWidget *widget, gpointer data);
-void _call_back_changed_verb_type_combo(GtkWidget *widget, gpointer data);
-void _call_back_toggled_check(GtkWidget *widget, gpointer data);
-void _call_back_changed_search_entry(GtkWidget *widget, gpointer data);
-void _call_back_activate_search_entry(GtkWidget *widget, gpointer data);
-void _call_back_clicked_column_header(GtkTreeViewColumn *column,
-                                      gpointer data);
+typedef _TextColumnEnum SearchBy;
+typedef _TextColumnEnum TextColumn;
 
 class KasumiMainWindow : public KasumiDicEventListener{
-  friend void _call_back_delete_event(GtkWidget *widget,
-                                      GdkEvent *event,
-                                      gpointer data);
-  friend void _call_back_quit(GtkWidget *widget,
-                              gpointer data);
-  friend void _call_back_store(GtkWidget *widget,
-                               gpointer data);
-  friend void _call_back_add(GtkWidget *widget,
-                             gpointer data);
-  friend void _call_back_remove(GtkWidget *widget,
-                                gpointer data);
-  friend void _call_back_adding_mode(GtkWidget *widget,
-                                     gpointer data);
-  friend void _call_back_changed_list_cursor(GtkWidget *widget,
-                                             gpointer data);
-  friend void _call_back_changed_sound_entry(GtkWidget *widget,
-                                             gpointer data);
-  friend void _call_back_changed_spelling_entry(GtkWidget *widget,
+    friend void _call_back_delete_event(GtkWidget *widget,
+					GdkEvent *event,
+					gpointer data);
+    friend void _call_back_quit(GtkWidget *widget,
+				gpointer data);
+    friend void _call_back_store(GtkWidget *widget,
+				 gpointer data);
+    friend void _call_back_add(GtkWidget *widget,
+			       gpointer data);
+    friend void _call_back_remove(GtkWidget *widget,
+				  gpointer data);
+    friend void _call_back_adding_mode(GtkWidget *widget,
+				       gpointer data);
+    friend void _call_back_changed_search_entry(GtkWidget *widget,
                                                 gpointer data);
-  friend void _call_back_changed_frequency_spin(GtkWidget *widget,
-                                                gpointer data);
-  friend void _call_back_changed_word_class_combo(GtkWidget *widget,
-                                                  gpointer data);
-  friend void _call_back_changed_verb_type_combo(GtkWidget *widget,
-                                                 gpointer data);
-  friend void _call_back_toggled_check(GtkWidget *widget,
-                                       gpointer data);
-  friend void _call_back_changed_search_entry(GtkWidget *widget,
-                                                gpointer data);
-  friend void _call_back_activate_search_entry(GtkWidget *widget,
-                                               gpointer data);
-  friend void _call_back_clicked_column_header(GtkTreeViewColumn *column,
-                                               gpointer data);
-
+    friend void _call_back_activate_search_entry(GtkWidget *widget,
+						 gpointer data);
+    friend void _call_back_clicked_column_header(GtkTreeViewColumn *column,
+						 gpointer data);
+    friend void _call_back_edited_sound_column(GtkCellRendererText *renderer,
+					       gchar *arg1,
+					       gchar *arg2,
+					       gpointer data);
+    friend void _call_back_edited_spelling_column(GtkCellRendererText *renderer,
+						  gchar *arg1,
+						  gchar *arg2,
+						  gpointer data);
+    friend void _call_back_editing_started_wordtype_column(GtkCellRenderer *render,
+							   GtkCellEditable *editable,
+							   gchar *path,
+							   gpointer data);
+    friend void _call_back_changed_wordtype_column(GtkComboBox *combo,
+						   gpointer data);
 private:
-  KasumiDic *dictionary;
-  KasumiConfiguration *conf;
-  GtkWidget *window;
-  GtkWidget *SpellingEntry;
-  GtkWidget *SoundEntry;
-  GtkWidget *FrequencySpin;
-  GtkWidget *WordClassCombo;
-  GtkWidget *WordListView;
-  GtkWidget *ScrolledWindow;
+    KasumiDic *dictionary;
+    KasumiConfiguration *conf;
 
-  GtkWidget *NounOptionPane;
-  GtkWidget *NounOptionSaConnectionCheck;
-  GtkWidget *NounOptionNaConnectionCheck;
-  GtkWidget *NounOptionSuruConnectionCheck;
-  GtkWidget *NounOptionGokanCheck;
-  GtkWidget *NounOptionKakujoshiConnectionCheck;
+    GtkWidget *mWindow;
+    GtkWidget *mSpellingRadio;
+    GtkWidget *mSoundRadio;
+    GtkWidget *mSearchEntry;
+    GtkWidget *mWordListView;
+    GtkWidget *mScrolledWindow;
+    GtkWidget *mQuitButton;
+    GtkWidget *mSaveButton;
+    GtkWidget *mAddButton;
+    GtkWidget *mRemoveButton;
+    GtkWidget *mChangeModeButton;
 
-  GtkWidget *AdvOptionPane;
-  GtkWidget *AdvOptionToConnectionCheck;
-  GtkWidget *AdvOptionTaruConnectionCheck;
-  GtkWidget *AdvOptionSuruConnectionCheck;
-  GtkWidget *AdvOptionGokanCheck;
+    GtkListStore *WordList;
+    GtkTreeModel *SortList;
+    GtkTreeSelection *SortListSelection;
+    GtkTreeViewColumn *mSpellingColumn;
+    GtkTreeViewColumn *mSoundColumn;
+    GtkTreeViewColumn *mFreqColumn;
+    GtkTreeViewColumn *mWordTypeColumn;
 
-  GtkWidget *VerbOptionPane;
-  GtkWidget *VerbTypeCombo;
-  GtkWidget *VerbOptionRentaiCheck;
+    GtkTreePath *editingPath;
   
-  GtkListStore *WordList;
-  GtkTreeModel *SortList;
-  GtkTreeSelection *SortListSelection;
-  GtkTreeViewColumn *SpellingColumn;
-  GtkTreeViewColumn *SoundColumn;
-  GtkTreeViewColumn *FreqColumn;
-  GtkTreeViewColumn *WordClassColumn;
-  gulong HandlerIDOfSoundEntry;
-  gulong HandlerIDOfSpellingEntry;
-  gulong HandlerIDOfFrequencySpin;
-  gulong HandlerIDOfWordClassCombo;
-  gulong HandlerIDOfNounOptionSaConnectionCheck;
-  gulong HandlerIDOfNounOptionNaConnectionCheck;
-  gulong HandlerIDOfNounOptionSuruConnectionCheck;
-  gulong HandlerIDOfNounOptionGokanCheck;
-  gulong HandlerIDOfNounOptionKakujoshiConnectionCheck;
-  gulong HandlerIDOfAdvOptionToConnectionCheck;
-  gulong HandlerIDOfAdvOptionTaruConnectionCheck;
-  gulong HandlerIDOfAdvOptionSuruConnectionCheck;
-  gulong HandlerIDOfAdvOptionGokanCheck;
-  gulong HandlerIDOfVerbTypeCombo;
-  gulong HandlerIDOfVerbOptionRentaiCheck;
+    bool modificationFlag;
+    string previousSoundEntryText;
 
-  GtkWidget *SearchBySpellingRadio;
-  GtkWidget *SearchBySoundRadio;
-  GtkWidget *SearchEntry;
+    void createWindow();
+    void createWordList();
+    void registerCallbackFunctions();
+      
+    void destroy();
+    void quit();
+    void ClickedStoreButton();
+    void ClickedAddButton();
+    void ClickedRemoveButton();
+    void SwitchToAddingMode();
 
-  GtkWidget *SortCombo;
-  
-  bool modificationFlag;
-  string previousSoundEntryText;
-  
-  void destroy();
-  void quit();
-  void ClickedStoreButton();
-  void ClickedAddButton();
-  void ClickedRemoveButton();
-  void ChangedListCursor();
-  void ChangedSoundEntry();
-  void ChangedSpellingEntry();
-  void ChangedFrequencySpin();
-  void ChangedWordClassCombo();
-  void ChangedVerbTypeCombo();
-  void ChangedOption(GtkWidget *widget);
-  void SwitchToAddingMode();
+    void editedTextColumn(GtkCellRendererText *renderer,
+			  string pathStr,
+			  string newSound,
+			  TextColumn col);
+    void changedWordTypeColumn(GtkComboBox *combo);
 
-  void FindNext(bool fromCurrent);
-  GtkTreeIter *findCorrespondingIter(int id);
+    void FindNext(bool fromCurrent);
+    GtkTreeIter *findCorrespondingIter(size_t id);
+    
+    void SortBy(GtkTreeViewColumn *column);
 
-  void SortBy(GtkTreeViewColumn *column);
-
-  void synchronizeOptionCheckButton(KasumiWord *word);
-  void setActiveVerbType(VerbType type);
-  VerbType getActiveVerbType();
-  void setActiveWordClass(WordClassType type);
-  WordClassType getActiveWordClass();
-  void flipOptionPane();
 public:
   KasumiMainWindow(KasumiDic *aDictionary, KasumiConfiguration *conf);
   virtual ~KasumiMainWindow();
   void refresh();
-  void removedWord(int id);
-  void appendedWord(int id);
-  void modifiedWord(int id);
+  void removedWord(size_t id);
+  void appendedWord(KasumiWord *word);
+  void modifiedWord(KasumiWord *word);
 };
 
 guint getAccelKey(const string &key);

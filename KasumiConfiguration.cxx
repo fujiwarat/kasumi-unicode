@@ -64,27 +64,27 @@ void KasumiConfiguration::loadDefaultProperties() throw(KasumiException){
   if(home == NULL){
       throw KasumiException(string("Cannot find $HOME environment variable."),
                             STDERR,
+
                             KILL);
   }
   
   config[string("StartupMode")] = string("MANAGE");
-  config[string("DictionaryPath")] = string(home) + "/.private-dic.src.tmp";
   config[string("DefaultFrequency")] = string("500");
   config[string("MaxFrequency")] = string("1000");
   config[string("MinFrequency")] = string("1");
-  config[string("QuitShortcutKey")] = string("Ctrl+Q");
-  config[string("StoreShortcutKey")] = string("Ctrl+S");
-  config[string("NewWordShortcutKey")] = string("Ctrl+N");
-  config[string("RemoveShortcutKey")] = string("Ctrl+R");
-  config[string("AddShortcutKey")] = string("Ctrl+A");
-  config[string("AddingModeShortcutKey")] = string("Ctrl+J");
-  config[string("ManageModeShortcutKey")] = string("Ctrl+M");
+//  config[string("QuitShortcutKey")] = string("Ctrl+Q");
+//  config[string("StoreShortcutKey")] = string("Ctrl+S");
+//  config[string("NewWordShortcutKey")] = string("Ctrl+N");
+//  config[string("RemoveShortcutKey")] = string("Ctrl+R");
+//  config[string("AddShortcutKey")] = string("Ctrl+A");
+//  config[string("AddingModeShortcutKey")] = string("Ctrl+J");
+//  config[string("ManageModeShortcutKey")] = string("Ctrl+M");
   config[string("DefaultSpelling")] = string("");
   config[string("DefaultSound")] = string("");
-  config[string("DefaultWordClass")] = string(EUCJP_MEISHI);
+  config[string("DefaultWordType")] = string(EUCJP_MEISHI);
   config[string("DefaultAddingSpelling")] = string("");
   config[string("DefaultAddingSound")] = string("");
-  config[string("DefaultAddingWordClass")] = string(EUCJP_MEISHI);
+  config[string("DefaultAddingWordType")] = string(EUCJP_MEISHI);
   //  config[string("DefaultWindowPosX")] = string("-1");
   //  config[string("DefaultWindowPosY")] = string("-1");
   config[string("ImportSelectedText")] = string("true");
@@ -135,7 +135,7 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
       setPropertyValue(string("DefaultAddingSpelling"),string(optarg));
       break;
     case 'w':
-      setPropertyValue(string("DefaultAddingWordClass"),string(optarg));
+      setPropertyValue(string("DefaultAddingWordType"),string(optarg));
       break;
       //    case 'x':
       //      setPropertyValue(string("DefaultWindowPosX"),string(optarg));
@@ -265,54 +265,54 @@ void KasumiConfiguration::checkValidity()
 
   // check key configurations
   // throws exeption if there is an invalid key or duplication
-  map<string,string> registeredKey;
-  list<string> keyNames;
+//  map<string,string> registeredKey;
+//  list<string> keyNames;
   
-  keyNames.push_back(string("QuitShortcutKey"));
-  keyNames.push_back(string("StoreShortcutKey"));
-  keyNames.push_back(string("NewWordShortcutKey"));
-  keyNames.push_back(string("RemoveShortcutKey"));
-  keyNames.push_back(string("AddShortcutKey"));
-  keyNames.push_back(string("AddingModeShortcutKey"));
-  keyNames.push_back(string("ManageModeShortcutKey"));
+//  keyNames.push_back(string("QuitShortcutKey"));
+//  keyNames.push_back(string("StoreShortcutKey"));
+//  keyNames.push_back(string("NewWordShortcutKey"));
+//  keyNames.push_back(string("RemoveShortcutKey"));
+//  keyNames.push_back(string("AddShortcutKey"));
+//  keyNames.push_back(string("AddingModeShortcutKey"));
+//  keyNames.push_back(string("ManageModeShortcutKey"));
 
-  while(!keyNames.empty()){
-    string keyName = keyNames.front();
-    keyNames.pop_front();
+//  while(!keyNames.empty()){
+//    string keyName = keyNames.front();
+//    keyNames.pop_front();
+//
+//    string shortKey = config[string(keyName)];
+//    if(!isValidShortcutKey(shortKey)){
+//      string message = string("Invalid shortcut key configuration for ") +
+//        keyName + string(": ") + shortKey;
+//      throw KasumiException(message, STDERR, KILL);
+//    }
+  //  if(registeredKey.find(shortKey) == registeredKey.end()){
+//      registeredKey.insert(make_pair(shortKey,keyName));
+//    }else{
+//      string message = string("Failed to set ") + keyName + string(" variable; ") + shortKey + string(" has been already registered as ") + registeredKey[shortKey];
+//      throw KasumiException(message, STDERR, KILL);
+//    }
+//  }
 
-    string shortKey = config[string(keyName)];
-    if(!isValidShortcutKey(shortKey)){
-      string message = string("Invalid shortcut key configuration for ") +
-        keyName + string(": ") + shortKey;
-      throw KasumiException(message, STDERR, KILL);
-    }
-    if(registeredKey.find(shortKey) == registeredKey.end()){
-      registeredKey.insert(make_pair(shortKey,keyName));
-    }else{
-      string message = string("Failed to set ") + keyName + string(" variable; ") + shortKey + string(" has been already registered as ") + registeredKey[shortKey];
-      throw KasumiException(message, STDERR, KILL);
-    }
-  }
+  // check WordType configuration
+  list<string> keyForWordType;
+  map<string,bool> validWordType;
 
-  // check WordClass configuration
-  list<string> keyForWordClass;
-  map<string,bool> validWordClass;
+  keyForWordType.push_back(string("DefaultWordType"));
+  keyForWordType.push_back(string("DefaultAddingWordType"));
 
-  keyForWordClass.push_back(string("DefaultWordClass"));
-  keyForWordClass.push_back(string("DefaultAddingWordClass"));
+  validWordType.insert(make_pair(string(EUCJP_MEISHI),true));
+  validWordType.insert(make_pair(string(EUCJP_FUKUSHI),true));
+  validWordType.insert(make_pair(string(EUCJP_JINNMEI),true));
+  validWordType.insert(make_pair(string(EUCJP_CHIMEI),true));
+  validWordType.insert(make_pair(string(EUCJP_KEIYOUSHI),true));
 
-  validWordClass.insert(make_pair(string(EUCJP_MEISHI),true));
-  validWordClass.insert(make_pair(string(EUCJP_FUKUSHI),true));
-  validWordClass.insert(make_pair(string(EUCJP_JINNMEI),true));
-  validWordClass.insert(make_pair(string(EUCJP_CHIMEI),true));
-  validWordClass.insert(make_pair(string(EUCJP_KEIYOUSHI),true));
-
-  while(!keyForWordClass.empty()){
-    string keyName = keyForWordClass.front();
-    keyForWordClass.pop_front();
+  while(!keyForWordType.empty()){
+    string keyName = keyForWordType.front();
+    keyForWordType.pop_front();
     string val = config[keyName];
 
-    if(validWordClass.find(val) == validWordClass.end()){
+    if(validWordType.find(val) == validWordType.end()){
       string message = val + string(" is an invalid word class for ") + keyName;
       throw KasumiException(message, STDERR, KILL);
     }
@@ -338,6 +338,7 @@ void KasumiConfiguration::checkValidity()
   //  DefaultSound
   //  DefaultAddingSpelling
   //  DefaultAddingSound
+  // ToDo: confirm default sounds do not have invalid character
 }
 
 void KasumiConfiguration::setPropertyValue(const string &name, const string &value){
@@ -395,6 +396,7 @@ bool KasumiConfiguration::getPropertyValueByBool(const string &name){
   }
 }
 
+/*
 bool isValidShortcutKey(const string &key){
   string::size_type i;
   
@@ -421,3 +423,4 @@ bool isValidShortcutKey(const string &key){
 
   return false;
 }
+*/

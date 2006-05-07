@@ -19,8 +19,6 @@ void _call_back_add_window_add(GtkWidget *widget,
                                gpointer data);
 void _call_back_manage_mode(GtkWidget *widget,
                             gpointer data);
-void _call_back_add_window_changed_word_class_combo(GtkWidget *widget,
-                                                    gpointer data);
 void _call_back_selection_data_received(GtkWidget *widget,
                                         GtkSelectionData *selection_data,
                                         gpointer data) ;
@@ -35,8 +33,8 @@ class KasumiAddWindow{
                                         gpointer data);
   friend void _call_back_manage_mode(GtkWidget *widget,
                                      gpointer data);
-  friend void _call_back_add_window_changed_word_class_combo(GtkWidget *widget,
-                                                             gpointer data);
+  friend void _call_back_add_window_changed_word_type_combo(GtkWidget *widget,
+							    gpointer data);
   friend void _call_back_selection_data_received(GtkWidget *widget,
                                                  GtkSelectionData *selection_data,
                                                  gpointer data) ;
@@ -47,32 +45,12 @@ private:
   GtkWidget *SpellingEntry;
   GtkWidget *SoundEntry;
   GtkWidget *FrequencySpin;
-  GtkWidget *WordClassCombo;
+  GtkWidget *WordTypeCombo;
   GtkTooltips *Tooltips;
-
-  GtkWidget *NounOptionPane;
-  GtkWidget *NounOptionSaConnectionCheck;
-  GtkWidget *NounOptionNaConnectionCheck;
-  GtkWidget *NounOptionSuruConnectionCheck;
-  GtkWidget *NounOptionGokanCheck;
-  GtkWidget *NounOptionKakujoshiConnectionCheck;
-
-  GtkWidget *AdvOptionPane;
-  GtkWidget *AdvOptionToConnectionCheck;
-  GtkWidget *AdvOptionTaruConnectionCheck;
-  GtkWidget *AdvOptionSuruConnectionCheck;
-  GtkWidget *AdvOptionGokanCheck;
-
-  GtkWidget *VerbOptionPane;
-  GtkWidget *VerbTypeCombo;
-  GtkWidget *VerbOptionRentaiCheck;
   
   void destroy();
   void quit();
   void ClickedAddButton(GtkWidget *widget);
-  void ChangedWordClassCombo(GtkWidget *widget);
-  WordClassType getActiveWordClass();
-  VerbType getActiveVerbType();
 
   void SwitchToManageMode();
 public:

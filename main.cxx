@@ -13,6 +13,9 @@
 #include "KasumiConfiguration.hxx"
 #include "KasumiException.hxx"
 #include "intl.h"
+extern "C"{  // ad-hoc solution for a defect of Anthy
+#include "anthy/dicutil.h"
+}
 
 using namespace std;
 
@@ -167,9 +170,12 @@ int main(int argc, char *argv[])
     return 0;
 
   try{
+      anthy_dic_util_init();
+      
     KasumiConfiguration *conf = new KasumiConfiguration(argc, argv);
 
-    KasumiDic *dic = new KasumiDic(conf->getPropertyValue("DictionaryPath"),conf);
+    KasumiWordType::initWordTypeList();
+    KasumiDic *dic = new KasumiDic(conf);
 
     string startupMode = conf->getPropertyValue("StartupMode");
     if(startupMode == string("HELP")){

@@ -14,6 +14,10 @@ using namespace std;
 iconv_t KasumiWord::IconvUTF8_To_EUCJP = iconv_open("EUC-JP", "UTF-8");
 iconv_t KasumiWord::IconvEUCJP_To_UTF8 = iconv_open("UTF-8", "EUC-JP");
 
+size_t KasumiWord::id_generator = 0;
+
+vector<KasumiWord*> KasumiWord::words(0);
+
 string KasumiWord::convertUTF8ToEUCJP(const string &aUTF8){
   char *utf8 = (char*)malloc(strlen(aUTF8.c_str())+1);
   strcpy(utf8, aUTF8.c_str());
@@ -97,15 +101,22 @@ string KasumiWord::extractInvalidCharacterFromSound(string soundByUTF8){
 }
 
 KasumiWord::KasumiWord(KasumiConfiguration *conf){
-  setSound(conf->getPropertyValue("DefaultSound"));
-  setSpelling(conf->getPropertyValue("DefaultSpelling"));
-  Frequency = conf->getPropertyValueByInt("DefaultFrequency");
-  try{
-    setWordClassWithName(conf->getPropertyValue("DefaultWordClass"));
-  }catch(KasumiException e){
-    cout << e.getMessage() << endl;
-    exit(1);
-  }
+    setSound(conf->getPropertyValue("DefaultSound"));
+    setSpelling(conf->getPropertyValue("DefaultSpelling"));
+    Frequency = conf->getPropertyValueByInt("DefaultFrequency");
+    try{
+	setWordType(KasumiWordType::getWordTypeFromPos(conf->getPropertyValue("DefaultWordType")));
+    }catch(KasumiException e){
+	cout << e.getMessage() << endl;
+	exit(1);
+    }
+}
+
+KasumiWord* KasumiWord::createNewWord(KasumiConfiguration *conf)
+{
+    KasumiWord *word = new KasumiWord(conf);
+    KasumiWord::words[word->id = KasumiWord::id_generator++] = word;
+    return word;
 }
 
 void KasumiWord::setSound(const string &aSound)
@@ -139,23 +150,6 @@ void KasumiWord::setSoundByUTF8(const string &aSound)
   Sound = convertUTF8ToEUCJP(Sound_UTF8);
 }
 
-string KasumiWord::getSound(){
-  return Sound;
-}
-
-string KasumiWord::getSoundByUTF8(){
-  return Sound_UTF8;
-}
-
-void KasumiWord::setFrequency(int aFrequency){
-  Frequency = aFrequency;
-}
-
-int KasumiWord::getFrequency(){
-  return Frequency;
-}
-
-
 void KasumiWord::setSpelling(const string &aSpelling){
   Spelling = aSpelling;
   Spelling_UTF8 = convertEUCJPToUTF8(Spelling);
@@ -166,174 +160,45 @@ void KasumiWord::setSpellingByUTF8(const string &aSpelling){
   Spelling = convertUTF8ToEUCJP(Spelling_UTF8);
 }
 
-string KasumiWord::getSpelling(){
-  return Spelling;
+string KasumiWord::getWordTypeUIString()
+{
+    if(mWordType != NULL)
+	return mWordType->getUIString();
+    else
+	return string("");
 }
 
-string KasumiWord::getSpellingByUTF8(){
-  return Spelling_UTF8;
+KasumiWord* KasumiWord::getWordFromID(size_t id)
+{
+    return KasumiWord::words[id];
 }
 
-void KasumiWord::setWordClass(WordClassType aWordClass){
-  WordClass = aWordClass;
+/*
+// for debug
+int main(int argc, char *argv[])
+{
+    KasumiWordType::addNewWordType("Ì¾»ì", "°ìÈÌÌ¾»ì", "#T35");
+    KasumiWordType::addNewWordType("Ì¾»ì", "¿ÍÌ¾", "#JN");
+    KasumiWordType::addNewWordType("Ì¾»ì", "ÃÏÌ¾", "#CN");
+    KasumiWordType::addNewWordType("Ì¾»ì", "²ñ¼Ò", "#KK");
+    KasumiWordType::addNewWordType("Ì¾»ì", "¤¹¤ëÀÜÂ³", "#T30");
+    KasumiWordType::addNewWordType("¿ô»ì", "¿ô»ì", "#NN");
+    KasumiWordType::addNewWordType("·ÁÍÆ»ì", "¥¯³èÍÑ", "#KY");
+    KasumiWordType::addNewWordType("·ÁÍÆ»ì", "¥·¥¯³èÍÑ", "#KYT");
+    KasumiWordType::addNewWordType("·ÁÍÆÆ°»ì", "", "#T05");
+    KasumiWordType::addNewWordType("Éû»ì", "", "#F04");
+    KasumiWordType::addNewWordType("´¶Æ°»ì", "", "#CJ");
+    KasumiWordType::addNewWordType("Ï¢ÂÎ»ì", "", "#RT");
+    KasumiWordType::addNewWordType("Ã±´Á»ú", "", "#KJ");
+
+    KasumiWord *newWord = new KasumiWord();
+    newWord->setSound("¤¿¤«¤·");
+    newWord->setSpelling("¿ò»Ö");
+    newWord->setFrequency(180);
+    newWord->setWordType(KasumiWordType::getWordTypeFromPos("Ì¾»ì"));
+    cout << newWord->getSound() << " " << newWord->getSpelling() << " ";
+    cout << newWord->getFrequency() << " " << endl;
+    cout << newWord->getWordType()->getPos() << endl;
+    cout << newWord->getWordType()->getCategory() << endl;
 }
-
-WordClassType KasumiWord::getWordClass(){
-  return WordClass;
-}
-
-void KasumiWord::setWordClassWithName(const string &aWordClass)
-  throw(KasumiException){
-  if(aWordClass == EUCJP_MEISHI){
-    WordClass = NOUN;
-  }else if(aWordClass == EUCJP_FUKUSHI){
-    WordClass = ADV;
-  }else if(aWordClass == EUCJP_JINNMEI){
-    WordClass = PERSON;
-  }else if(aWordClass == EUCJP_CHIMEI){
-    WordClass = PLACE;
-  }else if(aWordClass == EUCJP_KEIYOUSHI){
-    WordClass = ADJ;
-  }else if(aWordClass == EUCJP_DOUSHI){
-    WordClass = VERB;
-  }else{
-    string message = string("Invalid word class name: ") + aWordClass;
-    throw KasumiException(message, ERR_DIALOG, ALERT_ONLY);
-  }
-  
-}
-
-void KasumiWord::setWordClassWithNameByUTF8(const string &aWordClass)
-  throw(KasumiException){
-  try{
-    string euc = convertUTF8ToEUCJP(aWordClass);
-    setWordClassWithName(euc);
-  }catch(KasumiException e){
-    throw e;
-  }
-}
-
-string KasumiWord::getStringOfWordClass(){
-  switch(WordClass){
-  case NOUN:
-    return EUCJP_MEISHI;
-  case ADV:
-    return EUCJP_FUKUSHI;
-  case PERSON:
-    return EUCJP_JINNMEI;
-  case PLACE:
-    return EUCJP_CHIMEI;
-  case ADJ:
-    return EUCJP_KEIYOUSHI;
-  case VERB:
-    return EUCJP_DOUSHI;
-  }
-
-  return "";
-}
-
-string KasumiWord::getStringOfWordClassByUTF8(){
-  string euc = getStringOfWordClass();
-  return convertEUCJPToUTF8(euc);
-}
-
-void KasumiWord::setVerbType(VerbType aVerbType){
-  eVerbType = aVerbType;
-}
-
-void KasumiWord::setVerbTypeWithName(const string &aVerbType)
-  throw(KasumiException){
-    if(aVerbType == EUCJP_BAGYOUGODAN){
-      eVerbType = B5;
-    }else if(aVerbType == EUCJP_GAGYOUGODAN){
-      eVerbType = G5;
-    }else if(aVerbType == EUCJP_KAGYOUGODAN){
-      eVerbType = K5;
-    }else if(aVerbType == EUCJP_MAGYOUGODAN){
-      eVerbType = M5;
-    }else if(aVerbType == EUCJP_NAGYOUGODAN){
-      eVerbType = N5;
-    }else if(aVerbType == EUCJP_RAGYOUGODAN){
-      eVerbType = R5;
-    }else if(aVerbType == EUCJP_SAGYOUGODAN){
-      eVerbType = S5;
-    }else if(aVerbType == EUCJP_TAGYOUGODAN){
-      eVerbType = T5;
-    }else if(aVerbType == EUCJP_WAGYOUGODAN){
-      eVerbType = W5;
-    }else{
-      string message = string("Invalid verb type name: ") + aVerbType;
-      throw KasumiException(message, ERR_DIALOG, ALERT_ONLY);
-    }
-}
-
-void KasumiWord::setVerbTypeWithNameByUTF8(const string &aVerbType)
-  throw(KasumiException){
-  try{
-    string euc = convertUTF8ToEUCJP(aVerbType);
-    setVerbTypeWithName(euc);
-  }catch(KasumiException e){
-    throw e;
-  }
-}
-
-VerbType KasumiWord::getVerbType(){
-  return eVerbType;
-}
-
-string KasumiWord::getStringOfVerbType(){
-  switch(eVerbType){
-  case B5:
-    return EUCJP_BAGYOUGODAN;
-  case G5:
-    return EUCJP_GAGYOUGODAN;
-  case K5:
-    return EUCJP_KAGYOUGODAN;
-  case M5:
-    return EUCJP_MAGYOUGODAN;
-  case N5:
-    return EUCJP_NAGYOUGODAN;
-  case R5:
-    return EUCJP_RAGYOUGODAN;
-  case S5:
-    return EUCJP_SAGYOUGODAN;
-  case T5:
-    return EUCJP_TAGYOUGODAN;
-  case W5:
-    return EUCJP_WAGYOUGODAN;
-  }
-
-  return "";
-}
-
-string KasumiWord::getStringOfVerbTypeByUTF8(){
-  string euc = getStringOfVerbType();
-  return convertEUCJPToUTF8(euc);
-}
-
-
-void KasumiWord::setOption(const string &aOptionName, bool aOption){
-  map<string,bool>::iterator p;
-
-  p = Option.find(aOptionName);
-
-  if(p == Option.end()){
-    Option.insert(make_pair(aOptionName,aOption));    
-  }else{
-    Option[aOptionName] = aOption;
-  }
-}
-
-bool KasumiWord::getOption(const string &aOptionName){
-  map<string, bool>::iterator p;
-
-  p = Option.find(aOptionName);
-
-  if(p != Option.end()){
-    return p->second;
-  }
-  
-  return false;
-}
-
-
+*/

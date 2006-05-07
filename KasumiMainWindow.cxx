@@ -9,6 +9,9 @@
 #include "KasumiConfiguration.hxx"
 #include <gdk/gdkkeysyms.h>
 #include "intl.h"
+extern "C"{  // ad-hoc solution for a defect of Anthy
+#include "anthy/dicutil.h"
+}
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,491 +25,298 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
   
   dictionary = aDictionary;
   modificationFlag = false;
-  
-  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
-  gtk_window_set_title(GTK_WINDOW(window), _("Kasumi"));
-  gtk_window_set_position (GTK_WINDOW(window), GTK_WIN_POS_MOUSE);
-  g_signal_connect(G_OBJECT(window), "delete_event",
-                   G_CALLBACK(_call_back_delete_event), this);
-
-  // creating top vbox
-  GtkWidget *vbox = gtk_vbox_new(FALSE,8);
-  gtk_container_set_border_width(GTK_CONTAINER(vbox),8);
-  gtk_container_add(GTK_CONTAINER(window),vbox);
-
-  // creating hbox for text entries, spin button and so on
-  GtkWidget *hbox = gtk_hbox_new(FALSE,8);
-  gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hbox),TRUE,TRUE,0);
-
-  // creating scrolled window for list view
-  ScrolledWindow = gtk_scrolled_window_new(NULL,NULL);
-  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(ScrolledWindow),
-                                 GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
-  gtk_widget_set_size_request(GTK_WIDGET(ScrolledWindow),300,300);
-  gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(ScrolledWindow),TRUE,TRUE,0);
-
-  // creating tree(list) view for words
-  GtkWidget *WordListView = gtk_tree_view_new();
-  GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
-  SpellingColumn = gtk_tree_view_column_new_with_attributes(_("Spelling"),
-                                                            renderer,
-                                                            "text",
-                                                            COL_WORD,
-                                                            NULL);
-  gtk_tree_view_column_set_resizable(SpellingColumn, true);
-  gtk_tree_view_insert_column(GTK_TREE_VIEW(WordListView),SpellingColumn,-1);
-
-  renderer = gtk_cell_renderer_text_new();
-  SoundColumn = gtk_tree_view_column_new_with_attributes(_("Sound"),
-                                                         renderer,
-                                                         "text",
-                                                         COL_YOMI,
-                                                         NULL);
-  gtk_tree_view_column_set_resizable(SoundColumn, true);
-  gtk_tree_view_insert_column(GTK_TREE_VIEW(WordListView),SoundColumn,-1);
-  gtk_tree_view_column_set_clickable(SoundColumn,TRUE);
-  g_signal_connect(G_OBJECT(SoundColumn), "clicked",
-                   G_CALLBACK(_call_back_clicked_column_header), this);
-
-  renderer = gtk_cell_renderer_text_new();
-  FreqColumn = gtk_tree_view_column_new_with_attributes(_("Frequency"),
-                                                        renderer,
-                                                        "text",
-                                                        COL_FREQ,
-                                                        NULL);
-  gtk_tree_view_column_set_resizable(FreqColumn, true);
-  gtk_tree_view_insert_column(GTK_TREE_VIEW(WordListView),FreqColumn,-1);
-  gtk_tree_view_column_set_clickable(FreqColumn, TRUE);
-  g_signal_connect(G_OBJECT(FreqColumn), "clicked",
-                   G_CALLBACK(_call_back_clicked_column_header), this);
-  /*
-  gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(WordListView),-1,
-                                              _("Frequency"),renderer,
-                                              "text",COL_FREQ,
-                                              NULL);
-  */
-  renderer = gtk_cell_renderer_text_new();
-  WordClassColumn = gtk_tree_view_column_new_with_attributes(_("WordClass"),
-                                                             renderer,
-                                                             "text",
-                                                             COL_PART,
-                                                             NULL);
-  gtk_tree_view_column_set_resizable(WordClassColumn, true);
-  gtk_tree_view_insert_column(GTK_TREE_VIEW(WordListView),WordClassColumn,-1);
-  gtk_tree_view_column_set_clickable(WordClassColumn, TRUE);
-  g_signal_connect(G_OBJECT(WordClassColumn), "clicked",
-                   G_CALLBACK(_call_back_clicked_column_header), this);
-  
-  WordList = gtk_list_store_new(NUM_COLS,G_TYPE_UINT,
-                                G_TYPE_STRING,G_TYPE_STRING,
-                                G_TYPE_UINT,G_TYPE_STRING);
-  SortList = gtk_tree_model_sort_new_with_model(GTK_TREE_MODEL(WordList));
-  gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(SortList), COL_YOMI,
-                                  sortFuncBySound,(gpointer)dictionary,
-                                  NULL);
-  gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(SortList), COL_FREQ,
-                                  sortFuncByFreq,(gpointer)dictionary,
-                                  NULL);
-  gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(SortList), COL_PART,
-                                  sortFuncByWordClass,(gpointer)dictionary,
-                                  NULL);
-  gtk_tree_view_set_model(GTK_TREE_VIEW(WordListView),
-                          GTK_TREE_MODEL(SortList));
-
-  SortListSelection = gtk_tree_view_get_selection(GTK_TREE_VIEW(WordListView));
-  gtk_tree_selection_set_mode(SortListSelection, GTK_SELECTION_SINGLE);
-  g_signal_connect(G_OBJECT(SortListSelection), "changed",
-                   G_CALLBACK(_call_back_changed_list_cursor), this);
-
-  // destroy model automatically with view
-  g_object_unref(GTK_TREE_MODEL(WordList));
-
-  gtk_container_add(GTK_CONTAINER(ScrolledWindow),GTK_WIDGET(WordListView));
-
-  // separator between word list box and text entries
-  GtkWidget *vsep = gtk_vseparator_new();
-  gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(vsep),FALSE,FALSE,0);
-
-  // creating vbox for text entries
-  GtkWidget *entry_vbox = gtk_vbox_new(FALSE,0);
-  gtk_box_pack_start(GTK_BOX(hbox),GTK_WIDGET(entry_vbox),FALSE,FALSE,0);
-
-  // creating text entries for "Spelling"
-  GtkWidget *label = gtk_label_new(_("Spelling"));
-  GtkWidget *alignment = gtk_alignment_new(0,0.5,0,0);
-  gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
-  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(alignment),FALSE,FALSE,2);
-
-  SpellingEntry = gtk_entry_new();
-  HandlerIDOfSpellingEntry =
-    g_signal_connect(G_OBJECT(SpellingEntry),
-                     "changed",
-                     G_CALLBACK(_call_back_changed_spelling_entry),
-                     this);
-  gtk_box_pack_start(GTK_BOX(entry_vbox),
-                     GTK_WIDGET(SpellingEntry),
-                     FALSE,
-                     FALSE,
-                     2);
-
-  // creating text entries for "Sound"
-  label = gtk_label_new(_("Sound"));
-  alignment = gtk_alignment_new(0,0.5,0,0);
-  gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
-  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(alignment),FALSE,FALSE,2);
-
-  SoundEntry = gtk_entry_new();
-  HandlerIDOfSoundEntry = g_signal_connect(G_OBJECT(SoundEntry), "changed",
-               G_CALLBACK(_call_back_changed_sound_entry), this);
-  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(SoundEntry),FALSE,FALSE,2);
-  previousSoundEntryText = string(gtk_entry_get_text(GTK_ENTRY(SoundEntry)));
-
-  // creating spin button for "Frequency"
-  label = gtk_label_new(_("Frequency"));
-  alignment = gtk_alignment_new(0,0.5,0,0);
-  gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
-  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(alignment),FALSE,FALSE,2);
-
-  const int FREQ_DEFAULT = conf->getPropertyValueByInt("DefaultFrequency");
-  const int FREQ_LBOUND = conf->getPropertyValueByInt("MinFrequency");
-  const int FREQ_UBOUND = conf->getPropertyValueByInt("MaxFrequency");
-  GtkObject *adjustment = gtk_adjustment_new(FREQ_DEFAULT,
-                                             FREQ_LBOUND,
-                                             FREQ_UBOUND,
-                                             1,
-                                             FREQ_LBOUND / 100
-                                             ,0);
-  FrequencySpin = gtk_spin_button_new(GTK_ADJUSTMENT(adjustment),1.0,0);
-  HandlerIDOfFrequencySpin =
-    g_signal_connect(G_OBJECT(FrequencySpin),
-                     "value-changed",
-                     G_CALLBACK(_call_back_changed_frequency_spin),
-                     this);
-  gtk_box_pack_start(GTK_BOX(entry_vbox),
-                     GTK_WIDGET(FrequencySpin),
-                     FALSE,
-                     FALSE,
-                     2);
-
-  // creating combo box for "Word Class"
-  label = gtk_label_new(_("Word Class"));
-  alignment = gtk_alignment_new(0,0.5,0,0);
-  gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
-  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(alignment),FALSE,FALSE,2);
-  
-  WordClassCombo = gtk_combo_box_new_text();
-  gtk_combo_box_append_text(GTK_COMBO_BOX(WordClassCombo), _("Noun"));  
-  gtk_combo_box_append_text(GTK_COMBO_BOX(WordClassCombo), _("Adverb"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(WordClassCombo), _("Person's name"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(WordClassCombo), _("Place-name"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(WordClassCombo), _("Adjective"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(WordClassCombo), _("Verb"));
-  gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo), 0);
-  HandlerIDOfWordClassCombo =
-    g_signal_connect(G_OBJECT(WordClassCombo), "changed",
-                     G_CALLBACK(_call_back_changed_word_class_combo), this);
-  gtk_box_pack_start(GTK_BOX(entry_vbox),
-                     GTK_WIDGET(WordClassCombo),FALSE,FALSE,2);
-
-  // creating noun option pane
-  NounOptionPane = gtk_vbox_new(FALSE,0);
-  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(NounOptionPane),
-                     FALSE,FALSE,0);
-
-  NounOptionNaConnectionCheck =
-    gtk_check_button_new_with_label(_("NA connection"));
-  gtk_box_pack_start(GTK_BOX(NounOptionPane),
-                     GTK_WIDGET(NounOptionNaConnectionCheck),
-                     FALSE,FALSE,0);
-  HandlerIDOfNounOptionNaConnectionCheck =
-    g_signal_connect(G_OBJECT(NounOptionNaConnectionCheck),"toggled",
-                     G_CALLBACK(_call_back_toggled_check),this);
-
-  NounOptionSaConnectionCheck =
-    gtk_check_button_new_with_label(_("SA connection"));
-  gtk_box_pack_start(GTK_BOX(NounOptionPane),
-                     GTK_WIDGET(NounOptionSaConnectionCheck),
-                     FALSE,FALSE,0);
-  HandlerIDOfNounOptionSaConnectionCheck =
-    g_signal_connect(G_OBJECT(NounOptionSaConnectionCheck),"toggled",
-                     G_CALLBACK(_call_back_toggled_check),this);
-
-  NounOptionSuruConnectionCheck =
-    gtk_check_button_new_with_label(_("SURU connection"));
-  gtk_box_pack_start(GTK_BOX(NounOptionPane),
-                     GTK_WIDGET(NounOptionSuruConnectionCheck),
-                     FALSE,FALSE,0);
-  HandlerIDOfNounOptionSuruConnectionCheck =
-    g_signal_connect(G_OBJECT(NounOptionSuruConnectionCheck),"toggled",
-                     G_CALLBACK(_call_back_toggled_check),this);
-
-  NounOptionGokanCheck =
-    gtk_check_button_new_with_label(_("Can be Bunnsetsu"));
-  gtk_box_pack_start(GTK_BOX(NounOptionPane),
-                     GTK_WIDGET(NounOptionGokanCheck),
-                     FALSE,FALSE,0);
-  HandlerIDOfNounOptionGokanCheck =
-    g_signal_connect(G_OBJECT(NounOptionGokanCheck),"toggled",
-                     G_CALLBACK(_call_back_toggled_check),this);
-
-  NounOptionKakujoshiConnectionCheck =
-    gtk_check_button_new_with_label(_("KAKUJOSHI connection"));
-  gtk_box_pack_start(GTK_BOX(NounOptionPane),
-                     GTK_WIDGET(NounOptionKakujoshiConnectionCheck),
-                     FALSE,FALSE,0);
-  HandlerIDOfNounOptionKakujoshiConnectionCheck =
-    g_signal_connect(G_OBJECT(NounOptionKakujoshiConnectionCheck),"toggled",
-                     G_CALLBACK(_call_back_toggled_check),this);
-
-  // creating adv option pane
-  AdvOptionPane = gtk_vbox_new(FALSE,0);
-  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(AdvOptionPane),
-                     FALSE,FALSE,0);
-
-  AdvOptionToConnectionCheck =
-    gtk_check_button_new_with_label(_("TO connection"));
-  gtk_box_pack_start(GTK_BOX(AdvOptionPane),
-                     GTK_WIDGET(AdvOptionToConnectionCheck),
-                     FALSE,FALSE,0);
-  HandlerIDOfAdvOptionToConnectionCheck =
-    g_signal_connect(G_OBJECT(AdvOptionToConnectionCheck),"toggled",
-                     G_CALLBACK(_call_back_toggled_check),this);
-
-  AdvOptionTaruConnectionCheck =
-    gtk_check_button_new_with_label(_("TARU connection"));
-  gtk_box_pack_start(GTK_BOX(AdvOptionPane),
-                     GTK_WIDGET(AdvOptionTaruConnectionCheck),
-                     FALSE,FALSE,0);
-  HandlerIDOfAdvOptionTaruConnectionCheck =
-    g_signal_connect(G_OBJECT(AdvOptionTaruConnectionCheck),"toggled",
-                     G_CALLBACK(_call_back_toggled_check),this);
-
-  AdvOptionSuruConnectionCheck =
-    gtk_check_button_new_with_label(_("SURU connection"));
-  gtk_box_pack_start(GTK_BOX(AdvOptionPane),
-                     GTK_WIDGET(AdvOptionSuruConnectionCheck),
-                     FALSE,FALSE,0);
-  HandlerIDOfAdvOptionSuruConnectionCheck =
-    g_signal_connect(G_OBJECT(AdvOptionSuruConnectionCheck),"toggled",
-                     G_CALLBACK(_call_back_toggled_check),this);
-
-  AdvOptionGokanCheck =
-    gtk_check_button_new_with_label(_("Can be Bunnsetsu"));
-  gtk_box_pack_start(GTK_BOX(AdvOptionPane),
-                     GTK_WIDGET(AdvOptionGokanCheck),
-                     FALSE,FALSE,0);
-  HandlerIDOfAdvOptionGokanCheck =
-    g_signal_connect(G_OBJECT(AdvOptionGokanCheck),"toggled",
-                     G_CALLBACK(_call_back_toggled_check),this);
-
-  // creating verb option pane
-  VerbOptionPane = gtk_vbox_new(FALSE,0);
-  gtk_box_pack_start(GTK_BOX(entry_vbox),GTK_WIDGET(VerbOptionPane),
-                     FALSE,FALSE,0);
-
-  label = gtk_label_new(_("VerbType"));
-  alignment = gtk_alignment_new(0,0.5,0,0);
-  gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
-  gtk_box_pack_start(GTK_BOX(VerbOptionPane),GTK_WIDGET(alignment),
-                             FALSE,FALSE,2);
-
-  VerbTypeCombo = gtk_combo_box_new_text();
-  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ba line, 5 columns"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ga line, 5 columns"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ka line, 5 columns"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ma line, 5 columns"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Na line, 5 columns"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ra line, 5 columns"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Sa line, 5 columns"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Ta line, 5 columns"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(VerbTypeCombo), _("Wa line, 5 columns"));
-  gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo), 0);
-  HandlerIDOfVerbTypeCombo =
-    g_signal_connect(G_OBJECT(VerbTypeCombo), "changed",
-                     G_CALLBACK(_call_back_changed_verb_type_combo), this);
-  gtk_box_pack_start(GTK_BOX(VerbOptionPane),
-                     GTK_WIDGET(VerbTypeCombo),
-                     FALSE,FALSE,0);
-
-  VerbOptionRentaiCheck =
-    gtk_check_button_new_with_label(_("Can be Meishi when Renyou type"));
-  gtk_box_pack_start(GTK_BOX(VerbOptionPane),
-                     GTK_WIDGET(VerbOptionRentaiCheck),
-                     FALSE,FALSE,0);
-  HandlerIDOfVerbOptionRentaiCheck =
-    g_signal_connect(G_OBJECT(VerbOptionRentaiCheck),"toggled",
-                     G_CALLBACK(_call_back_toggled_check),this);
-
-  GtkWidget *hsep = gtk_hseparator_new();
-  gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hsep),FALSE,FALSE,0);
-
-  // creating expandable box for search function
-  GtkWidget *search_expander = gtk_expander_new(_("Search"));
-  gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(search_expander),FALSE,FALSE,0);
-
-  GtkWidget *search_hbox = gtk_hbox_new(FALSE,8);
-  gtk_container_add(GTK_CONTAINER(search_expander),search_hbox);
-
-  // creating Entry and Button for search function
-  SearchEntry = gtk_entry_new();
-  g_signal_connect(G_OBJECT(SearchEntry),
-                   "changed",
-                   G_CALLBACK(_call_back_changed_search_entry),
-                   this);
-  g_signal_connect(G_OBJECT(SearchEntry),
-                   "activate",
-                   G_CALLBACK(_call_back_activate_search_entry),
-                   this); // called when Entry key is pressed
-  gtk_box_pack_start(GTK_BOX(search_hbox),
-                     GTK_WIDGET(SearchEntry),
-                     FALSE,
-                     FALSE,
-                     0);
-
-  SearchBySpellingRadio = gtk_radio_button_new_with_label(NULL,
-                                                          _("Find By Spelling"));
-  gtk_box_pack_start(GTK_BOX(search_hbox),SearchBySpellingRadio,
-                     TRUE,TRUE,0);
-  
-  SearchBySoundRadio =
-    gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(SearchBySpellingRadio),
-                                                _("Find By Sound"));
-  gtk_box_pack_start(GTK_BOX(search_hbox),SearchBySoundRadio,
-                     TRUE,TRUE,0);
-
-  hsep = gtk_hseparator_new();
-  gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hsep),FALSE,FALSE,0);
-
-  /* creating box for buttons */
-  GtkWidget *hbutton_box = gtk_hbutton_box_new();
-  gtk_button_box_set_layout(GTK_BUTTON_BOX(hbutton_box),GTK_BUTTONBOX_SPREAD);
-  gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hbutton_box),FALSE,FALSE,0);
-
-
-  // creating buttons and shortcut key configuration
-  GtkWidget *button = gtk_button_new_from_stock(GTK_STOCK_QUIT);
-  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
-  g_signal_connect(G_OBJECT(button),"clicked",
-                   G_CALLBACK(_call_back_quit),this);
-  GtkAccelGroup *accel = gtk_accel_group_new();
-  gtk_window_add_accel_group(GTK_WINDOW(window), accel);
-  string key = conf->getPropertyValue("QuitShortcutKey");
-  gtk_widget_add_accelerator(button, "clicked", accel,
-                             getAccelKey(key),
-                             getModifierType(key),
-                             GTK_ACCEL_VISIBLE);
-
-  button = gtk_button_new_from_stock(GTK_STOCK_SAVE);
-  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
-  g_signal_connect(G_OBJECT(button),"clicked",
-                   G_CALLBACK(_call_back_store),this);
-  accel = gtk_accel_group_new();
-  gtk_window_add_accel_group(GTK_WINDOW(window), accel);
-  key = conf->getPropertyValue("StoreShortcutKey");
-  gtk_widget_add_accelerator(button, "clicked", accel,
-                             getAccelKey(key),
-                             getModifierType(key),
-                             GTK_ACCEL_VISIBLE);
-
-  button = gtk_button_new_from_stock(GTK_STOCK_ADD);
-  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
-  g_signal_connect(G_OBJECT(button),"clicked",
-                   G_CALLBACK(_call_back_add),this);
-  accel = gtk_accel_group_new();
-  gtk_window_add_accel_group(GTK_WINDOW(window), accel);
-  key = conf->getPropertyValue("NewWordShortcutKey");  
-  gtk_widget_add_accelerator(button, "clicked", accel,
-                             getAccelKey(key),
-                             getModifierType(key),
-                             GTK_ACCEL_VISIBLE);
-  
-  button = gtk_button_new_from_stock(GTK_STOCK_REMOVE);
-  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
-  g_signal_connect(G_OBJECT(button),"clicked",
-                   G_CALLBACK(_call_back_remove),this);
-  accel = gtk_accel_group_new();
-  gtk_window_add_accel_group(GTK_WINDOW(window), accel);
-  key = conf->getPropertyValue("RemoveShortcutKey");
-  gtk_widget_add_accelerator(button, "clicked", accel,
-                             getAccelKey(key),
-                             getModifierType(key),
-                             GTK_ACCEL_VISIBLE);
-
-  button = gtk_button_new();
-  gtk_button_set_label(GTK_BUTTON(button),_("Adding Mode"));
-  gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),FALSE,FALSE,0);
-  g_signal_connect(G_OBJECT(button),"clicked",
-                   G_CALLBACK(_call_back_adding_mode),this);
-  accel = gtk_accel_group_new();
-  gtk_window_add_accel_group(GTK_WINDOW(window), accel);
-  key = conf->getPropertyValue("AddingModeShortcutKey");
-  gtk_widget_add_accelerator(button, "clicked", accel,
-                             getAccelKey(key),
-                             getModifierType(key),
-                             GTK_ACCEL_VISIBLE);
-
-  gtk_widget_show_all(window);
-  gtk_widget_hide(AdvOptionPane);
-  gtk_widget_hide(VerbOptionPane);
-
-  // set default window position
-  //  int x = conf->getPropertyValueByInt("DefaultWindowPosX");
-  //  int y = conf->getPropertyValueByInt("DefaultWindowPosY");
-  //  if(x >= 0 && y >= 0){
-  //    gtk_window_move(GTK_WINDOW(window),x,y);
-  //  }
+  createWindow();
+  createWordList();
+  registerCallbackFunctions();
+  gtk_widget_show(mWindow);
 
   refresh();
 
   dictionary->registerEventListener(this);
 }
 
-void KasumiMainWindow::refresh(){
-  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
-  GtkTreeIter iter;
-  int i = 0;
+void KasumiMainWindow::createWindow()
+{
+//  GtkWidget *mWindow;
+  GtkWidget *vbox1;
+//  GtkWidget *scrolledwindow1;
+//  GtkWidget *mWordListView;
+  GtkWidget *vbox2;
+  GtkWidget *label1;
+  GtkWidget *hbox1;
+//  GtkWidget *mSpellingRadio;
+  GSList *mSpellingRadio_group = NULL;
+//  GtkWidget *mSoundRadio;
+  GtkWidget *hbox2;
+  GtkWidget *mSearchEntry;
+  GtkWidget *alignment6;
+  GtkWidget *hbuttonbox1;
+//  GtkWidget *mSaveButton;
+//  GtkWidget *mAddButton;
+//  GtkWidget *mRemoveButton;
+//  GtkWidget *mChangeModeButton;
+//  GtkWidget *mQuitButton;
+  GtkAccelGroup *accel_group;
 
-  gtk_list_store_clear(WordList);
-  
-  for(i=0;i<=dictionary->getUpperBoundOfWordID();i++){
-    try{
-      KasumiWord *word = dictionary->getWordWithID(i);
+  accel_group = gtk_accel_group_new ();
 
-      if(word != NULL && word->getFrequency() != 0){
-        gtk_list_store_append(WordList,&iter);
-      
-        gtk_list_store_set(WordList,&iter,
-                           COL_ID,i,
-                           COL_WORD,word->getSpellingByUTF8().c_str(),
-                           COL_YOMI,word->getSoundByUTF8().c_str(),
-                           COL_FREQ,word->getFrequency(),
-                           COL_PART,word->getStringOfWordClassByUTF8().c_str(),
-                           -1);
-      }
-    }catch(KasumiException e){
-      handleException(e);
+  mWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (mWindow), _("Kasumi"));
+
+  vbox1 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox1);
+  gtk_container_add (GTK_CONTAINER (mWindow), vbox1);
+
+  mScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_show (mScrolledWindow);
+  gtk_box_pack_start (GTK_BOX (vbox1), mScrolledWindow, TRUE, TRUE, 0);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (mScrolledWindow), GTK_SHADOW_IN);
+
+  mWordListView = gtk_tree_view_new ();
+  gtk_widget_show (mWordListView);
+  gtk_container_add (GTK_CONTAINER (mScrolledWindow), mWordListView);
+
+  vbox2 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox2);
+  gtk_box_pack_start (GTK_BOX (vbox1), vbox2, FALSE, FALSE, 0);
+
+  label1 = gtk_label_new (_("search"));
+  gtk_widget_show (label1);
+  gtk_box_pack_start (GTK_BOX (vbox2), label1, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label1), 0, 0.5);
+  gtk_misc_set_padding (GTK_MISC (label1), 10, 0);
+
+  hbox1 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_show (hbox1);
+  gtk_box_pack_start (GTK_BOX (vbox2), hbox1, TRUE, TRUE, 0);
+
+  mSpellingRadio = gtk_radio_button_new_with_mnemonic (NULL, _("Search by Spelling"));
+  gtk_widget_show (mSpellingRadio);
+  gtk_box_pack_start (GTK_BOX (hbox1), mSpellingRadio, FALSE, FALSE, 20);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (mSpellingRadio), mSpellingRadio_group);
+  mSpellingRadio_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (mSpellingRadio));
+
+  mSoundRadio = gtk_radio_button_new_with_mnemonic (NULL, _("Search by Sound"));
+  gtk_widget_show (mSoundRadio);
+  gtk_box_pack_start (GTK_BOX (hbox1), mSoundRadio, FALSE, FALSE, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (mSoundRadio), mSpellingRadio_group);
+  mSpellingRadio_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (mSoundRadio));
+
+  hbox2 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_show (hbox2);
+  gtk_box_pack_start (GTK_BOX (vbox2), hbox2, FALSE, FALSE, 0);
+
+  mSearchEntry = gtk_entry_new ();
+  gtk_widget_show (mSearchEntry);
+  gtk_box_pack_start (GTK_BOX (hbox2), mSearchEntry, TRUE, TRUE, 40);
+
+  alignment6 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment6);
+  gtk_box_pack_start (GTK_BOX (vbox1), alignment6, FALSE, FALSE, 8);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment6), 0, 0, 12, 12);
+
+  hbuttonbox1 = gtk_hbutton_box_new ();
+  gtk_widget_show (hbuttonbox1);
+  gtk_container_add (GTK_CONTAINER (alignment6), hbuttonbox1);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox1), GTK_BUTTONBOX_SPREAD);
+
+  mSaveButton = gtk_button_new_from_stock ("gtk-save");
+  gtk_widget_show (mSaveButton);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox1), mSaveButton);
+  GTK_WIDGET_SET_FLAGS (mSaveButton, GTK_CAN_DEFAULT);
+  gtk_widget_add_accelerator (mSaveButton, "clicked", accel_group,
+                              GDK_S, (GdkModifierType) GDK_CONTROL_MASK,
+                              GTK_ACCEL_VISIBLE);
+
+  mAddButton = gtk_button_new_from_stock ("gtk-add");
+  gtk_widget_show (mAddButton);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox1), mAddButton);
+  GTK_WIDGET_SET_FLAGS (mAddButton, GTK_CAN_DEFAULT);
+  gtk_widget_add_accelerator (mAddButton, "clicked", accel_group,
+                              GDK_A, (GdkModifierType) GDK_CONTROL_MASK,
+                              GTK_ACCEL_VISIBLE);
+
+  mRemoveButton = gtk_button_new_from_stock ("gtk-delete");
+  gtk_widget_show (mRemoveButton);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox1), mRemoveButton);
+  GTK_WIDGET_SET_FLAGS (mRemoveButton, GTK_CAN_DEFAULT);
+  gtk_widget_add_accelerator (mRemoveButton, "clicked", accel_group,
+                              GDK_R, (GdkModifierType) GDK_CONTROL_MASK,
+                              GTK_ACCEL_VISIBLE);
+//  gtk_widget_add_accelerator (mRemoveButton, "clicked", accel_group,
+//                              GDK_Delete, (GdkModifierType) 0,
+//                              GTK_ACCEL_VISIBLE);
+
+  mChangeModeButton = gtk_button_new_with_mnemonic (_("Add mode"));
+  gtk_widget_show (mChangeModeButton);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox1), mChangeModeButton);
+  GTK_WIDGET_SET_FLAGS (mChangeModeButton, GTK_CAN_DEFAULT);
+  gtk_widget_add_accelerator (mChangeModeButton, "clicked", accel_group,
+                              GDK_M, (GdkModifierType) GDK_CONTROL_MASK,
+                              GTK_ACCEL_VISIBLE);
+
+  mQuitButton = gtk_button_new_from_stock ("gtk-quit");
+  gtk_widget_show (mQuitButton);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox1), mQuitButton);
+  GTK_WIDGET_SET_FLAGS (mQuitButton, GTK_CAN_DEFAULT);
+  gtk_widget_add_accelerator (mQuitButton, "clicked", accel_group,
+                              GDK_Q, (GdkModifierType) GDK_CONTROL_MASK,
+                              GTK_ACCEL_VISIBLE);
+
+  gtk_window_add_accel_group (GTK_WINDOW (mWindow), accel_group);
+}
+
+void KasumiMainWindow::createWordList()
+{
+    // renderer and column
+    GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
+    g_signal_connect(G_OBJECT(renderer), "edited",
+		     G_CALLBACK(_call_back_edited_spelling_column), this);
+    g_object_set(renderer, "editable", TRUE, NULL);
+    mSpellingColumn = gtk_tree_view_column_new_with_attributes(_("Spelling"),
+							      renderer,
+							      "text",
+							      COL_WORD,
+							      NULL);
+    gtk_tree_view_column_set_resizable(mSpellingColumn, true);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(mWordListView),mSpellingColumn,-1);
+
+    renderer = gtk_cell_renderer_text_new();
+    g_signal_connect(G_OBJECT(renderer), "edited",
+		     G_CALLBACK(_call_back_edited_sound_column), this);
+    g_object_set(renderer, "editable", TRUE, NULL);
+    mSoundColumn = gtk_tree_view_column_new_with_attributes(_("Sound"),
+							   renderer,
+							   "text",
+							   COL_YOMI,
+							   NULL);
+    gtk_tree_view_column_set_resizable(mSoundColumn, true);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(mWordListView),mSoundColumn,-1);
+    gtk_tree_view_column_set_clickable(mSoundColumn,TRUE);
+    g_signal_connect(G_OBJECT(mSoundColumn), "clicked",
+		     G_CALLBACK(_call_back_clicked_column_header), this);
+
+    renderer = gtk_cell_renderer_text_new();
+    g_object_set(renderer, "editable", TRUE, NULL);
+    mFreqColumn = gtk_tree_view_column_new_with_attributes(_("Frequency"),
+							   renderer,
+							   "text",
+							   COL_FREQ,
+							   NULL);
+    gtk_tree_view_column_set_resizable(mFreqColumn, true);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(mWordListView),mFreqColumn,-1);
+    gtk_tree_view_column_set_clickable(mFreqColumn, TRUE);
+    g_signal_connect(G_OBJECT(mFreqColumn), "clicked",
+		     G_CALLBACK(_call_back_clicked_column_header), this);
+
+    // word type column - combo renderer
+    GtkListStore *WordTypeList = gtk_list_store_new(WORDTYPE_NUM_COLS,G_TYPE_STRING,G_TYPE_POINTER);
+    GtkTreeIter iter;
+    WordTypeList::iterator p = KasumiWordType::getBeginIteratorWordTypeList();
+    while(p != KasumiWordType::getEndIteratorWordTypeList())
+    {
+	gtk_list_store_append(WordTypeList,&iter);
+	gtk_list_store_set(WordTypeList,&iter,
+			   COL_UI_STRING, (*p)->getUIString().c_str(),
+			   COL_WORDTYPE_POINTER, (*p),
+			   -1);    
+	p++;
     }
-  }
+    
+    renderer = gtk_cell_renderer_combo_new();
+    g_signal_connect(G_OBJECT(renderer), "editing-started",
+		     G_CALLBACK(_call_back_editing_started_wordtype_column), this);
+    g_object_set(renderer,
+		 "model", WordTypeList,
+		 "text-column", COL_UI_STRING,
+		 "has-entry", FALSE,
+		 "editable", TRUE,
+		 NULL);
+    mWordTypeColumn = gtk_tree_view_column_new_with_attributes(_("WordClass"),
+							       renderer,
+							       "text",
+							       COL_PART,
+							       NULL);
+    gtk_tree_view_column_set_resizable(mWordTypeColumn, true);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(mWordListView),mWordTypeColumn,-1);
+    gtk_tree_view_column_set_clickable(mWordTypeColumn, TRUE);
+    g_signal_connect(G_OBJECT(mWordTypeColumn), "clicked",
+		     G_CALLBACK(_call_back_clicked_column_header), this);
 
-  if(!gtk_tree_model_get_iter_first(model, &iter)){
-    // If no words, disable text entries and other visible widgets
-    gtk_widget_set_sensitive(SpellingEntry,false);
-    gtk_widget_set_sensitive(SoundEntry,false);
-    gtk_widget_set_sensitive(FrequencySpin,false);
-    gtk_widget_set_sensitive(WordClassCombo,false);
-    gtk_widget_set_sensitive(NounOptionSaConnectionCheck,false);
-    gtk_widget_set_sensitive(NounOptionNaConnectionCheck,false);
-    gtk_widget_set_sensitive(NounOptionSuruConnectionCheck,false);
-    gtk_widget_set_sensitive(NounOptionGokanCheck,false);
-    gtk_widget_set_sensitive(NounOptionKakujoshiConnectionCheck,false);
+    // model
+    WordList = gtk_list_store_new(NUM_COLS,G_TYPE_UINT,
+				  G_TYPE_STRING,G_TYPE_STRING,
+				  G_TYPE_UINT,G_TYPE_STRING);
+    SortList = gtk_tree_model_sort_new_with_model(GTK_TREE_MODEL(WordList));
+    gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(SortList), COL_YOMI,
+				    sortFuncBySound, NULL,
+				    NULL);
+    gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(SortList), COL_FREQ,
+				    sortFuncByFreq, NULL,
+				    NULL);
+    gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(SortList), COL_PART,
+				    sortFuncByWordClass, NULL,
+				    NULL);
+    gtk_tree_view_set_model(GTK_TREE_VIEW(mWordListView),
+			    GTK_TREE_MODEL(SortList));
 
-    return;
-  }
+    SortListSelection = gtk_tree_view_get_selection(GTK_TREE_VIEW(mWordListView));
+    gtk_tree_selection_set_mode(SortListSelection, GTK_SELECTION_SINGLE);
 
-  // select first word
-  gtk_tree_selection_select_iter(SortListSelection,&iter);  
+    // destroy model automatically with view
+    g_object_unref(GTK_TREE_MODEL(WordList));
+}
 
+void KasumiMainWindow::registerCallbackFunctions()
+{
+    // buttons
+    g_signal_connect(G_OBJECT(mQuitButton), "clicked",
+		     G_CALLBACK(_call_back_quit), this);
+    g_signal_connect(G_OBJECT(mSaveButton), "clicked",
+		     G_CALLBACK(_call_back_store), this);
+    g_signal_connect(G_OBJECT(mAddButton), "clicked",
+		     G_CALLBACK(_call_back_add), this);
+    g_signal_connect(G_OBJECT(mRemoveButton), "clicked",
+		     G_CALLBACK(_call_back_remove), this);
+    g_signal_connect(G_OBJECT(mChangeModeButton), "clicked",
+		     G_CALLBACK(_call_back_adding_mode), this);
+}
+
+void KasumiMainWindow::refresh(){
+    GtkTreeModel *model = GTK_TREE_MODEL(SortList);
+    GtkTreeIter iter;
+
+    gtk_list_store_clear(WordList);
+
+    list<KasumiWord*>::iterator p = dictionary->firstWordIter();
+    while(p != dictionary->endWordIter()){
+	try{
+	    KasumiWord *word = (*p);
+
+	    if(word != NULL && word->getFrequency() != 0){
+		gtk_list_store_append(WordList,&iter);
+      
+		gtk_list_store_set(WordList,&iter,
+				   COL_ID,word->getID(),
+				   COL_WORD,word->getSpellingByUTF8().c_str(),
+				   COL_YOMI,word->getSoundByUTF8().c_str(),
+				   COL_FREQ,word->getFrequency(),
+				   COL_PART,word->getWordTypeUIString().c_str(),
+				   -1);
+	    }
+	}catch(KasumiException e){
+	    handleException(e);
+	}
+	p++;
+    }
+
+    // If no words, nothing to do more
+    if(!gtk_tree_model_get_iter_first(model, &iter))
+	return;
+
+    // select first word
+    gtk_tree_selection_select_iter(SortListSelection,&iter);  
 }
 
 KasumiMainWindow::~KasumiMainWindow(){
@@ -515,17 +325,16 @@ KasumiMainWindow::~KasumiMainWindow(){
 }
 
 void KasumiMainWindow::destroy(){
-  gtk_widget_destroy(window);
+  gtk_widget_destroy(mWindow);
 }
 
 void KasumiMainWindow::quit(){
   if(modificationFlag){
-    GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(window),
+    GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(mWindow),
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_MESSAGE_QUESTION,
                                      GTK_BUTTONS_YES_NO,
-                                     _("Your dictionary went through several "
-                                       "changes. Do you save these changes "
+                                     _("Your dictionary was changed. Do you save these changes "
                                        "before Kasumi quits?"));
     switch(gtk_dialog_run (GTK_DIALOG (dialog))){
     case GTK_RESPONSE_YES:
@@ -539,6 +348,7 @@ void KasumiMainWindow::quit(){
     }
     gtk_widget_destroy (dialog);
   }
+//  anthy_dic_util_quit();
   delete this;
   gtk_main_quit();
 }
@@ -554,8 +364,8 @@ void KasumiMainWindow::ClickedStoreButton(){
 }
 
 void KasumiMainWindow::ClickedAddButton(){
-  KasumiWord *word = new KasumiWord(conf);
-  dictionary->appendWord(word);
+    KasumiWord *word = KasumiWord::createNewWord(conf);
+    dictionary->appendWord(word);
 }
 
 void KasumiMainWindow::ClickedRemoveButton(){
@@ -569,197 +379,95 @@ void KasumiMainWindow::ClickedRemoveButton(){
   }
 }
 
-void KasumiMainWindow::ChangedListCursor(){
-  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
-  GtkTreeIter iter;
-  int id;
-  
-  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
-    gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
-    KasumiWord *word = dictionary->getWordWithID(id);
-
-    g_signal_handler_block(SoundEntry, HandlerIDOfSoundEntry);
-    g_signal_handler_block(SpellingEntry, HandlerIDOfSpellingEntry);
-    g_signal_handler_block(FrequencySpin, HandlerIDOfFrequencySpin);
-    g_signal_handler_block(WordClassCombo, HandlerIDOfWordClassCombo);
-    g_signal_handler_block(VerbTypeCombo, HandlerIDOfVerbTypeCombo);
-                           
-    gtk_entry_set_text(GTK_ENTRY(SpellingEntry),
-                       word->getSpellingByUTF8().c_str());
-    gtk_entry_set_text(GTK_ENTRY(SoundEntry),
-                       word->getSoundByUTF8().c_str());
-    previousSoundEntryText = string(gtk_entry_get_text(GTK_ENTRY(SoundEntry)));
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),
-                              word->getFrequency());
-    setActiveWordClass(word->getWordClass());
-    setActiveVerbType(word->getVerbType());
-
-    g_signal_handler_unblock(SoundEntry, HandlerIDOfSoundEntry);
-    g_signal_handler_unblock(SpellingEntry, HandlerIDOfSpellingEntry);
-    g_signal_handler_unblock(FrequencySpin, HandlerIDOfFrequencySpin);
-    g_signal_handler_unblock(WordClassCombo, HandlerIDOfWordClassCombo);
-    g_signal_handler_unblock(VerbTypeCombo, HandlerIDOfVerbTypeCombo);
-
-    synchronizeOptionCheckButton(word);
-  }else{
-    g_signal_handler_block(SoundEntry, HandlerIDOfSoundEntry);
-    g_signal_handler_block(SpellingEntry, HandlerIDOfSpellingEntry);
-    g_signal_handler_block(FrequencySpin, HandlerIDOfFrequencySpin);
-    g_signal_handler_block(WordClassCombo, HandlerIDOfWordClassCombo);
-    g_signal_handler_block(VerbTypeCombo, HandlerIDOfVerbTypeCombo);
-    
-    gtk_entry_set_text(GTK_ENTRY(SpellingEntry),"");
-    gtk_entry_set_text(GTK_ENTRY(SoundEntry),"");
-    previousSoundEntryText = string(gtk_entry_get_text(GTK_ENTRY(SoundEntry)));
-    const int FREQ_DEFAULT = conf->getPropertyValueByInt("DefaultFrequency");
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),FREQ_DEFAULT);
-    setActiveWordClass(NOUN);
-    setActiveVerbType(B5);
-    
-    g_signal_handler_unblock(SoundEntry, HandlerIDOfSoundEntry);
-    g_signal_handler_unblock(SpellingEntry, HandlerIDOfSpellingEntry);
-    g_signal_handler_unblock(FrequencySpin, HandlerIDOfFrequencySpin);
-    g_signal_handler_unblock(WordClassCombo, HandlerIDOfWordClassCombo);
-    g_signal_handler_unblock(VerbTypeCombo, HandlerIDOfVerbTypeCombo);
-    
-    synchronizeOptionCheckButton(NULL);
-  }
-
-  flipOptionPane();
-}
-
+/*
 void KasumiMainWindow::ChangedSoundEntry(){
-  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
-  GtkTreeIter iter;
-  int id;
-  
-  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
-    gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
-    KasumiWord *word = dictionary->getWordWithID(id);
-    try{
-      word->setSoundByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))));
-      dictionary->modifyWord(id);
-      previousSoundEntryText = string(gtk_entry_get_text(GTK_ENTRY(SoundEntry)));
-    }catch(KasumiException e){
-      handleException(e);
-
-      // take back invalid entry
-      g_signal_handler_block(SoundEntry, HandlerIDOfSoundEntry);
-      gtk_entry_set_text(GTK_ENTRY(SoundEntry),
-                         previousSoundEntryText.c_str());
-      g_signal_handler_unblock(SoundEntry, HandlerIDOfSoundEntry);
+    GtkTreeModel *model = GTK_TREE_MODEL(SortList);
+    GtkTreeIter iter;
+    int id;
+    
+    if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
+	gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
+	KasumiWord *word = dictionary->getWordWithID(id);
+	try{
+	    word->setSoundByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))));
+	    dictionary->modifyWord(id);
+	    previousSoundEntryText = string(gtk_entry_get_text(GTK_ENTRY(SoundEntry)));
+	}catch(KasumiException e){
+	    handleException(e);
+	    
+	    // take back invalid entry
+	    g_signal_handler_block(SoundEntry, HandlerIDOfSoundEntry);
+	    gtk_entry_set_text(GTK_ENTRY(SoundEntry),
+			       previousSoundEntryText.c_str());
+	    g_signal_handler_unblock(SoundEntry, HandlerIDOfSoundEntry);
+	}
     }
-  }
 }
-
-void KasumiMainWindow::ChangedSpellingEntry(){
-  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
-  GtkTreeIter iter;
-  int id;
-  
-  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
-    gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
-    KasumiWord *word = dictionary->getWordWithID(id);
-    word->setSpellingByUTF8(string(gtk_entry_get_text(
-      GTK_ENTRY(SpellingEntry))));
-    //    modifiedWord(id);
-    dictionary->modifyWord(id);
-  }
-}
-
-void KasumiMainWindow::ChangedFrequencySpin(){
-  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
-  GtkTreeIter iter;
-  int id;
-  
-  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
-    gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
-    KasumiWord *word = dictionary->getWordWithID(id);
-    word->setFrequency(gtk_spin_button_get_value_as_int(
-      GTK_SPIN_BUTTON(FrequencySpin)));
-    //modifiedWord(id);
-    dictionary->modifyWord(id);
-  }
-}
-
-void KasumiMainWindow::ChangedWordClassCombo(){
-  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
-  GtkTreeIter iter;
-  int id;
-  
-  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
-    gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
-    KasumiWord *word = dictionary->getWordWithID(id);
-    word->setWordClass(getActiveWordClass());
-    synchronizeOptionCheckButton(word);
-    //    modifiedWord(id);
-    dictionary->modifyWord(id);
-  }
-
-  flipOptionPane();  
-}
-
-void KasumiMainWindow::ChangedVerbTypeCombo(){
- GtkTreeModel *model = GTK_TREE_MODEL(SortList);
-  GtkTreeIter iter;
-  int id;
-  
-  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
-    gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
-    KasumiWord *word = dictionary->getWordWithID(id);
-    word->setVerbType(getActiveVerbType());
-    //    modifiedWord(id);
-    dictionary->modifyWord(id);
-  }
-}
-
-void KasumiMainWindow::ChangedOption(GtkWidget *widget){
-  GtkTreeModel *model = GTK_TREE_MODEL(SortList);
-  GtkTreeIter iter;
-  int id;
-  string OptionName = string("");
-  bool val;
-
-  if(widget == NounOptionSaConnectionCheck){
-    OptionName = string(EUCJP_SASETSUZOKU);
-  }else if(widget == NounOptionNaConnectionCheck){
-    OptionName = string(EUCJP_NASETSUZOKU);
-  }else if(widget == NounOptionSuruConnectionCheck){
-    OptionName = string(EUCJP_SURUSETSUZOKU);
-  }else if(widget == NounOptionGokanCheck){
-    OptionName = string(EUCJP_GOKANNNOMIDEBUNNSETSU);
-  }else if(widget == NounOptionKakujoshiConnectionCheck){
-    OptionName = string(EUCJP_KAKUJOSHISETSUZOKU);
-  }else if(widget == AdvOptionToConnectionCheck){
-    OptionName = string(EUCJP_TOSETSUZOKU);
-  }else if(widget == AdvOptionTaruConnectionCheck){
-    OptionName = string(EUCJP_TARUSETSUZOKU);
-  }else if(widget == AdvOptionSuruConnectionCheck){
-    OptionName = string(EUCJP_SURUSETSUZOKU);    
-  }else if(widget == AdvOptionGokanCheck){
-    OptionName = string(EUCJP_GOKANNNOMIDEBUNNSETSU);
-  }else if(widget == VerbOptionRentaiCheck){
-    OptionName = string(EUCJP_RENNYOUKEINOMEISHIKA);
-  }
-
-  if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-    val = true;
-  else
-    val = false;
-
-  if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter) &&
-     (OptionName != "")){
-    gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
-    KasumiWord *word = dictionary->getWordWithID(id);
-    word->setOption(OptionName, val);
-    //    modifiedWord(id);
-    dictionary->modifyWord(id);
-  }
-}
+*/
 
 void KasumiMainWindow::SwitchToAddingMode(){
   new KasumiAddWindow(dictionary,conf);
   delete this;
+}
+
+void KasumiMainWindow::editedTextColumn(GtkCellRendererText *renderer,
+					string pathStr,
+					string newText,
+					TextColumn col)
+{
+    try{
+	GtkTreePath *path = gtk_tree_path_new_from_string(pathStr.c_str());
+	GtkTreeIter iter;
+	gtk_tree_model_get_iter(SortList, &iter, path);
+
+	size_t id;
+	gtk_tree_model_get(SortList, &iter, COL_ID, &id, -1);
+
+	KasumiWord *word = KasumiWord::getWordFromID(id);
+    
+	if(col == SOUND)
+	    word->setSoundByUTF8(newText);
+	else if(col == SPELLING)
+	    word->setSpellingByUTF8(newText);
+	
+	gtk_tree_path_free(path);
+
+	dictionary->modifyWord(word); // ToDo: do not use this method any more
+    }catch(KasumiException e){
+	handleException(e);
+    }
+}
+
+void KasumiMainWindow::changedWordTypeColumn(GtkComboBox *combo)
+{
+    try{
+	// get which word type was selected
+	GtkTreeIter iter;
+	KasumiWordType *type;
+
+	GtkTreeModel *model = gtk_combo_box_get_model(combo);
+	gtk_combo_box_get_active_iter(combo, &iter);
+	gtk_tree_model_get(model, &iter,
+			   COL_WORDTYPE_POINTER, &type,
+			   -1);
+
+	// get edited word
+	if(editingPath == NULL)
+	    throw KasumiException(string("internal error: editingPath is already freed."), STDERR, KILL);
+	gtk_tree_model_get_iter(SortList, &iter, editingPath);
+	size_t id;
+	gtk_tree_model_get(SortList, &iter, COL_ID, &id, -1);
+	KasumiWord *word = KasumiWord::getWordFromID(id);
+
+	word->setWordType(type);
+    
+	gtk_tree_path_free(editingPath);
+	editingPath = NULL;
+
+	dictionary->modifyWord(word); // ToDo: do not use this method any more
+    }catch(KasumiException e){
+	handleException(e);
+    }
 }
 
 void KasumiMainWindow::FindNext(bool fromCurrent){
@@ -769,12 +477,12 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
   bool fromFirst = false;
   GtkTreeIter StartIter;
   int id;
-  string searchString = string(gtk_entry_get_text(GTK_ENTRY(SearchEntry)));
+  string searchString = string(gtk_entry_get_text(GTK_ENTRY(mSearchEntry)));
   string comparedString;
   GtkWidget *dialog;
 
   SearchBy by = SPELLING;
-  if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SearchBySoundRadio))){
+  if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mSoundRadio))){
     by = SOUND;
   }
 
@@ -804,7 +512,7 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
   // liner search!
   do{
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
-    word = dictionary->getWordWithID(id);
+    word = KasumiWord::getWordFromID(id);
 
     if(by == SPELLING){
       comparedString = word->getSpellingByUTF8();
@@ -822,7 +530,7 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
   
   // Unless searched from the first word, seek from the head again.
   if(!fromFirst){
-    dialog = gtk_message_dialog_new (GTK_WINDOW(window),
+    dialog = gtk_message_dialog_new (GTK_WINDOW(mWindow),
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_MESSAGE_QUESTION,
                                      GTK_BUTTONS_YES_NO,
@@ -837,7 +545,7 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
       // liner search to selected word!
       do{
         gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
-        word = dictionary->getWordWithID(id);
+        word = KasumiWord::getWordFromID(id);
 
         if(by == SPELLING){
           comparedString = word->getSpellingByUTF8();
@@ -860,7 +568,7 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
     }
   }
 
-  dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+  dialog = gtk_message_dialog_new(GTK_WINDOW(mWindow),
                                   GTK_DIALOG_DESTROY_WITH_PARENT,
                                   GTK_MESSAGE_WARNING,
                                   GTK_BUTTONS_OK,
@@ -877,17 +585,17 @@ void KasumiMainWindow::SortBy(GtkTreeViewColumn *column){
   order = (order == GTK_SORT_ASCENDING) ?
     GTK_SORT_DESCENDING : GTK_SORT_ASCENDING;
   
-  gtk_tree_view_column_set_sort_indicator(SoundColumn,FALSE);
-  gtk_tree_view_column_set_sort_indicator(FreqColumn,FALSE);
-  gtk_tree_view_column_set_sort_indicator(WordClassColumn,FALSE);
+  gtk_tree_view_column_set_sort_indicator(mSoundColumn,FALSE);
+  gtk_tree_view_column_set_sort_indicator(mFreqColumn,FALSE);
+  gtk_tree_view_column_set_sort_indicator(mWordTypeColumn,FALSE);
 
-  if(column == SoundColumn){
+  if(column == mSoundColumn){
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(SortList),
                                          COL_YOMI, order);
-  }else if(column == FreqColumn){
+  }else if(column == mFreqColumn){
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(SortList),
                                          COL_FREQ, order);
-  }else if(column == WordClassColumn){
+  }else if(column == mWordTypeColumn){
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(SortList),
                                          COL_PART, order);
   }
@@ -895,34 +603,22 @@ void KasumiMainWindow::SortBy(GtkTreeViewColumn *column){
   gtk_tree_view_column_set_sort_order(column,order);
 }
 
-void KasumiMainWindow::removedWord(int id){
+void KasumiMainWindow::removedWord(size_t id){
   refresh();
   modificationFlag = true;  
 }
 
-void KasumiMainWindow::appendedWord(int id){
+void KasumiMainWindow::appendedWord(KasumiWord *word){
   GtkTreeIter iter;
-  KasumiWord *word = dictionary->getWordWithID(id);
-  
+ 
   gtk_list_store_append(WordList,&iter);
 
-  // activate disabled widget
-  gtk_widget_set_sensitive(SpellingEntry,true);
-  gtk_widget_set_sensitive(SoundEntry,true);
-  gtk_widget_set_sensitive(FrequencySpin,true);
-  gtk_widget_set_sensitive(WordClassCombo,true);
-  gtk_widget_set_sensitive(NounOptionSaConnectionCheck,true);
-  gtk_widget_set_sensitive(NounOptionNaConnectionCheck,true);
-  gtk_widget_set_sensitive(NounOptionSuruConnectionCheck,true);
-  gtk_widget_set_sensitive(NounOptionGokanCheck,true);
-  gtk_widget_set_sensitive(NounOptionKakujoshiConnectionCheck,true);
-  
   gtk_list_store_set(WordList, &iter,
-                     COL_ID, id,
+                     COL_ID, word->getID(),
                      COL_WORD, word->getSpellingByUTF8().c_str(),
                      COL_YOMI, word->getSoundByUTF8().c_str(),
                      COL_FREQ, word->getFrequency(),
-                     COL_PART, word->getStringOfWordClassByUTF8().c_str(),
+                     COL_PART, word->getWordTypeUIString().c_str(),
                      -1);
   GtkTreeIter sort_iter;
   gtk_tree_model_sort_convert_child_iter_to_iter(GTK_TREE_MODEL_SORT(SortList),
@@ -930,31 +626,32 @@ void KasumiMainWindow::appendedWord(int id){
   gtk_tree_selection_select_iter(SortListSelection,&sort_iter);
 
   GtkAdjustment *adjustment =
-    gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(ScrolledWindow));
+    gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(mScrolledWindow));
   gtk_adjustment_set_value(adjustment, adjustment->upper);
   modificationFlag = true;  
 }
 
-void KasumiMainWindow::modifiedWord(int id){
-  GtkTreeIter *iter = findCorrespondingIter(id);
+void KasumiMainWindow::modifiedWord(KasumiWord *word){
+    size_t id = word->getID();
+    GtkTreeIter *iter = findCorrespondingIter(id);
 
-  if(iter != NULL){
-    KasumiWord *word = dictionary->getWordWithID(id);
-    
-    gtk_list_store_set(WordList,iter,
-                       COL_ID,id,
-                       COL_WORD,word->getSpellingByUTF8().c_str(),
-                       COL_YOMI,word->getSoundByUTF8().c_str(),
-                       COL_FREQ,word->getFrequency(),
-                       COL_PART,word->getStringOfWordClassByUTF8().c_str(),
-                       -1);
-  }
-  modificationFlag = true;  
+    if(iter != NULL)
+	gtk_list_store_set(WordList,iter,
+			   COL_ID,id,
+			   COL_WORD,word->getSpellingByUTF8().c_str(),
+			   COL_YOMI,word->getSoundByUTF8().c_str(),
+			   COL_FREQ,word->getFrequency(),
+			   COL_PART,word->getWordTypeUIString().c_str(),
+			   -1);
+
+    free(iter);
+
+    modificationFlag = true;  
 }
 
 // Do not returns iter of SortList but WordList
-GtkTreeIter *KasumiMainWindow::findCorrespondingIter(int id){
-  int i;
+GtkTreeIter *KasumiMainWindow::findCorrespondingIter(size_t id){
+  size_t i;
   GtkTreeModel *model = GTK_TREE_MODEL(WordList);
   GtkTreeIter *iter = (GtkTreeIter*)calloc(1,sizeof(GtkTreeIter));
 
@@ -967,255 +664,6 @@ GtkTreeIter *KasumiMainWindow::findCorrespondingIter(int id){
   }while(gtk_tree_model_iter_next(model, iter));
 
   return NULL;
-}
-
-void KasumiMainWindow::setActiveVerbType(VerbType type){
-  switch(type){
-  case B5:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo),0);
-    break;
-  case G5:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo),1);
-    break;
-  case K5:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo),2);
-    break;
-  case M5:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo),3);
-    break;
-  case N5:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo),4);
-    break;
-  case R5:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo),5);
-    break;
-  case S5:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo),6);
-    break;
-  case T5:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo),7);
-    break;
-  case W5:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo),8);
-    break;
-  default:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(VerbTypeCombo),0);
-    break;
-  }
-}
-
-VerbType KasumiMainWindow::getActiveVerbType(){
-  switch(gtk_combo_box_get_active(GTK_COMBO_BOX(VerbTypeCombo))){
-  case 0:
-    return B5;
-  case 1:
-    return G5;
-  case 2:
-    return K5;
-  case 3:
-    return M5;
-  case 4:
-    return N5;
-  case 5:
-    return R5;
-  case 6:
-    return S5;
-  case 7:
-    return T5;
-  case 8:
-    return W5;
-  default:
-    return B5;
-  }
-}
-
-void KasumiMainWindow::setActiveWordClass(WordClassType type){
-  switch(type){
-  case NOUN:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),0);
-    break;
-  case ADV:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),1);
-    break;
-  case PERSON:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),2);
-    break;
-  case PLACE:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),3);
-    break;
-  case ADJ:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),4);
-    break;
-  case VERB:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),5);
-    break;
-  default:
-    gtk_combo_box_set_active(GTK_COMBO_BOX(WordClassCombo),0);
-    break;
-  }
-}
-
-WordClassType KasumiMainWindow::getActiveWordClass(){
-  switch(gtk_combo_box_get_active(GTK_COMBO_BOX(WordClassCombo))){
-  case 0:
-    return NOUN;
-  case 1:
-    return ADV;
-  case 2:
-    return PERSON;
-  case 3:
-    return PLACE;
-  case 4:
-    return ADJ;
-  case 5:
-    return VERB;
-  default:
-    return NOUN;
-  }
-}
-
-void KasumiMainWindow::synchronizeOptionCheckButton(KasumiWord *word){
-  if(word == NULL){
-    g_signal_handler_block(NounOptionSaConnectionCheck,
-                           HandlerIDOfNounOptionSaConnectionCheck);
-    g_signal_handler_block(NounOptionNaConnectionCheck,
-                           HandlerIDOfNounOptionNaConnectionCheck);
-    g_signal_handler_block(NounOptionSuruConnectionCheck,
-                           HandlerIDOfNounOptionSuruConnectionCheck);
-    g_signal_handler_block(NounOptionGokanCheck,
-                           HandlerIDOfNounOptionGokanCheck);
-    g_signal_handler_block(NounOptionKakujoshiConnectionCheck,
-                           HandlerIDOfNounOptionKakujoshiConnectionCheck);
-      
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(NounOptionSaConnectionCheck),
-      false);
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(NounOptionNaConnectionCheck),
-      false);
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(NounOptionSuruConnectionCheck),
-      false);
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(NounOptionGokanCheck),
-      false);
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(NounOptionKakujoshiConnectionCheck),
-      false);
-    
-    g_signal_handler_unblock(NounOptionSaConnectionCheck,
-                             HandlerIDOfNounOptionSaConnectionCheck);
-    g_signal_handler_unblock(NounOptionNaConnectionCheck,
-                             HandlerIDOfNounOptionNaConnectionCheck);
-    g_signal_handler_unblock(NounOptionSuruConnectionCheck,
-                             HandlerIDOfNounOptionSuruConnectionCheck);
-    g_signal_handler_unblock(NounOptionGokanCheck,
-                             HandlerIDOfNounOptionGokanCheck);
-    g_signal_handler_unblock(NounOptionKakujoshiConnectionCheck,
-                             HandlerIDOfNounOptionKakujoshiConnectionCheck);
-    return;
-  }
-  
-  if(word->getWordClass() == NOUN){
-    g_signal_handler_block(NounOptionSaConnectionCheck,
-                           HandlerIDOfNounOptionSaConnectionCheck);
-    g_signal_handler_block(NounOptionNaConnectionCheck,
-                           HandlerIDOfNounOptionNaConnectionCheck);
-    g_signal_handler_block(NounOptionSuruConnectionCheck,
-                           HandlerIDOfNounOptionSuruConnectionCheck);
-    g_signal_handler_block(NounOptionGokanCheck,
-                           HandlerIDOfNounOptionGokanCheck);
-    g_signal_handler_block(NounOptionKakujoshiConnectionCheck,
-                           HandlerIDOfNounOptionKakujoshiConnectionCheck);
-      
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(NounOptionSaConnectionCheck),
-      word->getOption(string(EUCJP_SASETSUZOKU)));
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(NounOptionNaConnectionCheck),
-      word->getOption(string(EUCJP_NASETSUZOKU)));
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(NounOptionSuruConnectionCheck),
-      word->getOption(string(EUCJP_SURUSETSUZOKU)));
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(NounOptionGokanCheck),
-      word->getOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU)));
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(NounOptionKakujoshiConnectionCheck),
-      word->getOption(string(EUCJP_KAKUJOSHISETSUZOKU)));
-    
-    g_signal_handler_unblock(NounOptionSaConnectionCheck,
-                             HandlerIDOfNounOptionSaConnectionCheck);
-    g_signal_handler_unblock(NounOptionNaConnectionCheck,
-                             HandlerIDOfNounOptionNaConnectionCheck);
-    g_signal_handler_unblock(NounOptionSuruConnectionCheck,
-                             HandlerIDOfNounOptionSuruConnectionCheck);
-    g_signal_handler_unblock(NounOptionGokanCheck,
-                             HandlerIDOfNounOptionGokanCheck);
-    g_signal_handler_unblock(NounOptionKakujoshiConnectionCheck,
-                             HandlerIDOfNounOptionKakujoshiConnectionCheck);
-  }else if(word->getWordClass() == ADV){
-    g_signal_handler_block(AdvOptionToConnectionCheck,
-                           HandlerIDOfAdvOptionToConnectionCheck);
-    g_signal_handler_block(AdvOptionTaruConnectionCheck,
-                           HandlerIDOfAdvOptionTaruConnectionCheck);
-    g_signal_handler_block(AdvOptionSuruConnectionCheck,
-                           HandlerIDOfAdvOptionSuruConnectionCheck);
-    g_signal_handler_block(AdvOptionGokanCheck,
-                           HandlerIDOfAdvOptionGokanCheck);
-      
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(AdvOptionToConnectionCheck),
-      word->getOption(string(EUCJP_TOSETSUZOKU)));
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(AdvOptionTaruConnectionCheck),
-      word->getOption(string(EUCJP_TARUSETSUZOKU)));
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(AdvOptionSuruConnectionCheck),
-      word->getOption(string(EUCJP_SURUSETSUZOKU)));
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(AdvOptionGokanCheck),
-      word->getOption(string(EUCJP_GOKANNNOMIDEBUNNSETSU)));
-
-    g_signal_handler_unblock(AdvOptionToConnectionCheck,
-                             HandlerIDOfAdvOptionToConnectionCheck);
-    g_signal_handler_unblock(AdvOptionTaruConnectionCheck,
-                             HandlerIDOfAdvOptionTaruConnectionCheck);
-    g_signal_handler_unblock(AdvOptionSuruConnectionCheck,
-                             HandlerIDOfAdvOptionSuruConnectionCheck);
-    g_signal_handler_unblock(AdvOptionGokanCheck,
-                             HandlerIDOfAdvOptionGokanCheck);
-  }else if(word->getWordClass() == VERB){
-    g_signal_handler_block(VerbOptionRentaiCheck,
-                           HandlerIDOfVerbOptionRentaiCheck);
-    gtk_toggle_button_set_active(
-      GTK_TOGGLE_BUTTON(VerbOptionRentaiCheck),
-      word->getOption(string(EUCJP_RENNYOUKEINOMEISHIKA)));
-    g_signal_handler_unblock(VerbOptionRentaiCheck,
-                             HandlerIDOfVerbOptionRentaiCheck);
-
-  }
-}
-
-void KasumiMainWindow::flipOptionPane(){
-  if(getActiveWordClass() == NOUN){
-    gtk_widget_show(NounOptionPane);
-    gtk_widget_hide(AdvOptionPane);
-    gtk_widget_hide(VerbOptionPane);
-  }else if(getActiveWordClass() == ADV){
-    gtk_widget_hide(NounOptionPane);
-    gtk_widget_show(AdvOptionPane);
-    gtk_widget_hide(VerbOptionPane);
-  }else if(getActiveWordClass() == VERB){
-    gtk_widget_hide(NounOptionPane);
-    gtk_widget_hide(AdvOptionPane);
-    gtk_widget_show(VerbOptionPane);
-  }else{
-    gtk_widget_hide(NounOptionPane);
-    gtk_widget_hide(AdvOptionPane);
-    gtk_widget_hide(VerbOptionPane);
-    
-  }
 }
 
 void _call_back_delete_event(GtkWidget *widget,
@@ -1255,48 +703,6 @@ void _call_back_adding_mode(GtkWidget *widget,
   window->SwitchToAddingMode();
 }
 
-void _call_back_changed_list_cursor(GtkWidget *widget,
-                                    gpointer data){
-  KasumiMainWindow *window = (KasumiMainWindow *)data;
-  window->ChangedListCursor();
-}
-
-void _call_back_changed_sound_entry(GtkWidget *widget,
-                                    gpointer data){
-  KasumiMainWindow *window = (KasumiMainWindow *)data;
-  window->ChangedSoundEntry();
-}
-
-void _call_back_changed_spelling_entry(GtkWidget *widget,
-                                       gpointer data){
-  KasumiMainWindow *window = (KasumiMainWindow *)data;
-  window->ChangedSpellingEntry();
-}
-
-void _call_back_changed_frequency_spin(GtkWidget *widget,
-                                       gpointer data){
-  KasumiMainWindow *window = (KasumiMainWindow *)data;
-  window->ChangedFrequencySpin();
-}
-
-void _call_back_changed_word_class_combo(GtkWidget *widget,
-                                         gpointer data){
-  KasumiMainWindow *window = (KasumiMainWindow *)data;
-  window->ChangedWordClassCombo();
-}
-
-void _call_back_changed_verb_type_combo(GtkWidget *widget,
-                                         gpointer data){
-  KasumiMainWindow *window = (KasumiMainWindow *)data;
-  window->ChangedVerbTypeCombo();
-}
-
-void _call_back_toggled_check(GtkWidget *widget,
-                              gpointer data){
-  KasumiMainWindow *window = (KasumiMainWindow *)data;
-  window->ChangedOption(widget);
-}
-
 void _call_back_changed_search_entry(GtkWidget *widget,
                                        gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
@@ -1315,6 +721,41 @@ void _call_back_clicked_column_header(GtkTreeViewColumn *column,
   window->SortBy(column);
 }
 
+void _call_back_edited_sound_column(GtkCellRendererText *renderer,
+				   gchar *arg1,
+				   gchar *arg2,
+				   gpointer data)
+{
+    KasumiMainWindow *window = (KasumiMainWindow *)data;
+    window->editedTextColumn(renderer, string(arg1), string(arg2), SOUND);
+}
+
+void _call_back_edited_spelling_column(GtkCellRendererText *renderer,
+				       gchar *arg1,
+				       gchar *arg2,
+				       gpointer data)
+{
+    KasumiMainWindow *window = (KasumiMainWindow *)data;
+    window->editedTextColumn(renderer, string(arg1), string(arg2), SPELLING);
+}
+
+void _call_back_editing_started_wordtype_column(GtkCellRenderer *render,
+						GtkCellEditable *editable,
+						gchar *path,
+						gpointer data)
+{
+    KasumiMainWindow *window = (KasumiMainWindow *)data;
+    window->editingPath = gtk_tree_path_new_from_string(path);
+    g_signal_connect(G_OBJECT(editable), "changed",
+		     G_CALLBACK(_call_back_changed_wordtype_column), data);
+}
+
+void _call_back_changed_wordtype_column(GtkComboBox *combo,
+					gpointer data)
+{
+    KasumiMainWindow *window = (KasumiMainWindow *)data;
+    window->changedWordTypeColumn(combo);
+}
 
 guint getAccelKey(const string &key){
   string::size_type i;
@@ -1388,12 +829,11 @@ gint sortFuncByFreq(GtkTreeModel *model,
                     GtkTreeIter *a,
                     GtkTreeIter *b,
                     gpointer user_data){
-  KasumiDic *dictionary = (KasumiDic*)user_data;
   int id_a, id_b;
   gtk_tree_model_get(model, a, COL_ID, &id_a, -1);
   gtk_tree_model_get(model, b, COL_ID, &id_b, -1);
-  KasumiWord *word_a = dictionary->getWordWithID(id_a);
-  KasumiWord *word_b = dictionary->getWordWithID(id_b);
+  KasumiWord *word_a = KasumiWord::getWordFromID(id_a);
+  KasumiWord *word_b = KasumiWord::getWordFromID(id_b);
 
   return word_a->getFrequency() - word_b->getFrequency();
 }
@@ -1402,12 +842,11 @@ gint sortFuncBySound(GtkTreeModel *model,
                      GtkTreeIter *iter_a,
                      GtkTreeIter *iter_b,
                      gpointer user_data){
-  KasumiDic *dictionary = (KasumiDic*)user_data;
   int id_a, id_b;
   gtk_tree_model_get(model, iter_a, COL_ID, &id_a, -1);
   gtk_tree_model_get(model, iter_b, COL_ID, &id_b, -1);
-  KasumiWord *word_a = dictionary->getWordWithID(id_a);
-  KasumiWord *word_b = dictionary->getWordWithID(id_b);
+  KasumiWord *word_a = KasumiWord::getWordFromID(id_a);
+  KasumiWord *word_b = KasumiWord::getWordFromID(id_b);
   const char *str_a = word_a->getSoundByUTF8().c_str();
   const char *str_b = word_b->getSoundByUTF8().c_str();
   int size_a = word_a->getSound().size();
@@ -1468,12 +907,11 @@ gint sortFuncByWordClass(GtkTreeModel *model,
                          GtkTreeIter *iter_a,
                          GtkTreeIter *iter_b,
                          gpointer user_data){
-  KasumiDic *dictionary = (KasumiDic*)user_data;
   int id_a, id_b;
   gtk_tree_model_get(model, iter_a, COL_ID, &id_a, -1);
   gtk_tree_model_get(model, iter_b, COL_ID, &id_b, -1);
-  KasumiWord *word_a = dictionary->getWordWithID(id_a);
-  KasumiWord *word_b = dictionary->getWordWithID(id_b);
+  KasumiWord *word_a = KasumiWord::getWordFromID(id_a);
+  KasumiWord *word_b = KasumiWord::getWordFromID(id_b);
 
-  return word_a->getWordClass() - word_b->getWordClass();
+  return word_a->getWordType() > word_b->getWordType();
 }

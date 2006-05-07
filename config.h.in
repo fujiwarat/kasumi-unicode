@@ -76,6 +76,12 @@
 /* Define as 1 if you have LC_MESSAGES. */
 #undef HAVE_LC_MESSAGES
 
+/* Define to 1 if you have the `anthydic' library (-lanthydic). */
+#undef HAVE_LIBANTHYDIC
+
+/* Define to 1 if you have the `iconv' library (-liconv). */
+#undef HAVE_LIBICONV
+
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
 
