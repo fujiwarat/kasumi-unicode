@@ -1,0 +1,4 @@
+This directory contains the Glade project files.
+Kasumi's UI was created by Glade. However, all functions which Glade generate 
+are not integrated as-is. In short, the files in this directory are just for 
+reference and do not make any sense for developers but UI architect.
