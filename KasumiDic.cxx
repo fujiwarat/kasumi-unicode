@@ -29,6 +29,18 @@ KasumiDic::KasumiDic(KasumiConfiguration *conf)
   }
 }
 
+KasumiDic::~KasumiDic()
+{
+    list<KasumiWord*>::iterator p;
+
+    while(!mWordList.empty())
+    {
+	p =  mWordList.begin();
+	mWordList.pop_front();
+	delete (*p);
+    }
+}
+
 void KasumiDic::load(KasumiConfiguration *conf)
     throw(KasumiException){
 
@@ -90,8 +102,10 @@ void KasumiDic::appendWord(KasumiWord *word){
       p++;
   }
 
+  word->registerEventListener(this);
   mWordList.push_back(word);
-  
+
+  // raise event  
   for(size_t i=0;i<EventListeners.size();i++){
       EventListeners[i]->appendedWord(word);
   }
@@ -107,6 +121,7 @@ void KasumiDic::removeWord(size_t id)
 	if((*p)->getID() == id)
 	{
 	    mWordList.erase(p);
+	    (*p)->removeEventListener(this);
 	    free(*p);
 	    flag = 1;
 	    break;
@@ -114,17 +129,11 @@ void KasumiDic::removeWord(size_t id)
 	p++;
     }
 
+    // raise event  
     if(flag)
 	for(size_t i=0;i<EventListeners.size();i++){
 	    EventListeners[i]->removedWord(id);
 	}
-}
-
-void KasumiDic::modifyWord(KasumiWord *word)
-{
-  for(size_t i=0;i<EventListeners.size();i++){
-    EventListeners[i]->modifiedWord(word);
-  }
 }
 
 void KasumiDic::store()
@@ -183,6 +192,34 @@ void KasumiDic::removeEventListener(KasumiDicEventListener *listener){
       EventListeners.erase(i);
       return;
     }
+  }
+}
+
+void KasumiDic::changedFrequency(KasumiWord *word)
+{
+  for(size_t i=0;i<EventListeners.size();i++){
+    EventListeners[i]->modifiedWord(word);
+  }
+}
+
+void KasumiDic::changedSpelling(KasumiWord *word)
+{
+  for(size_t i=0;i<EventListeners.size();i++){
+    EventListeners[i]->modifiedWord(word);
+  }
+}
+
+void KasumiDic::changedSound(KasumiWord *word)
+{
+  for(size_t i=0;i<EventListeners.size();i++){
+    EventListeners[i]->modifiedWord(word);
+  }
+}
+
+void KasumiDic::changedWordType(KasumiWord *word)
+{
+  for(size_t i=0;i<EventListeners.size();i++){
+    EventListeners[i]->modifiedWord(word);
   }
 }
 

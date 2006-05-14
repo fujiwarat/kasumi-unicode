@@ -204,6 +204,7 @@ void KasumiAddWindow::destroy(){
 void KasumiAddWindow::quit(){
     dictionary->store();
 //  anthy_dic_util_quit();
+    delete dictionary;
     delete this;
     gtk_main_quit();
 }

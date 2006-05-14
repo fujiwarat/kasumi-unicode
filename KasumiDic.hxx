@@ -11,6 +11,7 @@
 #include "KasumiWord.hxx"
 #include "KasumiException.hxx"
 #include "KasumiDicEventListener.hxx"
+#include "KasumiWordEventListener.hxx"
 #include "KasumiConfiguration.hxx"
 
 #define ERROR 0
@@ -18,7 +19,7 @@
 
 using namespace std;
 
-class KasumiDic{
+class KasumiDic : public KasumiWordEventListener{
 private:
   list<KasumiWord*> mWordList;
   vector<KasumiDicEventListener*> EventListeners;
@@ -27,16 +28,21 @@ private:
 public:
     KasumiDic(KasumiConfiguration *conf)
 	throw(KasumiException);
-  void store() throw(KasumiException);
-  void appendWord(KasumiWord *word); // returns this word's ID
+    ~KasumiDic();
+    void store() throw(KasumiException);
+    void appendWord(KasumiWord *word); // returns this word's ID
     void removeWord(size_t id);
-    void modifyWord(KasumiWord *word);
 
-  void registerEventListener(KasumiDicEventListener *listener);
-  void removeEventListener(KasumiDicEventListener *listener);
+    void registerEventListener(KasumiDicEventListener *listener);
+    void removeEventListener(KasumiDicEventListener *listener);
 
     list<KasumiWord*>::iterator firstWordIter(){ return mWordList.begin(); };
     list<KasumiWord*>::iterator endWordIter(){ return mWordList.end(); };
+
+    void changedFrequency(KasumiWord *word);
+    void changedSpelling(KasumiWord *word);
+    void changedSound(KasumiWord *word);
+    void changedWordType(KasumiWord *word);
 
 //  KasumiWord *getWordWithID(size_t id) throw(KasumiException);
 //  int getUpperBoundOfWordID();

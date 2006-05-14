@@ -10,6 +10,7 @@
 #include "KasumiException.hxx"
 #include "KasumiConfiguration.hxx"
 #include "KasumiWordType.hxx"
+#include "KasumiWordEventListener.hxx"
 #include <iconv.h>
 #include <vector>
 
@@ -23,6 +24,7 @@ private:
     string Spelling; // corresponding "Tango"
     string Spelling_UTF8;
     size_t id;
+    vector<KasumiWordEventListener*> EventListeners;
 
     KasumiWordType *mWordType;
 
@@ -48,7 +50,7 @@ public:
     string getSound(){ return Sound; };
     string getSoundByUTF8(){ return Sound_UTF8; };
 
-    void setFrequency(int aFrequency){ Frequency = aFrequency; };
+    void setFrequency(int aFrequency);
     int getFrequency(){ return Frequency; };
 
     void setSpelling(const string &aSpelling);
@@ -56,11 +58,14 @@ public:
     string getSpelling(){ return Spelling; };
     string getSpellingByUTF8(){ return Spelling_UTF8; };  
 
-    void setWordType(KasumiWordType *aType) { mWordType = aType; };
+    void setWordType(KasumiWordType *aType);
     KasumiWordType *getWordType() { return mWordType; };
     string getWordTypeUIString(); // UTF8
 
     size_t getID(){ return id; };
+
+    void registerEventListener(KasumiWordEventListener *listener);
+    void removeEventListener(KasumiWordEventListener *listener);
 
     static KasumiWord *getWordFromID(size_t id);
 

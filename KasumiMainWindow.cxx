@@ -365,6 +365,7 @@ void KasumiMainWindow::quit(){
     }
     gtk_widget_destroy (dialog);
   }
+  delete dictionary;
   delete this;
   gtk_main_quit();
 }
@@ -421,8 +422,6 @@ void KasumiMainWindow::editedTextColumn(GtkCellRendererText *renderer,
 	    word->setSpellingByUTF8(newText);
 	
 	gtk_tree_path_free(path);
-
-	dictionary->modifyWord(word); // ToDo: do not use this method any more
     }catch(KasumiException e){
 	handleException(e);
     }
@@ -453,8 +452,6 @@ void KasumiMainWindow::changedWordTypeColumn(GtkComboBox *combo)
     
 	gtk_tree_path_free(editingPath);
 	editingPath = NULL;
-
-	dictionary->modifyWord(word); // ToDo: do not use this method any more
     }catch(KasumiException e){
 	handleException(e);
     }

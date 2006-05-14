@@ -138,6 +138,10 @@ void KasumiWord::setSound(const string &aSound)
   
   Sound = aSound;
   Sound_UTF8 = convertEUCJPToUTF8(Sound);
+
+  for(size_t i=0;i<EventListeners.size();i++){
+      EventListeners[i]->changedSound(this);
+  }
 }
 
 void KasumiWord::setSoundByUTF8(const string &aSound)
@@ -153,16 +157,46 @@ void KasumiWord::setSoundByUTF8(const string &aSound)
   
   Sound_UTF8 = aSound;
   Sound = convertUTF8ToEUCJP(Sound_UTF8);
+
+  for(size_t i=0;i<EventListeners.size();i++){
+      EventListeners[i]->changedSound(this);
+  }
 }
 
 void KasumiWord::setSpelling(const string &aSpelling){
   Spelling = aSpelling;
   Spelling_UTF8 = convertEUCJPToUTF8(Spelling);
+
+  for(size_t i=0;i<EventListeners.size();i++){
+      EventListeners[i]->changedSpelling(this);
+  }
 }
 
 void KasumiWord::setSpellingByUTF8(const string &aSpelling){
   Spelling_UTF8 = aSpelling;
   Spelling = convertUTF8ToEUCJP(Spelling_UTF8);
+
+  for(size_t i=0;i<EventListeners.size();i++){
+      EventListeners[i]->changedSpelling(this);
+  }
+}
+
+void KasumiWord::setFrequency(int aFrequency)
+{
+    Frequency = aFrequency;
+
+    for(size_t i=0;i<EventListeners.size();i++){
+	EventListeners[i]->changedFrequency(this);
+    }
+}
+
+void KasumiWord::setWordType(KasumiWordType *aType)
+{
+    mWordType = aType;
+
+    for(size_t i=0;i<EventListeners.size();i++){
+	EventListeners[i]->changedWordType(this);
+    }
 }
 
 string KasumiWord::getWordTypeUIString()
@@ -176,6 +210,35 @@ string KasumiWord::getWordTypeUIString()
 KasumiWord* KasumiWord::getWordFromID(size_t id)
 {
     return KasumiWord::words[id];
+}
+
+void KasumiWord::registerEventListener(KasumiWordEventListener *listener){
+  int i,size;
+
+  size = EventListeners.size();
+
+  // if the listener have been already registered, nothing to do
+  // assuring no duplication
+  for(i=0;i<size;i++){
+    if(EventListeners[i] == listener){
+      return;
+    }
+  }
+  
+  EventListeners.push_back(listener);  
+}
+
+void KasumiWord::removeEventListener(KasumiWordEventListener *listener){
+  vector<KasumiWordEventListener*>::iterator i;
+  KasumiWordEventListener *p;
+
+  for(i=EventListeners.begin();i!=EventListeners.end();i++){
+    p = *i;
+    if(p == listener){
+      EventListeners.erase(i);
+      return;
+    }
+  }
 }
 
 /*
