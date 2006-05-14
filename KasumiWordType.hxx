@@ -32,7 +32,7 @@ public:
     string getPos(){ return msPos; };
     string getCategory(){ return msCategory; };
     string getCannaTab(){ return msCannaTab; };
-    string getUIString(){ return msPos + " - " + msCategory; };
+    string getUIString();
 
     static WordTypeList::iterator beginWordTypeList(){ return _lWordTypes.begin(); };
     static WordTypeList::iterator endWordTypeList(){ return _lWordTypes.end(); };

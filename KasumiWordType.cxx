@@ -60,6 +60,14 @@ KasumiWordType* KasumiWordType::getWordTypeFromPos(string sPos)
     return NULL;
 }
 
+string KasumiWordType::getUIString()
+{
+    if(msCategory.size() != 0)
+	return msPos + " - " + msCategory;
+    else
+	return msPos;
+}
+
 /*
 // for debug
 int main()
