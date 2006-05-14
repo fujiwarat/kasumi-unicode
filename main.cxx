@@ -171,10 +171,10 @@ int main(int argc, char *argv[])
 
   try{
       anthy_dic_util_init();
-      
+
+    KasumiWordType::initWordTypeList();      
     KasumiConfiguration *conf = new KasumiConfiguration(argc, argv);
 
-    KasumiWordType::initWordTypeList();
     KasumiDic *dic = new KasumiDic(conf);
 
     string startupMode = conf->getPropertyValue("StartupMode");

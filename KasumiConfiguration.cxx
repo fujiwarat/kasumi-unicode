@@ -7,6 +7,7 @@
 #include "KasumiConfiguration.hxx"
 #include "KasumiException.hxx"
 #include "KasumiString.hxx"
+#include "KasumiWordType.hxx"
 #include "intl.h"
 
 #ifdef HAVE_CONFIG_H
@@ -81,10 +82,10 @@ void KasumiConfiguration::loadDefaultProperties() throw(KasumiException){
 //  config[string("ManageModeShortcutKey")] = string("Ctrl+M");
   config[string("DefaultSpelling")] = string("");
   config[string("DefaultSound")] = string("");
-  config[string("DefaultWordType")] = string(EUCJP_MEISHI);
+  config[string("DefaultWordType")] = string("#T35");
   config[string("DefaultAddingSpelling")] = string("");
   config[string("DefaultAddingSound")] = string("");
-  config[string("DefaultAddingWordType")] = string(EUCJP_MEISHI);
+  config[string("DefaultAddingWordType")] = string("#T35");
   //  config[string("DefaultWindowPosX")] = string("-1");
   //  config[string("DefaultWindowPosY")] = string("-1");
   config[string("ImportSelectedText")] = string("true");
@@ -301,11 +302,12 @@ void KasumiConfiguration::checkValidity()
   keyForWordType.push_back(string("DefaultWordType"));
   keyForWordType.push_back(string("DefaultAddingWordType"));
 
-  validWordType.insert(make_pair(string(EUCJP_MEISHI),true));
-  validWordType.insert(make_pair(string(EUCJP_FUKUSHI),true));
-  validWordType.insert(make_pair(string(EUCJP_JINNMEI),true));
-  validWordType.insert(make_pair(string(EUCJP_CHIMEI),true));
-  validWordType.insert(make_pair(string(EUCJP_KEIYOUSHI),true));
+  WordTypeList::iterator p = KasumiWordType::beginWordTypeList();
+  while(p != KasumiWordType::endWordTypeList())
+  {
+      validWordType.insert(make_pair((*p)->getCannaTab(),true));
+      p++;
+  }
 
   while(!keyForWordType.empty()){
     string keyName = keyForWordType.front();
@@ -313,7 +315,7 @@ void KasumiConfiguration::checkValidity()
     string val = config[keyName];
 
     if(validWordType.find(val) == validWordType.end()){
-      string message = val + string(" is an invalid word class for ") + keyName;
+      string message = val + string(" is an invalid word type for ") + keyName;
       throw KasumiException(message, STDERR, KILL);
     }
   }

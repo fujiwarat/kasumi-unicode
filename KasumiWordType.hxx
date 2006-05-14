@@ -20,6 +20,8 @@ private:
     string msPos; // part of speech such as noun, verb and so on
     string msCategory; // subcategory of Pos
     string msCannaTab;
+    int mnComp;
+    static int comp_seed;
 
     KasumiWordType(string sPos, string sCategory, string sCannaTab);
 
@@ -32,12 +34,14 @@ public:
     string getCannaTab(){ return msCannaTab; };
     string getUIString(){ return msPos + " - " + msCategory; };
 
-    static WordTypeList::iterator getBeginIteratorWordTypeList(){ return _lWordTypes.begin(); };
-    static WordTypeList::iterator getEndIteratorWordTypeList(){ return _lWordTypes.end(); };
+    static WordTypeList::iterator beginWordTypeList(){ return _lWordTypes.begin(); };
+    static WordTypeList::iterator endWordTypeList(){ return _lWordTypes.end(); };
 
     static void addNewWordType(string sPos, string sCategory, string sCannaTab);
     static KasumiWordType* getWordTypeFromCannaTab(string sCannaTab);
     static KasumiWordType* getWordTypeFromPos(string sPos);
+
+    int comp(KasumiWordType *op){ return mnComp - op->mnComp; }; // for sort function
 };
 
 #endif

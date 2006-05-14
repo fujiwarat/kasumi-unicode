@@ -1,11 +1,12 @@
 #include "KasumiDic.hxx"
 #include "KasumiWord.hxx"
-//#include "KasumiString.hxx"
+#include "KasumiString.hxx"
 #include "KasumiException.hxx"
 #include "KasumiConfiguration.hxx"
 extern "C"{  // ad-hoc solution for a defect of Anthy
-#include "anthy/dicutil.h"
+#include <anthy/dicutil.h>
 }
+#include <anthy/anthy.h>
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -37,7 +38,7 @@ void KasumiDic::load(KasumiConfiguration *conf)
   try{
       if(anthy_priv_dic_select_first_entry() == -1) {
 	  string message = string("Failed to read private dictionary. This problem might be a problem of Anthy.\n");
-	  throw new KasumiException(message, STDERR, KILL);
+	  throw KasumiException(message, STDERR, KILL);
       }
 
       char sound[BUFFER_SIZE], wt[BUFFER_SIZE], spelling[BUFFER_SIZE];
@@ -56,9 +57,18 @@ void KasumiDic::load(KasumiConfiguration *conf)
 		  freq = FREQ_UBOUND;
 	      
 	      KasumiWord *newWord = KasumiWord::createNewWord(conf);
-	      
+
 	      newWord->setSound(string(sound));
-	      newWord->setSpelling(string(spelling));
+	      int anthy_version = str2int(string(anthy_get_version_string()));
+	      if(anthy_version > 7710)
+		  newWord->setSpelling(string(spelling));
+	      else
+	      {
+		  // Measures against a defect of anthy.
+		  // "anthy_priv_dic_get_word()" function returns a string
+		  // whose first character is an unwated white space.
+		  newWord->setSpelling(string(spelling+1));
+	      }
 	      newWord->setFrequency(freq);
 	      newWord->setWordType(KasumiWordType::getWordTypeFromCannaTab(string(wt)));
 	      
@@ -90,7 +100,7 @@ void KasumiDic::appendWord(KasumiWord *word){
 void KasumiDic::removeWord(size_t id)
 {
     int flag = 0;
-
+    
     list<KasumiWord*>::iterator p = mWordList.begin();
     while(p != mWordList.end() )
     {
@@ -175,6 +185,7 @@ void KasumiDic::removeEventListener(KasumiDicEventListener *listener){
     }
   }
 }
+
 /*
 // for debug
 // 
@@ -192,17 +203,19 @@ int main(int argc, char *argv[])
 {
     anthy_dic_util_init();
 
+    KasumiWordType::initWordTypeList();
     KasumiConfiguration *conf = new KasumiConfiguration(argc, argv);
     KasumiDic *dic = new KasumiDic(conf);
     KasumiWord *word = KasumiWord::createNewWord(conf);
     word->setSpellingByUTF8("テスト");
     word->setSoundByUTF8("てすと");
     dic->appendWord(word);
-    dic->appendWord(word);
     output(dic);
 
-//    dic->removeWord(1);
-//    output(dic);
+    while(1);
+
+    dic->removeWord(1);
+    output(dic);
 }
 
 */

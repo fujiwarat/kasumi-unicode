@@ -47,6 +47,8 @@ private:
   GtkWidget *FrequencySpin;
   GtkWidget *WordTypeCombo;
   GtkTooltips *Tooltips;
+
+    GtkTreeIter defaultWordTypeIter;
   
   void destroy();
   void quit();

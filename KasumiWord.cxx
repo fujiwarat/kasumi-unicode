@@ -9,6 +9,8 @@
 
 #include <iostream>
 
+#define VECTOR_UNIT 10
+
 using namespace std;
 
 iconv_t KasumiWord::IconvUTF8_To_EUCJP = iconv_open("EUC-JP", "UTF-8");
@@ -16,7 +18,7 @@ iconv_t KasumiWord::IconvEUCJP_To_UTF8 = iconv_open("UTF-8", "EUC-JP");
 
 size_t KasumiWord::id_generator = 0;
 
-vector<KasumiWord*> KasumiWord::words(0);
+vector<KasumiWord*> KasumiWord::words = vector<KasumiWord*>(VECTOR_UNIT);
 
 string KasumiWord::convertUTF8ToEUCJP(const string &aUTF8){
   char *utf8 = (char*)malloc(strlen(aUTF8.c_str())+1);
@@ -105,7 +107,7 @@ KasumiWord::KasumiWord(KasumiConfiguration *conf){
     setSpelling(conf->getPropertyValue("DefaultSpelling"));
     Frequency = conf->getPropertyValueByInt("DefaultFrequency");
     try{
-	setWordType(KasumiWordType::getWordTypeFromPos(conf->getPropertyValue("DefaultWordType")));
+	setWordType(KasumiWordType::getWordTypeFromCannaTab(conf->getPropertyValue("DefaultWordType")));
     }catch(KasumiException e){
 	cout << e.getMessage() << endl;
 	exit(1);
@@ -115,7 +117,10 @@ KasumiWord::KasumiWord(KasumiConfiguration *conf){
 KasumiWord* KasumiWord::createNewWord(KasumiConfiguration *conf)
 {
     KasumiWord *word = new KasumiWord(conf);
-    KasumiWord::words[word->id = KasumiWord::id_generator++] = word;
+    word->id = id_generator++;
+    if(word->id >= words.size())
+	words.resize(words.size() + VECTOR_UNIT, NULL);
+    KasumiWord::words[word->id] = word;
     return word;
 }
 

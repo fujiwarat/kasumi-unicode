@@ -112,8 +112,8 @@ private:
     void SwitchToAddingMode();
 
     void editedTextColumn(GtkCellRendererText *renderer,
-			  string pathStr,
-			  string newSound,
+			  const string &pathStr,
+			  const string &newSound,
 			  TextColumn col);
     void changedWordTypeColumn(GtkComboBox *combo);
 

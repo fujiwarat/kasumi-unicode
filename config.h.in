@@ -76,6 +76,9 @@
 /* Define as 1 if you have LC_MESSAGES. */
 #undef HAVE_LC_MESSAGES
 
+/* Define to 1 if you have the `anthy' library (-lanthy). */
+#undef HAVE_LIBANTHY
+
 /* Define to 1 if you have the `anthydic' library (-lanthydic). */
 #undef HAVE_LIBANTHYDIC
 

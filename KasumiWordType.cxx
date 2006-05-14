@@ -4,6 +4,7 @@
 
 // static members of KasumiWordType
 WordTypeList KasumiWordType::_lWordTypes;
+int KasumiWordType::comp_seed = 0;
 
 void KasumiWordType::initWordTypeList()
 {
@@ -27,6 +28,7 @@ KasumiWordType::KasumiWordType(string sPos, string sCategory, string sCannaTab)
     msPos = sPos;
     msCategory = sCategory;
     msCannaTab = sCannaTab;
+    mnComp = comp_seed++;
 }
 
 void KasumiWordType::addNewWordType(string sPos, string sCategory, string sCannaTab)

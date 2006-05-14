@@ -29,6 +29,8 @@ KasumiMainWindow::KasumiMainWindow(KasumiDic *aDictionary,
   createWindow();
   createWordList();
   registerCallbackFunctions();
+  gtk_window_set_position (GTK_WINDOW(mWindow), GTK_WIN_POS_MOUSE);
+  gtk_window_resize(GTK_WINDOW(mWindow), 300,300); // ToDo: reset window size to be same as the window size when Kasumi quit the last time
   gtk_widget_show(mWindow);
 
   refresh();
@@ -49,7 +51,7 @@ void KasumiMainWindow::createWindow()
   GSList *mSpellingRadio_group = NULL;
 //  GtkWidget *mSoundRadio;
   GtkWidget *hbox2;
-  GtkWidget *mSearchEntry;
+//  GtkWidget *mSearchEntry;
   GtkWidget *alignment6;
   GtkWidget *hbuttonbox1;
 //  GtkWidget *mSaveButton;
@@ -211,13 +213,13 @@ void KasumiMainWindow::createWordList()
 		     G_CALLBACK(_call_back_clicked_column_header), this);
 
     // word type column - combo renderer
-    GtkListStore *WordTypeList = gtk_list_store_new(WORDTYPE_NUM_COLS,G_TYPE_STRING,G_TYPE_POINTER);
+    GtkListStore *gWordTypeList = gtk_list_store_new(WORDTYPE_NUM_COLS,G_TYPE_STRING,G_TYPE_POINTER);
     GtkTreeIter iter;
-    WordTypeList::iterator p = KasumiWordType::getBeginIteratorWordTypeList();
-    while(p != KasumiWordType::getEndIteratorWordTypeList())
+    WordTypeList::iterator p = KasumiWordType::beginWordTypeList();
+    while(p != KasumiWordType::endWordTypeList())
     {
-	gtk_list_store_append(WordTypeList,&iter);
-	gtk_list_store_set(WordTypeList,&iter,
+	gtk_list_store_append(gWordTypeList,&iter);
+	gtk_list_store_set(gWordTypeList,&iter,
 			   COL_UI_STRING, (*p)->getUIString().c_str(),
 			   COL_WORDTYPE_POINTER, (*p),
 			   -1);    
@@ -228,7 +230,7 @@ void KasumiMainWindow::createWordList()
     g_signal_connect(G_OBJECT(renderer), "editing-started",
 		     G_CALLBACK(_call_back_editing_started_wordtype_column), this);
     g_object_set(renderer,
-		 "model", WordTypeList,
+		 "model", gWordTypeList,
 		 "text-column", COL_UI_STRING,
 		 "has-entry", FALSE,
 		 "editable", TRUE,
@@ -270,6 +272,10 @@ void KasumiMainWindow::createWordList()
 
 void KasumiMainWindow::registerCallbackFunctions()
 {
+    // window
+    g_signal_connect(G_OBJECT(mWindow), "delete_event",
+		     G_CALLBACK(_call_back_delete_event), this);
+
     // buttons
     g_signal_connect(G_OBJECT(mQuitButton), "clicked",
 		     G_CALLBACK(_call_back_quit), this);
@@ -281,6 +287,17 @@ void KasumiMainWindow::registerCallbackFunctions()
 		     G_CALLBACK(_call_back_remove), this);
     g_signal_connect(G_OBJECT(mChangeModeButton), "clicked",
 		     G_CALLBACK(_call_back_adding_mode), this);
+
+    // search entry
+    g_signal_connect(G_OBJECT(mSearchEntry),
+		     "changed",
+		     G_CALLBACK(_call_back_changed_search_entry),
+		     this);
+    g_signal_connect(G_OBJECT(mSearchEntry),
+		     "activate",
+		     G_CALLBACK(_call_back_activate_search_entry),
+		     this); // called when Entry key is pressed
+
 }
 
 void KasumiMainWindow::refresh(){
@@ -348,7 +365,6 @@ void KasumiMainWindow::quit(){
     }
     gtk_widget_destroy (dialog);
   }
-//  anthy_dic_util_quit();
   delete this;
   gtk_main_quit();
 }
@@ -379,40 +395,14 @@ void KasumiMainWindow::ClickedRemoveButton(){
   }
 }
 
-/*
-void KasumiMainWindow::ChangedSoundEntry(){
-    GtkTreeModel *model = GTK_TREE_MODEL(SortList);
-    GtkTreeIter iter;
-    int id;
-    
-    if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
-	gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
-	KasumiWord *word = dictionary->getWordWithID(id);
-	try{
-	    word->setSoundByUTF8(string(gtk_entry_get_text(GTK_ENTRY(SoundEntry))));
-	    dictionary->modifyWord(id);
-	    previousSoundEntryText = string(gtk_entry_get_text(GTK_ENTRY(SoundEntry)));
-	}catch(KasumiException e){
-	    handleException(e);
-	    
-	    // take back invalid entry
-	    g_signal_handler_block(SoundEntry, HandlerIDOfSoundEntry);
-	    gtk_entry_set_text(GTK_ENTRY(SoundEntry),
-			       previousSoundEntryText.c_str());
-	    g_signal_handler_unblock(SoundEntry, HandlerIDOfSoundEntry);
-	}
-    }
-}
-*/
-
 void KasumiMainWindow::SwitchToAddingMode(){
   new KasumiAddWindow(dictionary,conf);
   delete this;
 }
 
 void KasumiMainWindow::editedTextColumn(GtkCellRendererText *renderer,
-					string pathStr,
-					string newText,
+					const string &pathStr,
+					const string &newText,
 					TextColumn col)
 {
     try{
@@ -913,5 +903,5 @@ gint sortFuncByWordClass(GtkTreeModel *model,
   KasumiWord *word_a = KasumiWord::getWordFromID(id_a);
   KasumiWord *word_b = KasumiWord::getWordFromID(id_b);
 
-  return word_a->getWordType() > word_b->getWordType();
+  return word_a->getWordType()->comp(word_b->getWordType());
 }
