@@ -73,12 +73,29 @@ string KasumiWord::extractInvalidCharacterFromSound(string soundByUTF8){
       if(first == 0xe3 && second == 0x83 && third == 0xbc){
         // dash
         continue;
-      }else if(first == 0xe3 && second == 0x81 && third >= 0x81 && third <= 0xbf){
+      }else if(first == 0xe3 && second == 0x80 &&
+	       (third == 0x81 || third == 0x82)){
+	  // punctuaiton mark
+	  continue;
+      }else if(first == 0xe3 && second == 0x80 &&
+	       (third == 0x8c || third == 0x8d)){
+	  // corner brackets
+	  continue;
+      }else if(first == 0xe3 && second == 0x80 && third == 0x9c){
+	  // wave dash
+	  continue;
+      }else if(first == 0xe3 && second == 0x81 &&
+	       third >= 0x81 && third <= 0xbf){
         // hiragana from "A" to "MI"
         continue;
-      }else if(first == 0xe3 && second == 0x82 && third >= 0x80 && third <= 0x94){
+      }else if(first == 0xe3 && second == 0x82 &&
+	       third >= 0x80 && third <= 0x94){
         // the rest of hiragana
         continue;
+      }else if(first == 0xef && second == 0xbc &&
+	       third >= 0x81 && third <= 0xa0){
+	  // symbol marks of two-byte characters
+	  continue;
       }else{
         res[0] = str[i];
         res[1] = str[i+1];
