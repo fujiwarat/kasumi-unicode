@@ -9,6 +9,7 @@ kasumi_SOURCES = main.cxx intl.h \
 				 KasumiMainWindow.cxx KasumiMainWindow.hxx \
 				 KasumiAddWindow.cxx KasumiAddWindow.hxx \
 				 KasumiDicEventListener.hxx \
+				KasumiWordEventListener.hxx \
 				 KasumiConfiguration.cxx KasumiConfiguration.hxx \
                  kasumi.png
 
