@@ -49,6 +49,9 @@ void KasumiDic::load(KasumiConfiguration *conf)
 
   try{
       if(anthy_priv_dic_select_first_entry() == -1) {
+	  // ToDo: do not throw exception in the case that this doesn't fail to
+	  //       read the private dictionary but the dictionary containes
+	  //       no word.
 	  string message = string("Failed to read private dictionary. This problem might be a problem of Anthy.\n");
 	  throw KasumiException(message, STDERR, KILL);
       }
@@ -83,6 +86,9 @@ void KasumiDic::load(KasumiConfiguration *conf)
 	      }
 	      newWord->setFrequency(freq);
 	      newWord->setWordType(KasumiWordType::getWordTypeFromCannaTab(string(wt)));
+	      // ToDo: set an alternative word type for a word type which 
+	      //       is not registered.
+	      //       For example, #T01 should be converted into #T35.
 	      
 	      appendWord(newWord);
 	  }

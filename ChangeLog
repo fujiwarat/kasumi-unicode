@@ -1,3 +1,16 @@
+2006-05-14  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix
+	 - KasumiAddWindow
+	 - search function for KasumiMainWindow
+
+	* enhancement
+	 - implement of KasumiWordEventListener
+
+2006-05-7  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* drastic changes for new version 2.0
+
 2006-03-26  Ikuya Awashiro <ikuya@fruitsbasket.info>
 	* KasumiMainWindow.hxx, KasumiAddWindow.hxx:
 	Fixed with G++ 4.1: friends not declared
