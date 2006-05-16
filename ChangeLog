@@ -1,3 +1,8 @@
+2006-05-17  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: KasumiDic.cxx
+	 - change the condition of anthy version
+
 2006-05-14  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
 	* fix

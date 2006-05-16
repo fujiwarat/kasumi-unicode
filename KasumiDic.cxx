@@ -75,7 +75,7 @@ void KasumiDic::load(KasumiConfiguration *conf)
 
 	      newWord->setSound(string(sound));
 	      int anthy_version = str2int(string(anthy_get_version_string()));
-	      if(anthy_version > 7710)
+	      if(anthy_version >= 7710)
 		  newWord->setSpelling(string(spelling));
 	      else
 	      {
