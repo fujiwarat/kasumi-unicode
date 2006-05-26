@@ -1,3 +1,10 @@
+2006-05-27  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: KasumiDic.cxx, KasumiWordType.cxx
+	 - set an alternative word type if specified one does not exist
+	 - measures against an anthy's defect that it returns error code
+	   even when it is right and no word is registered.
+
 2006-05-17  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
 	* fix: KasumiDic.cxx

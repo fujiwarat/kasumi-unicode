@@ -48,12 +48,22 @@ void KasumiDic::load(KasumiConfiguration *conf)
   const int FREQ_UBOUND = conf->getPropertyValueByInt("MaxFrequency");
 
   try{
-      if(anthy_priv_dic_select_first_entry() == -1) {
-	  // ToDo: do not throw exception in the case that this doesn't fail to
-	  //       read the private dictionary but the dictionary containes
-	  //       no word.
-	  string message = string("Failed to read private dictionary. This problem might be a problem of Anthy.\n");
-	  throw KasumiException(message, STDERR, KILL);
+      if(anthy_priv_dic_select_first_entry() == -3){
+	  // no word
+	  return;
+      }
+      else if(anthy_priv_dic_select_first_entry() == -1)
+      {
+	  int anthy_version = str2int(string(anthy_get_version_string()));
+	  if(anthy_version >= 7716)
+	  {
+	      // do not throw exception in the case that this doesn't fail to
+	      // read the private dictionary but the dictionary containes
+	      // no word. This case happens if the version of anthy is less
+	      // than 7714.
+	      string message = string("Failed to read private dictionary. This problem might be a problem of Anthy.\n");
+	      throw KasumiException(message, STDERR, KILL);
+	  }
       }
 
       char sound[BUFFER_SIZE], wt[BUFFER_SIZE], spelling[BUFFER_SIZE];
@@ -86,10 +96,6 @@ void KasumiDic::load(KasumiConfiguration *conf)
 	      }
 	      newWord->setFrequency(freq);
 	      newWord->setWordType(KasumiWordType::getWordTypeFromCannaTab(string(wt)));
-	      // ToDo: set an alternative word type for a word type which 
-	      //       is not registered.
-	      //       For example, #T01 should be converted into #T35.
-	      
 	      appendWord(newWord);
 	  }
       }while(anthy_priv_dic_select_next_entry() == 0);

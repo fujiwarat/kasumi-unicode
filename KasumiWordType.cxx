@@ -21,6 +21,25 @@ void KasumiWordType::initWordTypeList()
     KasumiWordType::addNewWordType("感動詞", "", "#CJ");
     KasumiWordType::addNewWordType("連体詞", "", "#RT");
     KasumiWordType::addNewWordType("単漢字", "", "#KJ");
+    KasumiWordType::addNewWordType("動詞", "カ行5段", "#K5");
+    KasumiWordType::addNewWordType("動詞", "カ行5段(連用形が名詞)", "#K5r");
+    KasumiWordType::addNewWordType("動詞", "ガ行5段", "#G5");
+    KasumiWordType::addNewWordType("動詞", "ガ行5段(連用形が名詞)", "#G5r");
+    KasumiWordType::addNewWordType("動詞", "サ行5段", "#S5");
+    KasumiWordType::addNewWordType("動詞", "サ行5段(連用形が名詞)", "#S5r");
+    KasumiWordType::addNewWordType("動詞", "タ行5段", "#T5");
+    KasumiWordType::addNewWordType("動詞", "タ行5段(連用形が名詞)", "#T5r");
+    KasumiWordType::addNewWordType("動詞", "ナ行5段", "#N5");
+    KasumiWordType::addNewWordType("動詞", "ナ行5段(連用形が名詞)", "#N5r");
+    KasumiWordType::addNewWordType("動詞", "バ行5段", "#B5");
+    KasumiWordType::addNewWordType("動詞", "バ行5段(連用形が名詞)", "#B5r");
+    KasumiWordType::addNewWordType("動詞", "マ行5段", "#M5");
+    KasumiWordType::addNewWordType("動詞", "マ行5段(連用形が名詞)", "#M5r");
+    KasumiWordType::addNewWordType("動詞", "ラ行5段", "#R5");
+    KasumiWordType::addNewWordType("動詞", "ラ行5段(連用形が名詞)", "#R5r");
+    KasumiWordType::addNewWordType("動詞", "ワ行5段", "#W5");
+    KasumiWordType::addNewWordType("動詞", "ワ行5段(連用形が名詞)", "#W5r");
+
 }
 
 KasumiWordType::KasumiWordType(string sPos, string sCategory, string sCannaTab)
@@ -38,6 +57,7 @@ void KasumiWordType::addNewWordType(string sPos, string sCategory, string sCanna
 
 KasumiWordType* KasumiWordType::getWordTypeFromCannaTab(string sCannaTab)
 {
+    // return the completely same word type
     WordTypeList::iterator p = _lWordTypes.begin();
     while(p != _lWordTypes.end()){
 	if( (*p)->getCannaTab() == sCannaTab )
@@ -45,7 +65,18 @@ KasumiWordType* KasumiWordType::getWordTypeFromCannaTab(string sCannaTab)
 	p++;
     }
 
-    return NULL;
+    // return the alternative word type whose first character is equal to
+    // specified one's
+    char first_char = sCannaTab.c_str()[0];
+    p = _lWordTypes.begin();
+    while(p != _lWordTypes.end()){
+	if( first_char == (*p)->getCannaTab().c_str()[0] )
+	    return (*p);
+	p++;
+    }
+
+    // return the first word type as a fallback
+    return *(_lWordTypes.begin());
 }
 
 KasumiWordType* KasumiWordType::getWordTypeFromPos(string sPos)
@@ -57,7 +88,8 @@ KasumiWordType* KasumiWordType::getWordTypeFromPos(string sPos)
 	p++;
     }
 
-    return NULL;
+    // return the first word type as a fallback
+    return *(_lWordTypes.begin());
 }
 
 string KasumiWordType::getUIString()

@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
     newWord->setSound("¤¿¤«¤·");
     newWord->setSpelling("¿ò»Ö");
     newWord->setFrequency(180);
-    newWord->setWordType(KasumiWordType::getWordTypeFromPos("Ì¾»ì"));
+    newWord->setWordType(KasumiWordType::getWordTypeFromCannaTab("#T35"));
     cout << newWord->getSound() << " " << newWord->getSpelling() << " ";
     cout << newWord->getFrequency() << " " << endl;
     cout << newWord->getWordType()->getPos() << endl;
