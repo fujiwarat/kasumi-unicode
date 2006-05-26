@@ -5,6 +5,10 @@
 	 - measures against an anthy's defect that it returns error code
 	   even when it is right and no word is registered.
 
+	* fix:
+	 - inserted copyright and license terms into the head of each
+	   source file or header file.
+
 2006-05-17  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
 	* fix: KasumiDic.cxx
