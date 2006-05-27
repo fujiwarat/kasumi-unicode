@@ -99,7 +99,7 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
 					       FREQ_LBOUND,
 					       FREQ_UBOUND,
 					       1,
-					       FREQ_LBOUND / 100
+					       FREQ_UBOUND / 100
 					       ,0);
     FrequencySpin = gtk_spin_button_new(GTK_ADJUSTMENT(adjustment),1.0,0);
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(FrequencySpin),FALSE,FALSE,0);
