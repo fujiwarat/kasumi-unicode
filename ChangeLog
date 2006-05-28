@@ -1,5 +1,8 @@
 2006-05-28  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
+	* fix: main.cxx
+	 - changed copyright notice
+
 	* fix: KasumiWordType.hxx, KasumiWord.cxx
 	 - don't issue modification event when the same value are set
 
