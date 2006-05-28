@@ -25,6 +25,7 @@
 *********************************************************************/
 
 #include <gtk/gtk.h>
+#include "cellrendererspin.h"
 #include <iostream>
 #include "KasumiMainWindow.hxx"
 #include "KasumiException.hxx"
@@ -201,6 +202,8 @@ void KasumiMainWindow::createWordList()
     GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
     g_signal_connect(G_OBJECT(renderer), "edited",
 		     G_CALLBACK(_call_back_edited_spelling_column), this);
+    g_signal_connect(G_OBJECT(renderer), "editing-started",
+		     G_CALLBACK(_call_back_editing_started_spelling_column), this);
     g_object_set(renderer, "editable", TRUE, NULL);
     mSpellingColumn = gtk_tree_view_column_new_with_attributes(_("Spelling"),
 							      renderer,
@@ -213,6 +216,8 @@ void KasumiMainWindow::createWordList()
     renderer = gtk_cell_renderer_text_new();
     g_signal_connect(G_OBJECT(renderer), "edited",
 		     G_CALLBACK(_call_back_edited_sound_column), this);
+    g_signal_connect(G_OBJECT(renderer), "editing-started",
+		     G_CALLBACK(_call_back_editing_started_sound_column), this);
     g_object_set(renderer, "editable", TRUE, NULL);
     mSoundColumn = gtk_tree_view_column_new_with_attributes(_("Sound"),
 							   renderer,
@@ -225,7 +230,19 @@ void KasumiMainWindow::createWordList()
     g_signal_connect(G_OBJECT(mSoundColumn), "clicked",
 		     G_CALLBACK(_call_back_clicked_column_header), this);
 
-    renderer = gtk_cell_renderer_text_new();
+    const int FREQ_LBOUND = conf->getPropertyValueByInt("MinFrequency");  
+    const int FREQ_UBOUND = conf->getPropertyValueByInt("MaxFrequency");
+    renderer = gui_cell_renderer_spin_new(FREQ_LBOUND,
+					  FREQ_UBOUND,
+					  1,
+					  FREQ_UBOUND / 100,
+					  FREQ_UBOUND / 100,
+					  10,
+					  0);
+    g_signal_connect(G_OBJECT(renderer), "edited",
+		     G_CALLBACK(_call_back_edited_freq_column), this);
+    g_signal_connect(G_OBJECT(renderer), "editing-started",
+		     G_CALLBACK(_call_back_editing_started_freq_column), this);
     g_object_set(renderer, "editable", TRUE, NULL);
     mFreqColumn = gtk_tree_view_column_new_with_attributes(_("Frequency"),
 							   renderer,
@@ -427,30 +444,107 @@ void KasumiMainWindow::SwitchToAddingMode(){
   delete this;
 }
 
+void KasumiMainWindow::startedEditingTextColumn(GtkCellEditable *editable,
+						string path,
+						TextColumn col)
+{
+    editingPath = gtk_tree_path_new_from_string(path.c_str());
+
+    g_signal_connect(G_OBJECT(editable), "key-press-event",
+		     G_CALLBACK(_call_back_key_pressed_text_column), this);
+}
+
+void KasumiMainWindow::pressedKeyOnTextColumn(GtkWidget *widget,
+					      GdkEventKey *event)
+{
+    lastKeyState = event->state;
+    lastKeyVal = event->keyval;
+}
+
 void KasumiMainWindow::editedTextColumn(GtkCellRendererText *renderer,
-					const string &pathStr,
 					const string &newText,
 					TextColumn col)
 {
     try{
-	GtkTreePath *path = gtk_tree_path_new_from_string(pathStr.c_str());
+	if(editingPath == NULL)
+	    throw KasumiException(string("internal error: editingPath is already freed."), STDERR, KILL);
+
 	GtkTreeIter iter;
-	gtk_tree_model_get_iter(SortList, &iter, path);
+	gtk_tree_model_get_iter(SortList, &iter, editingPath);
 
 	size_t id;
 	gtk_tree_model_get(SortList, &iter, COL_ID, &id, -1);
 
 	KasumiWord *word = KasumiWord::getWordFromID(id);
-    
-	if(col == SOUND)
-	    word->setSoundByUTF8(newText);
-	else if(col == SPELLING)
+   
+	if(col == SPELLING)
+	{
 	    word->setSpellingByUTF8(newText);
+	}
+	else if(col == SOUND)
+	{
+	    word->setSoundByUTF8(newText);
+	}
+	else if(col == FREQ)
+	{
+	    word->setFrequency(str2int(newText));
+	}
 	
-	gtk_tree_path_free(path);
+	GtkTreePath *editedPath = gtk_tree_path_copy(editingPath);
+	gtk_tree_path_free(editingPath);
+	editingPath = NULL;
+
+	// set cursor right or left
+	GtkTreeViewColumn *postCol = NULL;
+	if(lastKeyVal == GDK_Tab)
+	{
+	    if(lastKeyState & GDK_CONTROL_MASK)
+	    { // set cursor left
+		switch(col){
+		case SPELLING:
+		    postCol = NULL;
+		    break;
+		case SOUND:
+		    postCol = mSpellingColumn;
+		    break;
+		case FREQ:
+		    postCol = mSoundColumn;
+		    break;
+		}
+	    }
+	    else
+	    { // set cursor right
+		switch(col){
+		case SPELLING:
+		    postCol = mSoundColumn;
+		    break;
+		case SOUND:
+		    postCol = mFreqColumn;
+		    break;
+		case FREQ:
+		    postCol = mWordTypeColumn;
+		    break;
+		}
+	    }
+	}
+
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(mWordListView),
+				 editedPath,
+				 postCol,
+				 false);
+
+	gtk_tree_path_free(editedPath);
     }catch(KasumiException e){
 	handleException(e);
     }
+}
+
+void KasumiMainWindow::startedEditingWordTypeColumn(GtkCellEditable *editable,
+						    string path)
+{
+    editingPath = gtk_tree_path_new_from_string(path.c_str());
+    g_signal_connect(G_OBJECT(editable), "changed",
+		     G_CALLBACK(_call_back_changed_wordtype_column), this);
 }
 
 void KasumiMainWindow::changedWordTypeColumn(GtkComboBox *combo)
@@ -638,10 +732,21 @@ void KasumiMainWindow::appendedWord(KasumiWord *word){
                                                  &sort_iter,&iter);
   gtk_tree_selection_select_iter(SortListSelection,&sort_iter);
 
+  modificationFlag = true;
+
+  // set the vertical scroll bar of the tree view undermost
   GtkAdjustment *adjustment =
     gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(mScrolledWindow));
   gtk_adjustment_set_value(adjustment, adjustment->upper);
-  modificationFlag = true;  
+  
+  // start editing for spelling forcibly
+  GtkTreePath *path = gtk_tree_model_get_path(SortList, &sort_iter);
+  gtk_tree_view_set_cursor(GTK_TREE_VIEW(mWordListView),
+			   path,
+			   mSpellingColumn,
+			   true);
+  gtk_tree_path_free(path);
+
 }
 
 void KasumiMainWindow::modifiedWord(KasumiWord *word){
@@ -734,13 +839,40 @@ void _call_back_clicked_column_header(GtkTreeViewColumn *column,
   window->SortBy(column);
 }
 
-void _call_back_edited_sound_column(GtkCellRendererText *renderer,
-				   gchar *arg1,
-				   gchar *arg2,
-				   gpointer data)
+gboolean _call_back_key_pressed_text_column(GtkWidget *widget,
+					    GdkEventKey *event,
+					    gpointer data)
 {
     KasumiMainWindow *window = (KasumiMainWindow *)data;
-    window->editedTextColumn(renderer, string(arg1), string(arg2), SOUND);
+    window->pressedKeyOnTextColumn(widget, event);
+    return FALSE;
+}
+
+void _call_back_editing_started_sound_column(GtkCellRenderer *render,
+					     GtkCellEditable *editable,
+					     gchar *path,
+					     gpointer data)
+{
+    KasumiMainWindow *window = (KasumiMainWindow *)data;
+    window->startedEditingTextColumn(editable, string(path), SOUND);
+}
+
+void _call_back_edited_sound_column(GtkCellRendererText *renderer,
+				    gchar *arg1,
+				    gchar *arg2,
+				    gpointer data)
+{
+    KasumiMainWindow *window = (KasumiMainWindow *)data;
+    window->editedTextColumn(renderer, string(arg2), SOUND);
+}
+
+void _call_back_editing_started_spelling_column(GtkCellRenderer *render,
+						GtkCellEditable *editable,
+						gchar *path,
+						gpointer data)
+{
+    KasumiMainWindow *window = (KasumiMainWindow *)data;
+    window->startedEditingTextColumn(editable, string(path), SPELLING);
 }
 
 void _call_back_edited_spelling_column(GtkCellRendererText *renderer,
@@ -749,7 +881,26 @@ void _call_back_edited_spelling_column(GtkCellRendererText *renderer,
 				       gpointer data)
 {
     KasumiMainWindow *window = (KasumiMainWindow *)data;
-    window->editedTextColumn(renderer, string(arg1), string(arg2), SPELLING);
+    window->editedTextColumn(renderer, string(arg2), SPELLING);
+}
+
+
+void _call_back_editing_started_freq_column(GtkCellRenderer *render,
+					    GtkCellEditable *editable,
+					    gchar *path,
+					    gpointer data)
+{
+    KasumiMainWindow *window = (KasumiMainWindow *)data;
+    window->startedEditingTextColumn(editable, string(path), FREQ);
+}
+
+void _call_back_edited_freq_column(GtkCellRendererText *renderer,
+				   gchar *arg1,
+				   gchar *arg2,
+				   gpointer data)
+{
+    KasumiMainWindow *window = (KasumiMainWindow *)data;
+    window->editedTextColumn(renderer, string(arg2), FREQ);
 }
 
 void _call_back_editing_started_wordtype_column(GtkCellRenderer *render,
@@ -758,9 +909,7 @@ void _call_back_editing_started_wordtype_column(GtkCellRenderer *render,
 						gpointer data)
 {
     KasumiMainWindow *window = (KasumiMainWindow *)data;
-    window->editingPath = gtk_tree_path_new_from_string(path);
-    g_signal_connect(G_OBJECT(editable), "changed",
-		     G_CALLBACK(_call_back_changed_wordtype_column), data);
+    window->startedEditingWordTypeColumn(editable, string(path));
 }
 
 void _call_back_changed_wordtype_column(GtkComboBox *combo,

@@ -149,6 +149,7 @@ KasumiWord::KasumiWord(KasumiConfiguration *conf){
     setSpelling(conf->getPropertyValue("DefaultSpelling"));
     Frequency = conf->getPropertyValueByInt("DefaultFrequency");
     try{
+	mWordType = NULL;
 	setWordType(KasumiWordType::getWordTypeFromCannaTab(conf->getPropertyValue("DefaultWordType")));
     }catch(KasumiException e){
 	cout << e.getMessage() << endl;

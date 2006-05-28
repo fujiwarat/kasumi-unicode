@@ -56,8 +56,9 @@ enum wordtype_column_name
 
 enum _TextColumnEnum
 {
-    SOUND = 0,
-    SPELLING
+    SPELLING = 0,
+    SOUND,
+    FREQ
 };
 
 typedef _TextColumnEnum SearchBy;
@@ -83,14 +84,33 @@ class KasumiMainWindow : public KasumiDicEventListener{
 						 gpointer data);
     friend void _call_back_clicked_column_header(GtkTreeViewColumn *column,
 						 gpointer data);
+    friend gboolean _call_back_key_pressed_text_column(GtkWidget *widget,
+						       GdkEventKey *event,
+						       gpointer data);
+    friend void _call_back_editing_started_sound_column(GtkCellRenderer *render,
+							GtkCellEditable *editable,
+							gchar *path,
+							gpointer data);
     friend void _call_back_edited_sound_column(GtkCellRendererText *renderer,
 					       gchar *arg1,
 					       gchar *arg2,
 					       gpointer data);
+    friend void _call_back_editing_started_spelling_column(GtkCellRenderer *render,
+							   GtkCellEditable *editable,
+							   gchar *path,
+							   gpointer data);
     friend void _call_back_edited_spelling_column(GtkCellRendererText *renderer,
 						  gchar *arg1,
 						  gchar *arg2,
 						  gpointer data);
+    friend void _call_back_editing_started_freq_column(GtkCellRenderer *render,
+						       GtkCellEditable *editable,
+						       gchar *path,
+						       gpointer data);
+    friend void _call_back_edited_freq_column(GtkCellRendererText *renderer,
+					      gchar *arg1,
+					      gchar *arg2,
+					      gpointer data);
     friend void _call_back_editing_started_wordtype_column(GtkCellRenderer *render,
 							   GtkCellEditable *editable,
 							   gchar *path,
@@ -122,6 +142,8 @@ private:
     GtkTreeViewColumn *mWordTypeColumn;
 
     GtkTreePath *editingPath;
+    guint lastKeyState;
+    guint lastKeyVal;
   
     bool modificationFlag;
     string previousSoundEntryText;
@@ -137,10 +159,16 @@ private:
     void ClickedRemoveButton();
     void SwitchToAddingMode();
 
+    void startedEditingTextColumn(GtkCellEditable *editable,
+				  string path,
+				  TextColumn col);
+    void pressedKeyOnTextColumn(GtkWidget *widget,
+				GdkEventKey *event);
     void editedTextColumn(GtkCellRendererText *renderer,
-			  const string &pathStr,
 			  const string &newSound,
 			  TextColumn col);
+    void startedEditingWordTypeColumn(GtkCellEditable *editable,
+				      string path);
     void changedWordTypeColumn(GtkComboBox *combo);
 
     void FindNext(bool fromCurrent);
