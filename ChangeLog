@@ -1,3 +1,8 @@
+2006-05-28  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: KasumiWordType.hxx, KasumiWord.cxx
+	 - don't issue modification event when the same value are set
+
 2006-05-27  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
 	* fix: KasumiDic.cxx, KasumiWordType.cxx
@@ -8,6 +13,9 @@
 	* fix:
 	 - inserted copyright and license terms into the head of each
 	   source file or header file.
+
+	* fix: KasumiAddWindow.cxx
+	 - changed the page size of the spin button
 
 2006-05-17  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 

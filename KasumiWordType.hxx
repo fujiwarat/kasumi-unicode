@@ -66,7 +66,8 @@ public:
     static KasumiWordType* getWordTypeFromCannaTab(string sCannaTab);
     static KasumiWordType* getWordTypeFromPos(string sPos);
 
-    int comp(KasumiWordType *op){ return mnComp - op->mnComp; }; // for sort function
+    int comp(KasumiWordType *op){ return op ? mnComp - op->mnComp : -1; }; // for sort function
+    bool equal(KasumiWordType *op){ return comp(op) == 0 ? true : false; };
 };
 
 #endif
