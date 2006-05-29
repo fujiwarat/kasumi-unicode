@@ -1,5 +1,8 @@
 2006-05-29  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
+	* fix: AUTHORS
+	 - add Ikuya to AUTHORS
+
 	* fix: POTFILES.in ja.po
 	 - translated newly created message
 
