@@ -177,6 +177,7 @@ void KasumiMainWindow::createWindow()
 //                              GDK_Delete, (GdkModifierType) 0,
 //                              GTK_ACCEL_VISIBLE);
 
+/* // This button is obsolete
   mChangeModeButton = gtk_button_new_with_mnemonic (_("Add mode"));
   gtk_widget_show (mChangeModeButton);
   gtk_container_add (GTK_CONTAINER (hbuttonbox1), mChangeModeButton);
@@ -184,6 +185,7 @@ void KasumiMainWindow::createWindow()
   gtk_widget_add_accelerator (mChangeModeButton, "clicked", accel_group,
                               GDK_M, (GdkModifierType) GDK_CONTROL_MASK,
                               GTK_ACCEL_VISIBLE);
+*/
 
   mQuitButton = gtk_button_new_from_stock ("gtk-quit");
   gtk_widget_show (mQuitButton);
@@ -328,8 +330,10 @@ void KasumiMainWindow::registerCallbackFunctions()
 		     G_CALLBACK(_call_back_add), this);
     g_signal_connect(G_OBJECT(mRemoveButton), "clicked",
 		     G_CALLBACK(_call_back_remove), this);
+/* // This button is obsolete
     g_signal_connect(G_OBJECT(mChangeModeButton), "clicked",
 		     G_CALLBACK(_call_back_adding_mode), this);
+*/
 
     // search entry
     g_signal_connect(G_OBJECT(mSearchEntry),
@@ -815,11 +819,13 @@ void _call_back_remove(GtkWidget *widget,
   window->ClickedRemoveButton();
 }
 
+/* // obsolete
 void _call_back_adding_mode(GtkWidget *widget,
                             gpointer data){
   KasumiMainWindow *window = (KasumiMainWindow *)data;
   window->SwitchToAddingMode();
 }
+*/
 
 void _call_back_changed_search_entry(GtkWidget *widget,
                                        gpointer data){

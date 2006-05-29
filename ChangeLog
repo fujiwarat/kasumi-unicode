@@ -3,6 +3,9 @@
 	* fix: POTFILES.in ja.po
 	 - translated newly created message
 
+	* enhancement: KasumiMainWindow.cxx KasumiMainWindow.hxx
+	 - obsolete "Add Mode" button
+
 2006-05-28  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
 	* fix: main.cxx

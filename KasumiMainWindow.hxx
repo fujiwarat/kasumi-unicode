@@ -76,8 +76,10 @@ class KasumiMainWindow : public KasumiDicEventListener{
 			       gpointer data);
     friend void _call_back_remove(GtkWidget *widget,
 				  gpointer data);
+/* // obsolete
     friend void _call_back_adding_mode(GtkWidget *widget,
 				       gpointer data);
+*/
     friend void _call_back_changed_search_entry(GtkWidget *widget,
                                                 gpointer data);
     friend void _call_back_activate_search_entry(GtkWidget *widget,
@@ -131,7 +133,7 @@ private:
     GtkWidget *mSaveButton;
     GtkWidget *mAddButton;
     GtkWidget *mRemoveButton;
-    GtkWidget *mChangeModeButton;
+//    GtkWidget *mChangeModeButton;  // obsolete
 
     GtkListStore *WordList;
     GtkTreeModel *SortList;
