@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-06 12:39+0900\n"
+"POT-Creation-Date: 2006-05-29 13:15+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,192 +16,105 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: KasumiWord.cxx:118 KasumiWord.cxx:133
+#: KasumiWord.cxx:181 KasumiWord.cxx:204
 msgid ""
 "Sound must consist of only Hiragana characters. You have entered invalid "
 "character: "
 msgstr ""
 
-#: KasumiMainWindow.cxx:28 KasumiAddWindow.cxx:26
+#: KasumiMainWindow.cxx:94 KasumiAddWindow.cxx:56
 msgid "Kasumi"
 msgstr ""
 
-#: KasumiMainWindow.cxx:52 KasumiMainWindow.cxx:136 KasumiAddWindow.cxx:38
+#: KasumiMainWindow.cxx:113
+msgid "search"
+msgstr ""
+
+#: KasumiMainWindow.cxx:123
+msgid "Search by Spelling"
+msgstr ""
+
+#: KasumiMainWindow.cxx:129
+msgid "Search by Sound"
+msgstr ""
+
+#: KasumiMainWindow.cxx:180
+msgid "Add mode"
+msgstr ""
+
+#: KasumiMainWindow.cxx:208 KasumiAddWindow.cxx:68
 msgid "Spelling"
 msgstr ""
 
-#: KasumiMainWindow.cxx:61 KasumiMainWindow.cxx:154 KasumiAddWindow.cxx:49
+#: KasumiMainWindow.cxx:222 KasumiAddWindow.cxx:79
 msgid "Sound"
 msgstr ""
 
-#: KasumiMainWindow.cxx:73 KasumiMainWindow.cxx:166 KasumiAddWindow.cxx:60
+#: KasumiMainWindow.cxx:247 KasumiAddWindow.cxx:90
 msgid "Frequency"
 msgstr ""
 
-#: KasumiMainWindow.cxx:90
+#: KasumiMainWindow.cxx:281
 msgid "WordClass"
 msgstr ""
 
-#: KasumiMainWindow.cxx:193 KasumiAddWindow.cxx:78
-msgid "Word Class"
-msgstr ""
-
-#: KasumiMainWindow.cxx:199 KasumiAddWindow.cxx:84
-msgid "Noun"
-msgstr ""
-
-#: KasumiMainWindow.cxx:200 KasumiAddWindow.cxx:85
-msgid "Adverb"
-msgstr ""
-
-#: KasumiMainWindow.cxx:201 KasumiAddWindow.cxx:86
-msgid "Person's name"
-msgstr ""
-
-#: KasumiMainWindow.cxx:202 KasumiAddWindow.cxx:87
-msgid "Place-name"
-msgstr ""
-
-#: KasumiMainWindow.cxx:203 KasumiAddWindow.cxx:88
-msgid "Adjective"
-msgstr ""
-
-#: KasumiMainWindow.cxx:204 KasumiAddWindow.cxx:89
-msgid "Verb"
-msgstr ""
-
-#: KasumiMainWindow.cxx:218 KasumiAddWindow.cxx:102
-msgid "NA connection"
-msgstr ""
-
-#: KasumiMainWindow.cxx:227 KasumiAddWindow.cxx:108
-msgid "SA connection"
-msgstr ""
-
-#: KasumiMainWindow.cxx:236 KasumiMainWindow.cxx:286 KasumiAddWindow.cxx:114
-#: KasumiAddWindow.cxx:148
-msgid "SURU connection"
-msgstr ""
-
-#: KasumiMainWindow.cxx:245 KasumiMainWindow.cxx:295 KasumiAddWindow.cxx:120
-#: KasumiAddWindow.cxx:154
-msgid "Can be Bunnsetsu"
-msgstr ""
-
-#: KasumiMainWindow.cxx:254 KasumiAddWindow.cxx:125
-msgid "KAKUJOSHI connection"
-msgstr ""
-
-#: KasumiMainWindow.cxx:268 KasumiAddWindow.cxx:136
-msgid "TO connection"
-msgstr ""
-
-#: KasumiMainWindow.cxx:277 KasumiAddWindow.cxx:142
-msgid "TARU connection"
-msgstr ""
-
-#: KasumiMainWindow.cxx:308 KasumiAddWindow.cxx:164
-msgid "VerbType"
-msgstr ""
-
-#: KasumiMainWindow.cxx:315 KasumiAddWindow.cxx:171
-msgid "Ba line, 5 columns"
-msgstr ""
-
-#: KasumiMainWindow.cxx:316 KasumiAddWindow.cxx:172 KasumiAddWindow.cxx:173
-msgid "Ga line, 5 columns"
-msgstr ""
-
-#: KasumiMainWindow.cxx:317 KasumiAddWindow.cxx:174
-msgid "Ka line, 5 columns"
-msgstr ""
-
-#: KasumiMainWindow.cxx:318 KasumiAddWindow.cxx:175
-msgid "Ma line, 5 columns"
-msgstr ""
-
-#: KasumiMainWindow.cxx:319 KasumiAddWindow.cxx:176
-msgid "Na line, 5 columns"
-msgstr ""
-
-#: KasumiMainWindow.cxx:320 KasumiAddWindow.cxx:177
-msgid "Ra line, 5 columns"
-msgstr ""
-
-#: KasumiMainWindow.cxx:321 KasumiAddWindow.cxx:178
-msgid "Sa line, 5 columns"
-msgstr ""
-
-#: KasumiMainWindow.cxx:322 KasumiAddWindow.cxx:179
-msgid "Ta line, 5 columns"
-msgstr ""
-
-#: KasumiMainWindow.cxx:323 KasumiAddWindow.cxx:180
-msgid "Wa line, 5 columns"
-msgstr ""
-
-#: KasumiMainWindow.cxx:333 KasumiAddWindow.cxx:187
-msgid "Can be Meishi when Renyou type"
-msgstr ""
-
-#: KasumiMainWindow.cxx:345
-msgid "Search"
-msgstr ""
-
-#: KasumiMainWindow.cxx:368
-msgid "Find By Spelling"
-msgstr ""
-
-#: KasumiMainWindow.cxx:374
-msgid "Find By Sound"
-msgstr ""
-
-#: KasumiMainWindow.cxx:437
-msgid "Adding Mode"
-msgstr ""
-
-#: KasumiMainWindow.cxx:527
+#: KasumiMainWindow.cxx:397
 msgid ""
-"Your dictionary went through several changes. Do you save these changes "
-"before Kasumi quits?"
+"Your dictionary was changed. Do you save these changes before Kasumi quits?"
 msgstr ""
 
-#: KasumiMainWindow.cxx:829
+#: KasumiMainWindow.cxx:644
 msgid "Cannot find a specific word. Search from first?"
 msgstr ""
 
-#: KasumiMainWindow.cxx:867
+#: KasumiMainWindow.cxx:682
 msgid "Cannot find a specific word."
 msgstr ""
 
-#: KasumiAddWindow.cxx:213
+#: KasumiAddWindow.cxx:108
+msgid "Word Type"
+msgstr ""
+
+#: KasumiAddWindow.cxx:145
+msgid "Quit"
+msgstr ""
+
+#: KasumiAddWindow.cxx:163
 msgid "Quit this application"
 msgstr ""
 
-#: KasumiAddWindow.cxx:214
+#: KasumiAddWindow.cxx:164
 msgid "Save dictionary and quit this application."
 msgstr ""
 
-#: KasumiAddWindow.cxx:231
+#: KasumiAddWindow.cxx:167
+msgid "Add"
+msgstr ""
+
+#: KasumiAddWindow.cxx:185
 msgid "Add entered word"
 msgstr ""
 
-#: KasumiAddWindow.cxx:232
+#: KasumiAddWindow.cxx:186
 msgid "If all the necessary items are filled in, add entered word."
 msgstr ""
 
-#: KasumiAddWindow.cxx:249
+#: KasumiAddWindow.cxx:189
+msgid "Edit"
+msgstr ""
+
+#: KasumiAddWindow.cxx:207
 msgid "Manage mode"
 msgstr ""
 
-#: KasumiAddWindow.cxx:250
+#: KasumiAddWindow.cxx:208
 msgid "Make the shift to manage mode to modify and remove registered words."
 msgstr ""
 
-#: KasumiAddWindow.cxx:321
+#: KasumiAddWindow.cxx:259
 msgid "Invlid entry for Sound."
 msgstr ""
 
-#: KasumiAddWindow.cxx:335
+#: KasumiAddWindow.cxx:272
 msgid "Invlid entry for Spelling."
 msgstr ""

@@ -142,9 +142,13 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
 
     // creating buttons and configure shortcut key
     GtkWidget *button = gtk_button_new();
+    label = gtk_label_new(_("Quit"));
     GtkWidget *button_image = gtk_image_new_from_stock(GTK_STOCK_QUIT,
 						       GTK_ICON_SIZE_BUTTON);
-    gtk_container_add(GTK_CONTAINER(button),button_image);
+    GtkWidget *in_box = gtk_hbox_new(FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(in_box), button_image, FALSE, FALSE, 3);
+    gtk_box_pack_start(GTK_BOX(in_box), label, FALSE, FALSE, 3);
+    gtk_container_add(GTK_CONTAINER(button),in_box);
     gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),TRUE,TRUE,0);
     g_signal_connect(G_OBJECT(button),"clicked",
 		     G_CALLBACK(_call_back_add_window_quit),this);
@@ -160,9 +164,13 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
 			 _("Save dictionary and quit this application."));
 
     button = gtk_button_new();
+    label = gtk_label_new(_("Add"));
     button_image = gtk_image_new_from_stock(GTK_STOCK_ADD,
 					    GTK_ICON_SIZE_BUTTON);
-    gtk_container_add(GTK_CONTAINER(button),button_image);
+    in_box = gtk_hbox_new(FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(in_box), button_image, FALSE, FALSE, 3);
+    gtk_box_pack_start(GTK_BOX(in_box), label, FALSE, FALSE, 3);
+    gtk_container_add(GTK_CONTAINER(button),in_box);
     gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),TRUE,TRUE,0);
     g_signal_connect(G_OBJECT(button),"clicked",
 		     G_CALLBACK(_call_back_add_window_add),this);
@@ -178,9 +186,13 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
 			 _("If all the necessary items are filled in, add entered word."));
 
     button = gtk_button_new();
+    label = gtk_label_new(_("Edit"));
     button_image = gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,
 					    GTK_ICON_SIZE_BUTTON);
-    gtk_container_add(GTK_CONTAINER(button),button_image);
+    in_box = gtk_hbox_new(FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(in_box), button_image, FALSE, FALSE, 3);
+    gtk_box_pack_start(GTK_BOX(in_box), label, FALSE, FALSE, 3);
+    gtk_container_add(GTK_CONTAINER(button),in_box);
     gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),TRUE,TRUE,0);
     g_signal_connect(G_OBJECT(button),"clicked",
 		     G_CALLBACK(_call_back_manage_mode),this);
