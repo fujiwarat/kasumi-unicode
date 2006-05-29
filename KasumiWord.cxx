@@ -81,8 +81,11 @@ string KasumiWord::extractInvalidCharacterFromSound(string soundByUTF8){
 	first = static_cast<unsigned char> (str[i]);
 	second = static_cast<unsigned char> (str[i+1]);
 	third = static_cast<unsigned char> (str[i+2]);
-    
-	if(first <= 0x7f){
+
+	if(first >= 0x21 && first <= 0x7e){
+	    // ASCII character
+	    continue;
+	}else if(first <= 0x7f){
 	    res[0] = str[i];
 	    res[1] = 0;
 	    return string(res);

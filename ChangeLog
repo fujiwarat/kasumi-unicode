@@ -1,5 +1,10 @@
 2006-05-29  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
+ 	* preparation for release (ver 2.0)
+	
+	* fix: KasumiWord.cxx, configure.in
+	 - accept ASCII character in sound entries
+
 	* fix: AUTHORS
 	 - add Ikuya to AUTHORS
 
