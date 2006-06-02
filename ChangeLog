@@ -1,3 +1,10 @@
+2006-06-02  Ikuya Awashiro <ikuya@fruitsbasket.info>
+	* Makefile.am:
+	- kasumi.png was placed in /usr/share/pixmaps instead /usr/share/kasumi.
+	- add man page.
+	* kasumi.1:
+	- added.
+
 2006-05-29  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
  	* preparation for release (ver 2.0)
