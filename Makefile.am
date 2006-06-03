@@ -13,7 +13,8 @@ kasumi_SOURCES = main.cxx intl.h \
 		KasumiConfiguration.cxx KasumiConfiguration.hxx \
 		cellrendererspin.c cellrendererspin.h \
 		kasumi.png \
-		kasumi.1
+		kasumi.1 \
+		kasumi.desktop.in
 
 appicondir = $(datadir)/pixmaps
 appicon_DATA = kasumi.png
@@ -21,9 +22,14 @@ appicon_DATA = kasumi.png
 man_MANS = kasumi.1
 EXTRA_DIST = $(man_MANS)
 
+desktopdir = $(datadir)/applications
+Desktop_in_files = kasumi.desktop.in
+desktop_DATA = $(Desktop_in_files:.desktop.in=.desktop)
+
 AM_CPPFLAGS=-DLOCALEDIR='"$(localedir)"'
 SUBDIRS = intl m4 po
 
 ACLOCAL_AMFLAGS = -I m4
 
+CLEANFILES = $(desktop_DATA)
 EXTRA_DIST = config.rpath

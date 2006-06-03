@@ -1,3 +1,9 @@
+2006-06-03  Ikuya Awashiro <ikuya@fruitsbasket.info>
+	* kasumi.desktop.in:
+	- added.
+	* Makefile.am, configure.in:
+	- resistered in GNOME/K menu.
+
 2006-06-02  Ikuya Awashiro <ikuya@fruitsbasket.info>
 	* Makefile.am:
 	- kasumi.png was placed in /usr/share/pixmaps instead /usr/share/kasumi.

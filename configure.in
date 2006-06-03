@@ -33,6 +33,9 @@ dnl Checks for header files.
 dnl Checks for typedefs, structures, and compiler characteristics.
 
 dnl Checks for library functions.
+AC_CONFIG_FILES([
+kasumi.desktop
+])
 
 AC_OUTPUT(Makefile intl/Makefile po/Makefile.in m4/Makefile )
 

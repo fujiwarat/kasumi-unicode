@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Anthy Dictionary editor
+Name[ja]=Anthy 辞書管理
+GenericName=Management tool for a private dictionary of anthy
+GenericName[ja]=Anthy 個人辞書管理ツール
+Comment=Edit Anthy dictionary.
+Comment[ja]=Anthy の個人辞書に単語を登録、削除、編集するツールです。
+Exec=kasumi
+Icon=kasumi.png
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Applications;Settings;
