@@ -73,11 +73,11 @@ void KasumiDic::load(KasumiConfiguration *conf)
   const int FREQ_UBOUND = conf->getPropertyValueByInt("MaxFrequency");
 
   try{
-      if(anthy_priv_dic_select_first_entry() == -3){
+      if(anthy_priv_dic_select_first_entry() == -1){
 	  // no word
 	  return;
       }
-      else if(anthy_priv_dic_select_first_entry() == -1)
+      else if(anthy_priv_dic_select_first_entry() == -3)
       {
 	  int anthy_version = str2int(string(anthy_get_version_string()));
 	  if(anthy_version >= 7716)

@@ -1,3 +1,9 @@
+2006-06-20  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: KasumiDic.cxx
+	 - fix the defect that Kasumi failes when the private dictionary
+	   doesn't have any word.
+
 2006-06-03  Ikuya Awashiro <ikuya@fruitsbasket.info>
 	* kasumi.desktop.in:
 	- added.
