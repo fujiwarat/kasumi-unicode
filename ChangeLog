@@ -1,3 +1,8 @@
+2006-06-21  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: configure.in
+	 - require Gtk+ version is 2.6 or higher for GtkCellRendererCombo
+
 2006-06-20  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
 	* fix: KasumiDic.cxx
