@@ -1,3 +1,7 @@
+2006-06-23  Ikuya Awashiro <ikuya@fruitsbasket.info>
+	* KasumiMainWindow.hxx:
+	 - fixed compile error on gcc 4.1. thanks to sgtom.
+
 2006-06-21  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
 	* fix: configure.in
@@ -11,16 +15,16 @@
 
 2006-06-03  Ikuya Awashiro <ikuya@fruitsbasket.info>
 	* kasumi.desktop.in:
-	- added.
+	 - added.
 	* Makefile.am, configure.in:
-	- resistered in GNOME/K menu.
+	 - resistered in GNOME/K menu.
 
 2006-06-02  Ikuya Awashiro <ikuya@fruitsbasket.info>
 	* Makefile.am:
-	- kasumi.png was placed in /usr/share/pixmaps instead /usr/share/kasumi.
-	- add man page.
+	 - kasumi.png was placed in /usr/share/pixmaps instead /usr/share/kasumi.
+	 - add man page.
 	* kasumi.1:
-	- added.
+	 - added.
 
 2006-05-29  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 

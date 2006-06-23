@@ -64,6 +64,60 @@ enum _TextColumnEnum
 typedef _TextColumnEnum SearchBy;
 typedef _TextColumnEnum TextColumn;
 
+void _call_back_changed_wordtype_column(GtkComboBox *combo,
+                                        gpointer data);
+gboolean _call_back_key_pressed_text_column(GtkWidget *widget,
+                                            GdkEventKey *event,
+                                            gpointer data);
+void _call_back_activate_search_entry(GtkWidget *widget,
+                                       gpointer data);
+void _call_back_changed_search_entry(GtkWidget *widget,
+                                       gpointer data);
+void _call_back_remove(GtkWidget *widget,
+                       gpointer data);
+void _call_back_delete_event(GtkWidget *widget,
+                             GdkEvent *event,
+                             gpointer data);
+void _call_back_quit(GtkWidget *widget,
+                     gpointer data);
+void _call_back_store(GtkWidget *widget,
+                      gpointer data);
+void _call_back_add(GtkWidget *widget,
+                    gpointer data);
+void _call_back_clicked_column_header(GtkTreeViewColumn *column,
+                                             gpointer data);
+gboolean _call_back_key_pressed_text_column(GtkWidget *widget,
+					    GdkEventKey *event,
+					    gpointer data);
+void _call_back_editing_started_sound_column(GtkCellRenderer *render,
+					     GtkCellEditable *editable,
+					     gchar *path,
+					     gpointer data);
+void _call_back_edited_sound_column(GtkCellRendererText *renderer,
+				    gchar *arg1,
+				    gchar *arg2,
+				    gpointer data);
+void _call_back_editing_started_spelling_column(GtkCellRenderer *render,
+						GtkCellEditable *editable,
+						gchar *path,
+						gpointer data);
+void _call_back_edited_spelling_column(GtkCellRendererText *renderer,
+				       gchar *arg1,
+				       gchar *arg2,
+				       gpointer data);
+void _call_back_editing_started_freq_column(GtkCellRenderer *render,
+					    GtkCellEditable *editable,
+					    gchar *path,
+					    gpointer data);
+void _call_back_edited_freq_column(GtkCellRendererText *renderer,
+				   gchar *arg1,
+				   gchar *arg2,
+				   gpointer data);
+void _call_back_editing_started_wordtype_column(GtkCellRenderer *render,
+						GtkCellEditable *editable,
+						gchar *path,
+						gpointer data);
+
 class KasumiMainWindow : public KasumiDicEventListener{
     friend void _call_back_delete_event(GtkWidget *widget,
 					GdkEvent *event,
