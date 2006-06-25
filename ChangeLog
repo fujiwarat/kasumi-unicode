@@ -1,3 +1,11 @@
+2006-06-25  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: KasumiAddWindow.cxx po/*.po po/*.pot
+	 - fixed typo: "Invlid" -> "Invalid"
+
+	* New feature:
+	 - Italian localization
+
 2006-06-23  Ikuya Awashiro <ikuya@fruitsbasket.info>
 	* KasumiMainWindow.hxx:
 	 - fixed compile error on gcc 4.1. thanks to sgtom.
