@@ -1,3 +1,8 @@
+2006-06-26  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: AUTHORS
+	 - typo of my email address :(
+
 2006-06-25  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
 	* fix: KasumiAddWindow.cxx po/*.po po/*.pot
