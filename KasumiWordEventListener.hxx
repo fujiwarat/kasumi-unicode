@@ -37,6 +37,7 @@ class KasumiWord;
 class KasumiWordEventListener{
 private:
 public:
+    virtual ~KasumiWordEventListener() {};
     virtual void changedFrequency(KasumiWord *word) = 0;
     virtual void changedSpelling(KasumiWord *word) = 0;
     virtual void changedSound(KasumiWord *word) = 0;

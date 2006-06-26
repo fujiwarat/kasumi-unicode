@@ -35,9 +35,10 @@
 class KasumiDicEventListener{
 private:
 public:
-  virtual void removedWord(size_t id) = 0;
-  virtual void appendedWord(KasumiWord *word) = 0;
-  virtual void modifiedWord(KasumiWord *word) = 0;
+    virtual ~KasumiDicEventListener() {};
+    virtual void removedWord(size_t id) = 0;
+    virtual void appendedWord(KasumiWord *word) = 0;
+    virtual void modifiedWord(KasumiWord *word) = 0;
 };
 
 #endif
