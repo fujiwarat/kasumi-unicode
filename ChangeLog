@@ -1,54 +1,10 @@
 2006-06-26  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
+	* preparation for release (ver 2.0.1)
+
 	* fix: KasumiException.cxx
-	 - security fix
-
-	* fix: KasumiDicEventListener.hxx KasumiWordEventListener.hxx
-	 - add virtual destructor to avoid compilation warnings 
-
-	* fix: configure.in main.cxx Makefile.am acconfig.h
-	 - removed acconfig.h deprecated in autoconf 2.5
-	 - correctly handling "--disable-nls" option on no-glibc platform
-	 - thanks to Diego's patch
-
-	* fix: AUTHORS
-	 - typo of my email address :(
-
-2006-06-25  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
-
-	* fix: KasumiAddWindow.cxx po/*.po po/*.pot
-	 - fixed typo: "Invlid" -> "Invalid"
-
-	* New feature:
-	 - Italian localization
-
-2006-06-23  Ikuya Awashiro <ikuya@fruitsbasket.info>
-	* KasumiMainWindow.hxx:
-	 - fixed compile error on gcc 4.1. thanks to sgtom.
-
-2006-06-21  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
-
-	* fix: configure.in
-	 - require Gtk+ version is 2.6 or higher for GtkCellRendererCombo
-
-2006-06-20  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
-
-	* fix: KasumiDic.cxx
-	 - fix the defect that Kasumi failes when the private dictionary
-	   doesn't have any word.
-
-2006-06-03  Ikuya Awashiro <ikuya@fruitsbasket.info>
-	* kasumi.desktop.in:
-	 - added.
-	* Makefile.am, configure.in:
-	 - resistered in GNOME/K menu.
-
-2006-06-02  Ikuya Awashiro <ikuya@fruitsbasket.info>
-	* Makefile.am:
-	 - kasumi.png was placed in /usr/share/pixmaps instead /usr/share/kasumi.
-	 - add man page.
-	* kasumi.1:
-	 - added.
+	 - security fix: an arbitrary text can be accepted as printf()-style
+	   format string.
 
 2006-05-29  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
