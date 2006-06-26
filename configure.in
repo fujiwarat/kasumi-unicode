@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(main.cxx, 2.0)
-AM_INIT_AUTOMAKE(kasumi, 2.0)
+AC_INIT(main.cxx)
+AM_INIT_AUTOMAKE(kasumi, 2.0.1)
 AM_CONFIG_HEADER(config.h)
 
 dnl Checks for programs.
@@ -8,19 +8,19 @@ AC_PROG_CC
 AC_PROG_CXX
 
 dnl Checks for gettext
-ALL_LINGUAS="ja it"
+ALL_LINGUAS="ja"
 AM_GNU_GETTEXT
-dnl LDFLAGS="$LDFLAGS $INTLLIBS"
-dnl localedir='${prefix}/share/locale'
-dnl AC_SUBST(localedir)
-dnl AC_DEFINE(HAVE_CATGETS, 1,Define as 1 if you have catgets and don't want to use GNU gettext.)
-dnl AC_DEFINE(HAVE_GETTEXT, 1, Define as 1 if you have GNU gettext.)
-dnl AC_DEFINE(HAVE_LC_MESSAGES, 1, Define as 1 if you have LC_MESSAGES.)
-dnl AC_DEFINE(HAVE_STPCPY, 1, Define as 1 if you have stpcpy() function.)
-dnl AC_DEFINE(ENABLE_NLS, 1, Define as 1 if you want to use NLS.)
+LDFLAGS="$LDFLAGS $INTLLIBS"
+localedir='${prefix}/share/locale'
+AC_SUBST(localedir)
+AC_DEFINE(HAVE_CATGETS, 1,Define as 1 if you have catgets and don't want to use GNU gettext.)
+AC_DEFINE(HAVE_GETTEXT, 1, Define as 1 if you have GNU gettext.)
+AC_DEFINE(HAVE_LC_MESSAGES, 1, Define as 1 if you have LC_MESSAGES.)
+AC_DEFINE(HAVE_STPCPY, 1, Define as 1 if you have stpcpy() function.)
+AC_DEFINE(ENABLE_NLS, 1, Define as 1 if you want to use NLS.)
 
 dnl Checks for libraries.
-AM_PATH_GTK_2_0(2.6.0, CFLAGS="$CFLAGS $GTK_CFLAGS" CPPFLAGS="$CPPFLAGS $GTK_CFLAGS" LIBS="$LIBS $GTK_LIBS", AC_MSG_ERROR(GTK+ >= 2.6.0 not found.))
+AM_PATH_GTK_2_0(2.4.0, CFLAGS="$CFLAGS $GTK_CFLAGS" CPPFLAGS="$CPPFLAGS $GTK_CFLAGS" LIBS="$LIBS $GTK_LIBS", AC_MSG_ERROR(GTK+ 2.0 not found.))
 AC_CHECK_LIB(iconv, iconv)
 AC_CHECK_LIB(anthydic, anthy_dic_util_init)
 AC_CHECK_LIB(anthy, anthy_get_version_string)
@@ -33,9 +33,6 @@ dnl Checks for header files.
 dnl Checks for typedefs, structures, and compiler characteristics.
 
 dnl Checks for library functions.
-AC_CONFIG_FILES([
-kasumi.desktop
-])
 
 AC_OUTPUT(Makefile intl/Makefile po/Makefile.in m4/Makefile )
 
