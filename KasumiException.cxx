@@ -47,6 +47,7 @@ void handleException(KasumiException e){
                                     (GtkDialogFlags)0,
                                     GTK_MESSAGE_ERROR,
                                     GTK_BUTTONS_CLOSE,
+				    "%s",
                                     e.getMessage().c_str());
     gtk_dialog_run(GTK_DIALOG (dialog));
     gtk_widget_destroy(dialog);
@@ -56,6 +57,7 @@ void handleException(KasumiException e){
                                     (GtkDialogFlags)0,
                                     GTK_MESSAGE_WARNING,
                                     GTK_BUTTONS_OK,
+				    "%s",
                                     e.getMessage().c_str());
     gtk_dialog_run(GTK_DIALOG (dialog));
     gtk_widget_destroy(dialog);
