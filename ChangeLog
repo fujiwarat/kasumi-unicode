@@ -1,5 +1,10 @@
 2006-06-26  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
+	* fix: configure.in main.cxx Makefile.am acconfig.h
+	 - removed acconfig.h deprecated in autoconf 2.5
+	 - correctly handling "--disable-nls" option on no-glibc platform
+	 - thanks to Diego's patch
+
 	* fix: AUTHORS
 	 - typo of my email address :(
 

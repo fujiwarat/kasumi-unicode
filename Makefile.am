@@ -19,6 +19,8 @@ kasumi_SOURCES = main.cxx intl.h \
 appicondir = $(datadir)/pixmaps
 appicon_DATA = kasumi.png
 
+kasumi_LDADD = $(INTLLIBS)
+
 man_MANS = kasumi.1
 EXTRA_DIST = $(man_MANS)
 
@@ -26,10 +28,11 @@ desktopdir = $(datadir)/applications
 Desktop_in_files = kasumi.desktop.in
 desktop_DATA = $(Desktop_in_files:.desktop.in=.desktop)
 
-AM_CPPFLAGS=-DLOCALEDIR='"$(localedir)"'
+localedir = $(datadir)/locale
+AM_CPPFLAGS=-DLOCALEDIR=\"$(localedir)\"
 SUBDIRS = intl m4 po
 
 ACLOCAL_AMFLAGS = -I m4
 
 CLEANFILES = $(desktop_DATA)
-EXTRA_DIST = config.rpath
+#EXTRA_DIST = config.rpath

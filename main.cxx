@@ -185,11 +185,13 @@ int main(int argc, char *argv[])
 {
   gtk_init(&argc, &argv);
 
+#ifdef ENABLE_NLS
   // for gettext
   setlocale(LC_ALL, "");
   bindtextdomain(PACKAGE, LOCALEDIR);
   bind_textdomain_codeset(PACKAGE, "UTF-8");
   textdomain(PACKAGE);
+#endif // #ifdef ENABLE_NLS
 
   GtkWidget *server = check_duplicated_process (argc, argv);
   if (!server)
