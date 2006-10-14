@@ -256,7 +256,7 @@ void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
 							GTK_DIALOG_DESTROY_WITH_PARENT,
 							GTK_MESSAGE_ERROR,
 							GTK_BUTTONS_CLOSE,
-							_("Invlid entry for Sound."));
+							_("Invalid entry for Sound."));
 	    gtk_dialog_run (GTK_DIALOG (dialog));
 	    gtk_widget_destroy (dialog);
 	    delete(word);
@@ -269,7 +269,7 @@ void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
 							GTK_DIALOG_DESTROY_WITH_PARENT,
 							GTK_MESSAGE_ERROR,
 							GTK_BUTTONS_CLOSE,
-							_("Invlid entry for Spelling.")
+							_("Invalid entry for Spelling.")
 		);
 	    gtk_dialog_run (GTK_DIALOG (dialog));
 	    gtk_widget_destroy (dialog);
