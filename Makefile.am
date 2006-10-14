@@ -19,7 +19,7 @@ kasumi_SOURCES = main.cxx intl.h \
 appicondir = $(datadir)/pixmaps
 appicon_DATA = kasumi.png
 
-kasumi_LDADD = $(INTLLIBS)
+kasumi_LDADD = $(INTLLIBS) $(LTLIBICONV)
 
 man_MANS = kasumi.1
 EXTRA_DIST = $(man_MANS)
