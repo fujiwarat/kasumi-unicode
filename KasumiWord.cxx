@@ -124,6 +124,10 @@ string KasumiWord::extractInvalidCharacterFromSound(string soundByUTF8){
 		     third >= 0x81 && third <= 0xa0){
 		// symbol marks of two-byte characters
 		continue;
+	    }else if(first == 0xe3 && second == 0x82 &&
+		     third == 0x9b){
+		// dakuon mark
+		continue;
 	    }else{
 		res[0] = str[i];
 		res[1] = str[i+1];
