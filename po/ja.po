@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-12 17:15+0900\n"
-"PO-Revision-Date: 2006-08-12 17:16+0900\n"
+"POT-Creation-Date: 2006-10-14 15:35+0900\n"
+"PO-Revision-Date: 2006-10-14 15:35+0900\n"
 "Last-Translator: Takashi Nakamoto <bluedwarf@bpost.plala.or.jp>\n"
 "Language-Team: Takashi Nakamoto <bluedwarf@bpost.plala.or.jp>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgid ""
 "character: "
 msgstr "読みにひらがな以外の文字を入力することはできません: "
 
-#: KasumiMainWindow.cxx:94 KasumiAddWindow.cxx:56
+#: KasumiMainWindow.cxx:94
 msgid "Kasumi"
 msgstr "霞"
 
@@ -65,6 +65,10 @@ msgstr "検索しても見つかりませんでした。最初から検索しますか？"
 #: KasumiMainWindow.cxx:686
 msgid "Cannot find a specific word."
 msgstr "検索しても見つかりませんでした。"
+
+#: KasumiAddWindow.cxx:56
+msgid "Kasumi (Register words)"
+msgstr "霞 (単語登録)"
 
 #: KasumiAddWindow.cxx:108
 msgid "Word Type"

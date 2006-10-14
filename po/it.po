@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-12 17:15+0900\n"
+"POT-Creation-Date: 2006-10-14 15:35+0900\n"
 "PO-Revision-Date: 2006-06-25 13:04+0900\n"
 "Last-Translator: Diego 'Flameeyes' Pettenò <flameeyes@gentoo.org>\n"
 "Language-Team: Italian\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Il suono deve contenere solo caratteri Hiragana. Sono stati inseriti "
 "caratteri non validi."
 
-#: KasumiMainWindow.cxx:94 KasumiAddWindow.cxx:56
+#: KasumiMainWindow.cxx:94
 msgid "Kasumi"
 msgstr "Kasumi"
 
@@ -72,6 +72,10 @@ msgstr ""
 #: KasumiMainWindow.cxx:686
 msgid "Cannot find a specific word."
 msgstr "Impossibile trovare una parola specifica."
+
+#: KasumiAddWindow.cxx:56
+msgid "Kasumi (Register words)"
+msgstr ""
 
 #: KasumiAddWindow.cxx:108
 msgid "Word Type"
