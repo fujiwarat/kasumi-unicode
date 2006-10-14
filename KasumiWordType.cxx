@@ -66,7 +66,7 @@ void KasumiWordType::initWordTypeList()
     KasumiWordType::addNewWordType(_("Verb*"), _("Wa 5"), "#W5r");
 }
 
-KasumiWordType::KasumiWordType(string sPos, string sCategory, string sCannaTab)
+KasumiWordType::KasumiWordType(string sCategory, string sPos, string sCannaTab)
 {
     msPos = sPos;
     msCategory = sCategory;
@@ -118,10 +118,10 @@ KasumiWordType* KasumiWordType::getWordTypeFromPos(string sPos)
 
 string KasumiWordType::getUIString()
 {
-    if(msCategory.size() != 0)
-	return msPos + " - " + msCategory;
+    if(msPos.size() != 0)
+	return msCategory + " - " + msPos;
     else
-	return msPos;
+	return msCategory;
 }
 
 /*

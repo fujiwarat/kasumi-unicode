@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-14 15:35+0900\n"
+"POT-Creation-Date: 2006-10-14 18:33+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: KasumiWord.cxx:184 KasumiWord.cxx:207
+#: KasumiWord.cxx:188 KasumiWord.cxx:211
 msgid ""
 "Sound must consist of only Hiragana characters. You have entered invalid "
 "character: "
@@ -72,50 +72,54 @@ msgid "Kasumi (Register words)"
 msgstr ""
 
 #: KasumiAddWindow.cxx:108
+msgid "Word Type Category"
+msgstr ""
+
+#: KasumiAddWindow.cxx:153
 msgid "Word Type"
 msgstr ""
 
-#: KasumiAddWindow.cxx:145
+#: KasumiAddWindow.cxx:176
 msgid "Quit"
 msgstr ""
 
-#: KasumiAddWindow.cxx:163
+#: KasumiAddWindow.cxx:194
 msgid "Quit this application"
 msgstr ""
 
-#: KasumiAddWindow.cxx:164
+#: KasumiAddWindow.cxx:195
 msgid "Save dictionary and quit this application."
 msgstr ""
 
-#: KasumiAddWindow.cxx:167
+#: KasumiAddWindow.cxx:198
 msgid "Add"
 msgstr ""
 
-#: KasumiAddWindow.cxx:185
+#: KasumiAddWindow.cxx:216
 msgid "Add entered word"
 msgstr ""
 
-#: KasumiAddWindow.cxx:186
+#: KasumiAddWindow.cxx:217
 msgid "If all the necessary items are filled in, add entered word."
 msgstr ""
 
-#: KasumiAddWindow.cxx:189
+#: KasumiAddWindow.cxx:220
 msgid "Edit"
 msgstr ""
 
-#: KasumiAddWindow.cxx:207
+#: KasumiAddWindow.cxx:238
 msgid "Manage mode"
 msgstr ""
 
-#: KasumiAddWindow.cxx:208
+#: KasumiAddWindow.cxx:239
 msgid "Make the shift to manage mode to modify and remove registered words."
 msgstr ""
 
-#: KasumiAddWindow.cxx:259
+#: KasumiAddWindow.cxx:290
 msgid "Invalid entry for Sound."
 msgstr ""
 
-#: KasumiAddWindow.cxx:272
+#: KasumiAddWindow.cxx:303
 msgid "Invalid entry for Spelling."
 msgstr ""
 

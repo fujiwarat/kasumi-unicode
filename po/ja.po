@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-14 15:35+0900\n"
-"PO-Revision-Date: 2006-10-14 15:35+0900\n"
+"POT-Creation-Date: 2006-10-14 18:33+0900\n"
+"PO-Revision-Date: 2006-10-14 18:34+0900\n"
 "Last-Translator: Takashi Nakamoto <bluedwarf@bpost.plala.or.jp>\n"
 "Language-Team: Takashi Nakamoto <bluedwarf@bpost.plala.or.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=EUC-JP\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: KasumiWord.cxx:184 KasumiWord.cxx:207
+#: KasumiWord.cxx:188 KasumiWord.cxx:211
 msgid ""
 "Sound must consist of only Hiragana characters. You have entered invalid "
 "character: "
@@ -70,51 +70,56 @@ msgstr "検索しても見つかりませんでした。"
 msgid "Kasumi (Register words)"
 msgstr "霞 (単語登録)"
 
+# 品詞の分類
 #: KasumiAddWindow.cxx:108
+msgid "Word Type Category"
+msgstr "品詞の分類"
+
+#: KasumiAddWindow.cxx:153
 msgid "Word Type"
 msgstr "品詞"
 
-#: KasumiAddWindow.cxx:145
+#: KasumiAddWindow.cxx:176
 msgid "Quit"
 msgstr "終了"
 
-#: KasumiAddWindow.cxx:163
+#: KasumiAddWindow.cxx:194
 msgid "Quit this application"
 msgstr "このアプリケーションを終了する"
 
-#: KasumiAddWindow.cxx:164
+#: KasumiAddWindow.cxx:195
 msgid "Save dictionary and quit this application."
 msgstr "辞書を保存して、このアプリケーションを終了します。"
 
-#: KasumiAddWindow.cxx:167
+#: KasumiAddWindow.cxx:198
 msgid "Add"
 msgstr "追加"
 
-#: KasumiAddWindow.cxx:185
+#: KasumiAddWindow.cxx:216
 msgid "Add entered word"
 msgstr "入力された単語を追加する"
 
-#: KasumiAddWindow.cxx:186
+#: KasumiAddWindow.cxx:217
 msgid "If all the necessary items are filled in, add entered word."
 msgstr "全ての必要事項が埋められていたら、入力された単語を追加します。"
 
-#: KasumiAddWindow.cxx:189
+#: KasumiAddWindow.cxx:220
 msgid "Edit"
 msgstr "編集"
 
-#: KasumiAddWindow.cxx:207
+#: KasumiAddWindow.cxx:238
 msgid "Manage mode"
 msgstr "辞書管理モード"
 
-#: KasumiAddWindow.cxx:208
+#: KasumiAddWindow.cxx:239
 msgid "Make the shift to manage mode to modify and remove registered words."
 msgstr "単語の変更や削除が行える辞書管理モードに移行します。"
 
-#: KasumiAddWindow.cxx:259
+#: KasumiAddWindow.cxx:290
 msgid "Invalid entry for Sound."
 msgstr "「読み」の項目を正しく入力してください"
 
-#: KasumiAddWindow.cxx:272
+#: KasumiAddWindow.cxx:303
 msgid "Invalid entry for Spelling."
 msgstr "「単語」の項目を正しく入力してください"
 

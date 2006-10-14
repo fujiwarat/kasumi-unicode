@@ -47,43 +47,49 @@ void _call_back_manage_mode(GtkWidget *widget,
                             gpointer data);
 void _call_back_selection_data_received(GtkWidget *widget,
                                         GtkSelectionData *selection_data,
-                                        gpointer data) ;
+                                        gpointer data);
+void _call_back_word_type_category_changed(GtkWidget *widget,
+					   gpointer data);
 
 class KasumiAddWindow{
-  friend void _call_back_add_window_delete_event(GtkWidget *widget,
-                                                     GdkEvent *event,
-                                                     gpointer data);
-  friend void _call_back_add_window_quit(GtkWidget *widget,
-                                         gpointer data);
-  friend void _call_back_add_window_add(GtkWidget *widget,
-                                        gpointer data);
-  friend void _call_back_manage_mode(GtkWidget *widget,
-                                     gpointer data);
-  friend void _call_back_add_window_changed_word_type_combo(GtkWidget *widget,
-							    gpointer data);
-  friend void _call_back_selection_data_received(GtkWidget *widget,
-                                                 GtkSelectionData *selection_data,
-                                                 gpointer data) ;
+    friend void _call_back_add_window_delete_event(GtkWidget *widget,
+						   GdkEvent *event,
+						   gpointer data);
+    friend void _call_back_add_window_quit(GtkWidget *widget,
+					   gpointer data);
+    friend void _call_back_add_window_add(GtkWidget *widget,
+					  gpointer data);
+    friend void _call_back_manage_mode(GtkWidget *widget,
+				       gpointer data);
+    friend void _call_back_add_window_changed_word_type_combo(GtkWidget *widget,
+							      gpointer data);
+    friend void _call_back_selection_data_received(GtkWidget *widget,
+						   GtkSelectionData *selection_data,
+						   gpointer data) ;
+    friend void _call_back_word_type_category_changed(GtkWidget *widget,
+						      gpointer data);
 private:
-  KasumiDic *dictionary;
-  KasumiConfiguration *conf;
-  GtkWidget *window;
-  GtkWidget *SpellingEntry;
-  GtkWidget *SoundEntry;
-  GtkWidget *FrequencySpin;
-  GtkWidget *WordTypeCombo;
-  GtkTooltips *Tooltips;
+    KasumiDic *dictionary;
+    KasumiConfiguration *conf;
+    GtkWidget *window;
+    GtkWidget *SpellingEntry;
+    GtkWidget *SoundEntry;
+    GtkWidget *FrequencySpin;
+    GtkWidget *WordTypeCategoryCombo;
+    GtkWidget *WordTypeCombo;
+    GtkTooltips *Tooltips;
 
-    GtkTreeIter defaultWordTypeIter;
+    GtkTreeIter defaultWordTypeCategoryIter;
   
-  void destroy();
-  void quit();
-  void ClickedAddButton(GtkWidget *widget);
+    void destroy();
+    void quit();
+    void ClickedAddButton(GtkWidget *widget);
 
-  void SwitchToManageMode();
+    void SwitchToManageMode();
+    void ChangeWordTypeList( bool toDefault );
 public:
-  KasumiAddWindow(KasumiDic *aDictionary, KasumiConfiguration *conf);
-  ~KasumiAddWindow();
+    KasumiAddWindow(KasumiDic *aDictionary, KasumiConfiguration *conf);
+    ~KasumiAddWindow();
 };
 
 void get_targets(GtkWidget *data);

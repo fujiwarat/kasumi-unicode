@@ -104,36 +104,67 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
     FrequencySpin = gtk_spin_button_new(GTK_ADJUSTMENT(adjustment),1.0,0);
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(FrequencySpin),FALSE,FALSE,0);
 
+    // creating combo box for "Word Type Category"
+    label = gtk_label_new(_("Word Type Category"));
+    alignment = gtk_alignment_new(0,0.5,0,0);
+    gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
+    gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
+
+    string defaultCannaTab = conf->getPropertyValue("DefaultAddingWordType");
+
+    GtkListStore *gWordTypeCategoryList = gtk_list_store_new(WORDTYPE_NUM_COLS,G_TYPE_STRING,G_TYPE_POINTER);
+    GtkTreeIter iter;
+    WordTypeList::iterator p = KasumiWordType::beginWordTypeList();
+    list<string> wordCategoryList;
+    while(p != KasumiWordType::endWordTypeList())
+    {
+	string category = (*p)->getCategory();
+	if( find( wordCategoryList.begin(), wordCategoryList.end(), category )
+	    == wordCategoryList.end() )
+	{
+	    wordCategoryList.push_back( category );
+
+	    gtk_list_store_append(gWordTypeCategoryList,&iter);
+	    gtk_list_store_set(gWordTypeCategoryList,&iter,
+			       COL_UI_STRING, category.c_str(),
+			       COL_WORDTYPE_POINTER, (*p),
+			       -1);
+
+	    if((*p)->getCannaTab() == defaultCannaTab)
+		defaultWordTypeCategoryIter = iter;
+	}
+
+	p++;
+    }
+    WordTypeCategoryCombo = gtk_combo_box_new_with_model(GTK_TREE_MODEL(gWordTypeCategoryList));
+    GtkCellRenderer *renderer = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
+    gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(WordTypeCategoryCombo), renderer, TRUE);
+    gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(WordTypeCategoryCombo), renderer,
+				   "text", COL_UI_STRING,
+				   NULL);
+    gtk_combo_box_set_active_iter(GTK_COMBO_BOX(WordTypeCategoryCombo), &defaultWordTypeCategoryIter);
+    gtk_box_pack_start(GTK_BOX(vbox),
+		       GTK_WIDGET(WordTypeCategoryCombo),FALSE,FALSE,0);
+    g_signal_connect(G_OBJECT(WordTypeCategoryCombo),"changed",
+		     G_CALLBACK(_call_back_word_type_category_changed),this);
+
+
     // creating combo box for "Word Type"
     label = gtk_label_new(_("Word Type"));
     alignment = gtk_alignment_new(0,0.5,0,0);
     gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
-    GtkListStore *gWordTypeList = gtk_list_store_new(WORDTYPE_NUM_COLS,G_TYPE_STRING,G_TYPE_POINTER);
-    GtkTreeIter iter;
-    string defaultCannaTab = conf->getPropertyValue("DefaultAddingWordType");
-    WordTypeList::iterator p = KasumiWordType::beginWordTypeList();
-    while(p != KasumiWordType::endWordTypeList())
-    {
-	gtk_list_store_append(gWordTypeList,&iter);
-	gtk_list_store_set(gWordTypeList,&iter,
-			   COL_UI_STRING, (*p)->getUIString().c_str(),
-			   COL_WORDTYPE_POINTER, (*p),
-			   -1);
-	if((*p)->getCannaTab() == defaultCannaTab)
-	    defaultWordTypeIter = iter;
-	p++;
-    }
+    GtkListStore *gWordTypeList = gtk_list_store_new(WORDTYPE_NUM_COLS,G_TYPE_STRING,G_TYPE_POINTER); // dummy model
     WordTypeCombo = gtk_combo_box_new_with_model(GTK_TREE_MODEL(gWordTypeList));
-    GtkCellRenderer *renderer = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
+    renderer = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
     gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(WordTypeCombo), renderer, TRUE);
     gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(WordTypeCombo), renderer,
 				   "text", COL_UI_STRING,
 				   NULL);
-    gtk_combo_box_set_active_iter(GTK_COMBO_BOX(WordTypeCombo), &defaultWordTypeIter);
     gtk_box_pack_start(GTK_BOX(vbox),
 		       GTK_WIDGET(WordTypeCombo),FALSE,FALSE,0);
+    ChangeWordTypeList(true);
 
     // creating box for buttons
     GtkWidget *hbutton_box = gtk_hbutton_box_new();
@@ -296,7 +327,8 @@ void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
 	gtk_entry_set_text(GTK_ENTRY(SpellingEntry), "");
 	const int FREQ_DEFAULT = conf->getPropertyValueByInt("DefaultFrequency");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(FrequencySpin),FREQ_DEFAULT);
-	gtk_combo_box_set_active_iter(GTK_COMBO_BOX(WordTypeCombo), &defaultWordTypeIter);
+	gtk_combo_box_set_active_iter(GTK_COMBO_BOX(WordTypeCategoryCombo), &defaultWordTypeCategoryIter);
+	ChangeWordTypeList(true);
     }catch(KasumiException e){
 	handleException(e);
     }
@@ -305,6 +337,60 @@ void KasumiAddWindow::ClickedAddButton(GtkWidget *widget){
 void KasumiAddWindow::SwitchToManageMode(){
     new KasumiMainWindow(dictionary,conf);
     delete this;
+}
+
+void KasumiAddWindow::ChangeWordTypeList(bool toDefault = false){
+    GtkTreeIter iter;
+    GtkTreeIter defaultIter;
+    bool defaultFlag = false;
+    KasumiWordType *tmp;
+    string category;
+    string defaultCannaTab = conf->getPropertyValue("DefaultAddingWordType");
+    
+    gtk_combo_box_get_active_iter(GTK_COMBO_BOX(WordTypeCategoryCombo),
+				  &iter);
+
+    gtk_tree_model_get(gtk_combo_box_get_model( GTK_COMBO_BOX(WordTypeCategoryCombo)),
+		       &iter,
+		       COL_WORDTYPE_POINTER, &tmp,
+		       -1 );
+    category = tmp->getCategory();
+    
+    GtkListStore *gWordTypeList = gtk_list_store_new(WORDTYPE_NUM_COLS,G_TYPE_STRING,G_TYPE_POINTER);
+    WordTypeList::iterator p = KasumiWordType::beginWordTypeList();
+    while(p != KasumiWordType::endWordTypeList())
+    {
+	if( (*p)->getCategory() == category )
+	{
+	    gtk_list_store_append(gWordTypeList,&iter);
+	    if( (*p)->getPos().size() != 0 )
+		gtk_list_store_set(gWordTypeList,&iter,
+				   COL_UI_STRING, (*p)->getPos().c_str(),
+				   COL_WORDTYPE_POINTER, (*p),
+				   -1);
+	    else
+		gtk_list_store_set(gWordTypeList,&iter,
+				   COL_UI_STRING, (*p)->getCategory().c_str(),
+				   COL_WORDTYPE_POINTER, (*p),
+				   -1);
+
+	    if( (*p)->getCannaTab() == defaultCannaTab )
+	    {
+		defaultFlag = true;
+		defaultIter = iter;
+	    }
+	}
+
+	p++;
+    }
+
+    gtk_combo_box_set_model(GTK_COMBO_BOX(WordTypeCombo),
+			    GTK_TREE_MODEL(gWordTypeList));
+    if( defaultFlag && toDefault )
+	gtk_combo_box_set_active_iter(GTK_COMBO_BOX(WordTypeCombo),
+				      &defaultIter);
+    else
+	gtk_combo_box_set_active(GTK_COMBO_BOX(WordTypeCombo), 0);
 }
 
 void _call_back_add_window_delete_event(GtkWidget *widget,
@@ -362,4 +448,11 @@ void get_targets(GtkWidget *data){
     targets_atom = gdk_atom_intern("UTF8_STRING", FALSE);
     gtk_selection_convert(window, GDK_SELECTION_PRIMARY, targets_atom,
 			  GDK_CURRENT_TIME);
+}
+
+void _call_back_word_type_category_changed(GtkWidget *widget,
+					   gpointer data)
+{
+    KasumiAddWindow *window = (KasumiAddWindow *)data;
+    window->ChangeWordTypeList();
 }
