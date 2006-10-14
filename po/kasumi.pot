@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-25 13:02+0900\n"
+"POT-Creation-Date: 2006-08-12 17:15+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,4 +113,113 @@ msgstr ""
 
 #: KasumiAddWindow.cxx:272
 msgid "Invalid entry for Spelling."
+msgstr ""
+
+#: KasumiWordType.cxx:36 KasumiWordType.cxx:37 KasumiWordType.cxx:38
+#: KasumiWordType.cxx:39 KasumiWordType.cxx:40
+msgid "Noun"
+msgstr ""
+
+#: KasumiWordType.cxx:36
+msgid "General Noun"
+msgstr ""
+
+#: KasumiWordType.cxx:37
+msgid "Name of people"
+msgstr ""
+
+#: KasumiWordType.cxx:38
+msgid "Geographic Name"
+msgstr ""
+
+#: KasumiWordType.cxx:39
+msgid "Corporate Name"
+msgstr ""
+
+#: KasumiWordType.cxx:40
+msgid "SURU Connection"
+msgstr ""
+
+#: KasumiWordType.cxx:41
+msgid "Numeral"
+msgstr ""
+
+#: KasumiWordType.cxx:42 KasumiWordType.cxx:43
+msgid "Adjective (Keiyoushi)"
+msgstr ""
+
+#: KasumiWordType.cxx:42
+msgid "KU Conjugation"
+msgstr ""
+
+#: KasumiWordType.cxx:43
+msgid "SIKU Conjugation"
+msgstr ""
+
+#: KasumiWordType.cxx:44
+msgid "Adjective (Keiyoudoushi)"
+msgstr ""
+
+#: KasumiWordType.cxx:45
+msgid "Adverb"
+msgstr ""
+
+#: KasumiWordType.cxx:46
+msgid "Interjection"
+msgstr ""
+
+#: KasumiWordType.cxx:47
+msgid "Adnominal adjunct"
+msgstr ""
+
+#: KasumiWordType.cxx:48
+msgid "Single Kanji Character"
+msgstr ""
+
+#: KasumiWordType.cxx:49 KasumiWordType.cxx:50 KasumiWordType.cxx:51
+#: KasumiWordType.cxx:52 KasumiWordType.cxx:53 KasumiWordType.cxx:54
+#: KasumiWordType.cxx:55 KasumiWordType.cxx:56 KasumiWordType.cxx:57
+msgid "Verb"
+msgstr ""
+
+#: KasumiWordType.cxx:49 KasumiWordType.cxx:58
+msgid "Ka 5"
+msgstr ""
+
+#: KasumiWordType.cxx:50 KasumiWordType.cxx:59
+msgid "Ga 5"
+msgstr ""
+
+#: KasumiWordType.cxx:51 KasumiWordType.cxx:60
+msgid "Sa 5"
+msgstr ""
+
+#: KasumiWordType.cxx:52 KasumiWordType.cxx:61
+msgid "Ta 5"
+msgstr ""
+
+#: KasumiWordType.cxx:53 KasumiWordType.cxx:62
+msgid "Na 5"
+msgstr ""
+
+#: KasumiWordType.cxx:54 KasumiWordType.cxx:63
+msgid "Ba 5"
+msgstr ""
+
+#: KasumiWordType.cxx:55 KasumiWordType.cxx:64
+msgid "Ma 5"
+msgstr ""
+
+#: KasumiWordType.cxx:56 KasumiWordType.cxx:65
+msgid "Ra 5"
+msgstr ""
+
+#: KasumiWordType.cxx:57 KasumiWordType.cxx:66
+msgid "Wa 5"
+msgstr ""
+
+#: KasumiWordType.cxx:58 KasumiWordType.cxx:59 KasumiWordType.cxx:60
+#: KasumiWordType.cxx:61 KasumiWordType.cxx:62 KasumiWordType.cxx:63
+#: KasumiWordType.cxx:64 KasumiWordType.cxx:65 KasumiWordType.cxx:66
+msgid "Verb*"
 msgstr ""

@@ -14,3 +14,4 @@
 ./KasumiAddWindow.cxx
 ./KasumiConfiguration.cxx
 ./KasumiConfiguration.hxx
+./KasumiWordType.cxx

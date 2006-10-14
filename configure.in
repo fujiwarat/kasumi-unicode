@@ -10,6 +10,7 @@ AC_PROG_CXX
 dnl Checks for gettext
 ALL_LINGUAS="ja it"
 AM_GNU_GETTEXT
+
 dnl LDFLAGS="$LDFLAGS $INTLLIBS"
 dnl localedir='${prefix}/share/locale'
 dnl AC_SUBST(localedir)
@@ -18,6 +19,12 @@ dnl AC_DEFINE(HAVE_GETTEXT, 1, Define as 1 if you have GNU gettext.)
 dnl AC_DEFINE(HAVE_LC_MESSAGES, 1, Define as 1 if you have LC_MESSAGES.)
 dnl AC_DEFINE(HAVE_STPCPY, 1, Define as 1 if you have stpcpy() function.)
 dnl AC_DEFINE(ENABLE_NLS, 1, Define as 1 if you want to use NLS.)
+
+AM_ICONV
+
+if test "x$am_cv_func_iconv" != "xyes"; then
+	AC_MSG_ERROR([Unable to find iconv(). iconv() is needed for Kasumi])
+fi
 
 dnl Checks for libraries.
 AM_PATH_GTK_2_0(2.6.0, CFLAGS="$CFLAGS $GTK_CFLAGS" CPPFLAGS="$CPPFLAGS $GTK_CFLAGS" LIBS="$LIBS $GTK_LIBS", AC_MSG_ERROR(GTK+ >= 2.6.0 not found.))
