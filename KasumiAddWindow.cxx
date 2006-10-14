@@ -53,7 +53,7 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_position (GTK_WINDOW(window), GTK_WIN_POS_MOUSE);
-    gtk_window_set_title(GTK_WINDOW(window), _("Kasumi"));
+    gtk_window_set_title(GTK_WINDOW(window), _("Kasumi (Register words)"));
     g_signal_connect(G_OBJECT(window), "delete_event",
 		     G_CALLBACK(_call_back_add_window_delete_event), this);
 
