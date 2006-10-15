@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-14 18:33+0900\n"
+"POT-Creation-Date: 2006-10-15 22:28+0900\n"
 "PO-Revision-Date: 2006-06-25 13:04+0900\n"
 "Last-Translator: Diego 'Flameeyes' Pettenò <flameeyes@gentoo.org>\n"
 "Language-Team: Italian\n"
@@ -86,50 +86,73 @@ msgstr "Tipo di parola"
 msgid "Word Type"
 msgstr "Tipo di parola"
 
-#: KasumiAddWindow.cxx:176
-msgid "Quit"
-msgstr "Esci"
-
-#: KasumiAddWindow.cxx:194
-msgid "Quit this application"
-msgstr "Esci da questa applicazione"
-
-#: KasumiAddWindow.cxx:195
-msgid "Save dictionary and quit this application."
-msgstr "Salva il vocabolario ed esci da questa applicazione."
-
-#: KasumiAddWindow.cxx:198
+#: KasumiAddWindow.cxx:177 KasumiAddWindow.cxx:247
 msgid "Add"
 msgstr "Aggiungi"
 
-#: KasumiAddWindow.cxx:216
+#: KasumiAddWindow.cxx:195
+#, fuzzy
+msgid "Add entered word and quit registration."
+msgstr "Salva il vocabolario ed esci da questa applicazione."
+
+#: KasumiAddWindow.cxx:196
+#, fuzzy
+msgid ""
+"If all the necessary items are filled in, add entered word and quit "
+"registration."
+msgstr ""
+"Se tutti gli oggetti necessari sono stati riempiti, aggiungi la parola "
+"inserita."
+
+#: KasumiAddWindow.cxx:199
+msgid "Cancel"
+msgstr ""
+
+#: KasumiAddWindow.cxx:217 KasumiAddWindow.cxx:218
+#, fuzzy
+msgid "Cancel registration and quit."
+msgstr "Salva il vocabolario ed esci da questa applicazione."
+
+#: KasumiAddWindow.cxx:225
+msgid "Quit"
+msgstr "Esci"
+
+#: KasumiAddWindow.cxx:243
+msgid "Quit this application"
+msgstr "Esci da questa applicazione"
+
+#: KasumiAddWindow.cxx:244
+msgid "Save dictionary and quit this application."
+msgstr "Salva il vocabolario ed esci da questa applicazione."
+
+#: KasumiAddWindow.cxx:265
 msgid "Add entered word"
 msgstr "Aggiungi la parola inserita"
 
-#: KasumiAddWindow.cxx:217
+#: KasumiAddWindow.cxx:266
 msgid "If all the necessary items are filled in, add entered word."
 msgstr ""
 "Se tutti gli oggetti necessari sono stati riempiti, aggiungi la parola "
 "inserita."
 
-#: KasumiAddWindow.cxx:220
+#: KasumiAddWindow.cxx:269
 msgid "Edit"
 msgstr "Modifica"
 
-#: KasumiAddWindow.cxx:238
+#: KasumiAddWindow.cxx:287
 msgid "Manage mode"
 msgstr "Modalità gestione"
 
-#: KasumiAddWindow.cxx:239
+#: KasumiAddWindow.cxx:288
 msgid "Make the shift to manage mode to modify and remove registered words."
 msgstr ""
 "Passa a modalità gestione per modificare e rimuovere le parole registrate."
 
-#: KasumiAddWindow.cxx:290
+#: KasumiAddWindow.cxx:339
 msgid "Invalid entry for Sound."
 msgstr "Elemento per \"suono\" non valido."
 
-#: KasumiAddWindow.cxx:303
+#: KasumiAddWindow.cxx:352
 msgid "Invalid entry for Spelling."
 msgstr "Elemento per \"ortografia\" non valido. "
 

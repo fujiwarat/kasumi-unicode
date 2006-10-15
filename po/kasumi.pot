@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-14 18:33+0900\n"
+"POT-Creation-Date: 2006-10-15 22:28+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,47 +79,65 @@ msgstr ""
 msgid "Word Type"
 msgstr ""
 
-#: KasumiAddWindow.cxx:176
-msgid "Quit"
-msgstr ""
-
-#: KasumiAddWindow.cxx:194
-msgid "Quit this application"
-msgstr ""
-
-#: KasumiAddWindow.cxx:195
-msgid "Save dictionary and quit this application."
-msgstr ""
-
-#: KasumiAddWindow.cxx:198
+#: KasumiAddWindow.cxx:177 KasumiAddWindow.cxx:247
 msgid "Add"
 msgstr ""
 
-#: KasumiAddWindow.cxx:216
+#: KasumiAddWindow.cxx:195
+msgid "Add entered word and quit registration."
+msgstr ""
+
+#: KasumiAddWindow.cxx:196
+msgid ""
+"If all the necessary items are filled in, add entered word and quit "
+"registration."
+msgstr ""
+
+#: KasumiAddWindow.cxx:199
+msgid "Cancel"
+msgstr ""
+
+#: KasumiAddWindow.cxx:217 KasumiAddWindow.cxx:218
+msgid "Cancel registration and quit."
+msgstr ""
+
+#: KasumiAddWindow.cxx:225
+msgid "Quit"
+msgstr ""
+
+#: KasumiAddWindow.cxx:243
+msgid "Quit this application"
+msgstr ""
+
+#: KasumiAddWindow.cxx:244
+msgid "Save dictionary and quit this application."
+msgstr ""
+
+#: KasumiAddWindow.cxx:265
 msgid "Add entered word"
 msgstr ""
 
-#: KasumiAddWindow.cxx:217
+#: KasumiAddWindow.cxx:266
 msgid "If all the necessary items are filled in, add entered word."
 msgstr ""
 
-#: KasumiAddWindow.cxx:220
+#: KasumiAddWindow.cxx:269
 msgid "Edit"
 msgstr ""
 
-#: KasumiAddWindow.cxx:238
+#: KasumiAddWindow.cxx:287
 msgid "Manage mode"
 msgstr ""
 
-#: KasumiAddWindow.cxx:239
+#: KasumiAddWindow.cxx:288
 msgid "Make the shift to manage mode to modify and remove registered words."
 msgstr ""
 
-#: KasumiAddWindow.cxx:290
+#: KasumiAddWindow.cxx:339
 msgid "Invalid entry for Sound."
 msgstr ""
 
-#: KasumiAddWindow.cxx:303
+#: KasumiAddWindow.cxx:352
 msgid "Invalid entry for Spelling."
 msgstr ""
 

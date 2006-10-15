@@ -123,6 +123,7 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'v'},
     {"add", no_argument, NULL, 'a'},
+    {"exclusive", no_argument, NULL, 'e'},
     {"manage", no_argument, NULL, 'm'},
     {"sound", required_argument, NULL, 's'},
     {"spelling", required_argument, NULL, 't'},
@@ -138,7 +139,7 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
   int c;    
   while(1){
     //    c = getopt_long(argc, argv, "hvamiIns:t:w:x:y:", long_options, &option_index);
-    c = getopt_long(argc, argv, "hvamiIns:t:w:", long_options, &option_index);
+    c = getopt_long(argc, argv, "hvaemiIns:t:w:", long_options, &option_index);
     if(c == -1) break; // no more argument
 
     switch(c){
@@ -153,6 +154,9 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
       break;
     case 'm':
       setPropertyValue(string("StartupMode"),string("MANAGE"));
+      break;
+    case 'e':
+      setPropertyValue(string("StartupMode"),string("EXCLUSIVE"));
       break;
     case 's':
       setPropertyValue(string("DefaultAddingSound"),string(optarg));
@@ -236,9 +240,10 @@ void KasumiConfiguration::checkValidity()
   
   if(config[string("StartupMode")] != string("MANAGE") &&
      config[string("StartupMode")] != string("ADD") &&
+     config[string("StartupMode")] != string("EXCLUSIVE") &&
      config[string("StartupMode")] != string("HELP") &&
      config[string("StartupMode")] != string("VERSION")){
-    string message("StartupMode variable must be \"MANAGE\" or \"ADD\"");
+    string message("StartupMode variable must be \"MANAGE\", \"EXCLUSIVE\" or \"ADD\"");
     throw KasumiException(message, STDERR, KILL);
   }
 
@@ -374,7 +379,7 @@ void KasumiConfiguration::setPropertyValue(const string &name, const string &val
   p = config.find(name);
 
   if(p == config.end()){
-    cout << "error: you cannot set " << name << " property." << endl;
+    cerr << "error: you cannot set " << name << " property." << endl;
     exit(1);
   }
   
@@ -387,7 +392,7 @@ string KasumiConfiguration::getPropertyValue(const string &name){
   p = config.find(name);
 
   if(p == config.end()){
-    cout << "error: " << name << " property has not been set yet." << endl;
+    cerr << "error: " << name << " property has not been set yet." << endl;
     exit(1);
   }
   
@@ -400,7 +405,7 @@ int KasumiConfiguration::getPropertyValueByInt(const string &name){
   p = config.find(name);
 
   if(p == config.end()){
-    cout << "error: " << name << " property has not been set yet." << endl;
+    cerr << "error: " << name << " property has not been set yet." << endl;
     exit(1);
   }
   
@@ -412,7 +417,7 @@ bool KasumiConfiguration::getPropertyValueByBool(const string &name){
 
   p = config.find(name);
   if(p == config.end()){
-    cout << "error: " << name << " property has not been set yet." << endl;
+    cerr << "error: " << name << " property has not been set yet." << endl;
     exit(1);
   }
   

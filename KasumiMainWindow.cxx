@@ -407,7 +407,7 @@ void KasumiMainWindow::quit(){
     case GTK_RESPONSE_NO:
       break;
     default:
-      cout << "Error: Unexcepted return value of dialog's run" << endl;
+      cerr << "Error: Unexcepted return value of dialog's run" << endl;
       exit(1);
     }
     gtk_widget_destroy (dialog);
@@ -422,7 +422,7 @@ void KasumiMainWindow::ClickedStoreButton(){
     dictionary->store();
     modificationFlag = false;
   }catch(KasumiException e){
-      cout <<  e.getMessage() << endl;
+      cerr <<  e.getMessage() << endl;
       exit(1);
   }
 }
@@ -969,7 +969,7 @@ guint getAccelKey(const string &key){
   else if(shortkey == "8") return GDK_8;
   else if(shortkey == "9") return GDK_9;
   
-  cout << "Invalid shortcut key option: " << key << endl;
+  cerr << "Invalid shortcut key option: " << key << endl;
   exit(1);
 }
 
@@ -989,7 +989,7 @@ GdkModifierType getModifierType(const string &key){
     return GDK_MOD1_MASK;
   }
 
-  cout << "Invalid mask option: " << key << endl;
+  cerr << "Invalid mask option: " << key << endl;
   exit(1);
 }
 
@@ -1040,8 +1040,8 @@ gint sortFuncBySound(GtkTreeModel *model,
          (second_a == 0x83 && third_a == 0xbc)){
         a = second_a * 256 + third_a;
       }else{
-        cout << "invalid character or not hiragana" << endl;
-        cout << str_a << endl;
+        cerr << "invalid character or not hiragana" << endl;
+        cerr << str_a << endl;
         exit(1);
       }
 
@@ -1050,8 +1050,8 @@ gint sortFuncBySound(GtkTreeModel *model,
          (second_b == 0x83 && third_b == 0xbc)){
         b = second_b * 256 + third_b;
       }else{
-        cout << "invalid character or not hiragana" << endl;
-        cout << str_b << endl;
+        cerr << "invalid character or not hiragana" << endl;
+        cerr << str_b << endl;
         exit(1);
       }
 
@@ -1059,9 +1059,9 @@ gint sortFuncBySound(GtkTreeModel *model,
         return a - b;
       }
     }else{
-        cout << "invalid character or not hiragana" << endl;
-        cout << str_a << endl;
-        cout << str_b << endl;
+        cerr << "invalid character or not hiragana" << endl;
+        cerr << str_a << endl;
+        cerr << str_b << endl;
         exit(1);
     }
   }

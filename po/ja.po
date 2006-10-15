@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-14 18:33+0900\n"
-"PO-Revision-Date: 2006-10-14 18:34+0900\n"
+"POT-Creation-Date: 2006-10-15 22:28+0900\n"
+"PO-Revision-Date: 2006-10-15 22:30+0900\n"
 "Last-Translator: Takashi Nakamoto <bluedwarf@bpost.plala.or.jp>\n"
 "Language-Team: Takashi Nakamoto <bluedwarf@bpost.plala.or.jp>\n"
 "MIME-Version: 1.0\n"
@@ -79,47 +79,65 @@ msgstr "品詞の分類"
 msgid "Word Type"
 msgstr "品詞"
 
-#: KasumiAddWindow.cxx:176
-msgid "Quit"
-msgstr "終了"
-
-#: KasumiAddWindow.cxx:194
-msgid "Quit this application"
-msgstr "このアプリケーションを終了する"
-
-#: KasumiAddWindow.cxx:195
-msgid "Save dictionary and quit this application."
-msgstr "辞書を保存して、このアプリケーションを終了します。"
-
-#: KasumiAddWindow.cxx:198
+#: KasumiAddWindow.cxx:177 KasumiAddWindow.cxx:247
 msgid "Add"
 msgstr "追加"
 
-#: KasumiAddWindow.cxx:216
+#: KasumiAddWindow.cxx:195
+msgid "Add entered word and quit registration."
+msgstr "入力された単語を登録し、単語登録を終了します。"
+
+#: KasumiAddWindow.cxx:196
+msgid ""
+"If all the necessary items are filled in, add entered word and quit "
+"registration."
+msgstr "全ての必要事項が埋められていたら、入力された単語を登録し、単語登録をしゅうりょうします。"
+
+#: KasumiAddWindow.cxx:199
+msgid "Cancel"
+msgstr "中断"
+
+#: KasumiAddWindow.cxx:217 KasumiAddWindow.cxx:218
+msgid "Cancel registration and quit."
+msgstr "単語登録を中断します"
+
+#: KasumiAddWindow.cxx:225
+msgid "Quit"
+msgstr "終了"
+
+#: KasumiAddWindow.cxx:243
+msgid "Quit this application"
+msgstr "このアプリケーションを終了する"
+
+#: KasumiAddWindow.cxx:244
+msgid "Save dictionary and quit this application."
+msgstr "辞書を保存して、このアプリケーションを終了します。"
+
+#: KasumiAddWindow.cxx:265
 msgid "Add entered word"
 msgstr "入力された単語を追加する"
 
-#: KasumiAddWindow.cxx:217
+#: KasumiAddWindow.cxx:266
 msgid "If all the necessary items are filled in, add entered word."
 msgstr "全ての必要事項が埋められていたら、入力された単語を追加します。"
 
-#: KasumiAddWindow.cxx:220
+#: KasumiAddWindow.cxx:269
 msgid "Edit"
 msgstr "編集"
 
-#: KasumiAddWindow.cxx:238
+#: KasumiAddWindow.cxx:287
 msgid "Manage mode"
 msgstr "辞書管理モード"
 
-#: KasumiAddWindow.cxx:239
+#: KasumiAddWindow.cxx:288
 msgid "Make the shift to manage mode to modify and remove registered words."
 msgstr "単語の変更や削除が行える辞書管理モードに移行します。"
 
-#: KasumiAddWindow.cxx:290
+#: KasumiAddWindow.cxx:339
 msgid "Invalid entry for Sound."
 msgstr "「読み」の項目を正しく入力してください"
 
-#: KasumiAddWindow.cxx:303
+#: KasumiAddWindow.cxx:352
 msgid "Invalid entry for Spelling."
 msgstr "「単語」の項目を正しく入力してください"
 

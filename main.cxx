@@ -54,6 +54,7 @@ void showHelp(){
   cout << "  -m --manage      Run Kasumi in Manage mode." << endl;
   cout << "                   You may abbreviate this option." << endl;
   cout << "  -a --add         Run Kasumi in Add mode." << endl;
+  cout << "  -e --exclusive   Run Kasumi in Exclusive mode." << endl;
   cout << "  --sound val      Set default sound entry (only in Add mode)" << endl;
   cout << "  --spelling val   Set default spelling entry (only in Add mode)" << endl;
   cout << "  --wordclass val  Set default word class entry (only in Add mode)" << endl;
@@ -214,6 +215,9 @@ int main(int argc, char *argv[])
       new KasumiMainWindow(dic,conf);
       gtk_main();
     }else if(startupMode == string("ADD")){
+      new KasumiAddWindow(dic,conf);
+      gtk_main();
+    }else if(startupMode == string("EXCLUSIVE")){
       new KasumiAddWindow(dic,conf);
       gtk_main();
     }
