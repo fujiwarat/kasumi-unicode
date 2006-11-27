@@ -1019,10 +1019,11 @@ gint sortFuncBySound(GtkTreeModel *model,
   const char *str_b = word_b->getSoundByUTF8().c_str();
   int size_a = word_a->getSound().size();
   int size_b = word_b->getSound().size();
-  int size = (size_a > size_b) ? size_a : size_b;
+  int size = (size_a < size_b) ? size_a : size_b;
   int i,a,b;
   unsigned char first_a,second_a,third_a;
   unsigned char first_b,second_b,third_b;
+
   
   // compare Hiragana string encoded in UTF8
   for(i=0;i<size;i+=3){
@@ -1034,38 +1035,14 @@ gint sortFuncBySound(GtkTreeModel *model,
     third_b = static_cast<unsigned char> (str_b[i+2]);
 
     // confirm that current characters are Hiragana
-    if(first_a == 0xe3 && first_b == 0xe3){
-      if((second_a == 0x81 && third_a >= 0x81 && third_a <= 0xbf) ||
-         (second_a == 0x82 && third_a >= 0x80 && third_a <= 0x94) ||
-         (second_a == 0x83 && third_a == 0xbc)){
-        a = second_a * 256 + third_a;
-      }else{
-        cerr << "invalid character or not hiragana" << endl;
-        cerr << str_a << endl;
-        exit(1);
-      }
+    a = first_a * 65535 + second_a * 256 + third_a;
+    b = first_b * 65535 + second_b * 256 + third_b;
 
-      if((second_b == 0x81 && third_b >= 0x81 && third_b <= 0xbf) ||
-         (second_b == 0x82 && third_b >= 0x80 && third_b <= 0x94) ||
-         (second_b == 0x83 && third_b == 0xbc)){
-        b = second_b * 256 + third_b;
-      }else{
-        cerr << "invalid character or not hiragana" << endl;
-        cerr << str_b << endl;
-        exit(1);
-      }
-
-      if(a != b){
-        return a - b;
-      }
-    }else{
-        cerr << "invalid character or not hiragana" << endl;
-        cerr << str_a << endl;
-        cerr << str_b << endl;
-        exit(1);
+    if(a != b){
+      return a - b;
     }
   }
-  
+
   // one string is the beginning part of another string
   // compare string size
   return size_a - size_b;
