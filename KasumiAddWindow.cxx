@@ -216,6 +216,8 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
 	gtk_tooltips_set_tip(Tooltips, button,
 			     _("Cancel registration and quit."),
 			     _("Cancel registration and quit."));
+
+	gtk_window_set_keep_above(GTK_WINDOW(window), TRUE);
     }
     else
     {

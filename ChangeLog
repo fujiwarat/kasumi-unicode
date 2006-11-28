@@ -3,6 +3,7 @@
 	* enhancement:
 	 - change the text color on the search entry box if Kasumi failed
 	   to find specified text
+	 - ask Gtk+ library to keep above the exclusive mode window
 
 	* fix:
 	 - scroll to the undermost of the view after adding a new word
