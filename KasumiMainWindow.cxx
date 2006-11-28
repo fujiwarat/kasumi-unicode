@@ -739,9 +739,12 @@ void KasumiMainWindow::appendedWord(KasumiWord *word){
   modificationFlag = true;
 
   // set the vertical scroll bar of the tree view undermost
+  // removed: These codes doesn't work well. 
+/*
   GtkAdjustment *adjustment =
     gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(mScrolledWindow));
   gtk_adjustment_set_value(adjustment, adjustment->upper);
+*/
   
   // start editing for spelling forcibly
   GtkTreePath *path = gtk_tree_model_get_path(SortList, &sort_iter);
