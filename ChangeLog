@@ -1,5 +1,9 @@
 2006-11-28  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
+	* enhancement:
+	 - change the text color on the search entry box if Kasumi failed
+	   to find specified text
+
 	* fix:
 	 - scroll to the undermost of the view after adding a new word
 

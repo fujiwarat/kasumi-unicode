@@ -585,12 +585,13 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
   GtkTreeModel *model = GTK_TREE_MODEL(SortList);
   GtkTreeIter iter;
   KasumiWord *word;
-  bool fromFirst = false;
   GtkTreeIter StartIter;
   int id;
   string searchString = string(gtk_entry_get_text(GTK_ENTRY(mSearchEntry)));
   string comparedString;
-  GtkWidget *dialog;
+
+  // undo the modified text color
+  gtk_widget_modify_text(mSearchEntry, GTK_STATE_NORMAL, NULL);
 
   SearchBy by = SPELLING;
   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mSoundRadio))){
@@ -602,22 +603,20 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
       // If no words, do nothing.
       return;
     }
-    fromFirst = true;
   }
   StartIter = iter;
 
   if(fromCurrent){
-    // Search from the selected world
-    // nothing to do ... discourage against calling gtk_tree_model_iter_next
-  }else if(!fromFirst && !gtk_tree_model_iter_next(model,&iter)){
+    // Search from the selected word
+    // nothing to do
+    // to prevent from calling gtk_tree_model_iter_next )
+  }else if(!gtk_tree_model_iter_next(model,&iter)){
     // Search from next word if a certain word is selected.
     // If the selected is the last word, seek from the first word.
     
-    // If no words, do nothing;    
+    // If no words, do nothing;
     if(!gtk_tree_model_get_iter_first(model, &iter))
       return;
-
-    fromFirst = true;
   }
 
   // liner search!
@@ -638,55 +637,34 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
     }
   }while(gtk_tree_model_iter_next(model, &iter));
 
-  
-  // Unless searched from the first word, seek from the head again.
-  if(!fromFirst){
-    dialog = gtk_message_dialog_new (GTK_WINDOW(mWindow),
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_QUESTION,
-                                     GTK_BUTTONS_YES_NO,
-                                     _("Cannot find a specific word. Search "
-                                       "from first?"));
-    if(gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES){
-      gtk_widget_destroy (dialog);
-    
-      if(!gtk_tree_model_get_iter_first(model, &iter))
-        return;
+  // from first
+  gtk_tree_model_get_iter_first(model, &iter);
 
-      // liner search to selected word!
-      do{
-        gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
-        word = KasumiWord::getWordFromID(id);
+  do{
+      gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
+      word = KasumiWord::getWordFromID(id);
 
-        if(by == SPELLING){
-          comparedString = word->getSpellingByUTF8();
-        }else{
-          comparedString = word->getSoundByUTF8();
-        }
+      if(by == SPELLING){
+	  comparedString = word->getSpellingByUTF8();
+      }else{
+	  comparedString = word->getSoundByUTF8();
+      }
 
-        if(comparedString.find(searchString,0) == 0){
-          gtk_tree_selection_select_iter(SortListSelection,&iter);
-          return;
-        }
-      }while(gtk_tree_model_iter_next(model, &iter) &&
-             (StartIter.user_data != iter.user_data ||
-              StartIter.user_data2 != iter.user_data2 ||
-              StartIter.user_data3 != iter.user_data3));
-    }else{
-      gtk_widget_destroy(dialog);
-      //      gtk_tree_selection_unselect_all(SortListSelection);      
-      return;
-    }
-  }
+      if(comparedString.find(searchString,0) == 0){
+	  gtk_tree_selection_select_iter(SortListSelection, &iter);
+	  return; // succeed searching
+      }
 
-  dialog = gtk_message_dialog_new(GTK_WINDOW(mWindow),
-                                  GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_WARNING,
-                                  GTK_BUTTONS_OK,
-                                  _("Cannot find a specific word."));
-  gtk_dialog_run(GTK_DIALOG (dialog));
-  gtk_widget_destroy(dialog);
-  //  gtk_tree_selection_unselect_all(SortListSelection);
+  }while(gtk_tree_model_iter_next(model, &iter) &&
+	 (StartIter.user_data != iter.user_data ||
+	  StartIter.user_data2 != iter.user_data2 ||
+	  StartIter.user_data3 != iter.user_data3));
+
+  // found nothing
+  GdkColor red;
+  red.red = 65535;
+  red.green = red.blue = 0;
+  gtk_widget_modify_text(mSearchEntry, GTK_STATE_NORMAL, &red);
 }
 
 void KasumiMainWindow::SortBy(GtkTreeViewColumn *column){
