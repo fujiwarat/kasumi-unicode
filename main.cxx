@@ -167,12 +167,12 @@ static GtkWidget *check_duplicated_process (int argc, char *argv[])
     while (gtk_events_pending())
       gtk_main_iteration();
   if (instance > 0) {
-    /* Kasumi process is already exists */
+    /* Kasumi process already exists */
     while (arg_text != NULL)
       while (gtk_events_pending())
 	gtk_main_iteration();
     gtk_widget_destroy(window);
-    cerr << "Kasumi process is already exists." << endl;
+    cerr << "Kasumi process already exists." << endl;
     return NULL;
   }
   g_free(arg_text);

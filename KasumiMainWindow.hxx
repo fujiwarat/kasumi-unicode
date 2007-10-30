@@ -228,7 +228,7 @@ private:
     void changedWordTypeColumn(GtkComboBox *combo);
 
     void FindNext(bool fromCurrent);
-    GtkTreeIter *findCorrespondingIter(size_t id);
+    GtkTreeIter *findCorrespondingIter(unsigned int id);
     
     void SortBy(GtkTreeViewColumn *column);
 
@@ -236,7 +236,7 @@ public:
   KasumiMainWindow(KasumiDic *aDictionary, KasumiConfiguration *conf);
   virtual ~KasumiMainWindow();
   void refresh();
-  void removedWord(size_t id);
+  void removedWord(unsigned int id);
   void appendedWord(KasumiWord *word);
   void modifiedWord(KasumiWord *word);
 };

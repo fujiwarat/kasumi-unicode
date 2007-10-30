@@ -56,7 +56,7 @@ public:
     ~KasumiDic();
     void store() throw(KasumiException);
     void appendWord(KasumiWord *word); // returns this word's ID
-    void removeWord(size_t id);
+    void removeWord(unsigned int id);
 
     void registerEventListener(KasumiDicEventListener *listener);
     void removeEventListener(KasumiDicEventListener *listener);
@@ -69,7 +69,7 @@ public:
     void changedSound(KasumiWord *word);
     void changedWordType(KasumiWord *word);
 
-//  KasumiWord *getWordWithID(size_t id) throw(KasumiException);
+//  KasumiWord *getWordWithID(unsigned int id) throw(KasumiException);
 //  int getUpperBoundOfWordID();
 };
 

@@ -1,3 +1,17 @@
+2007-10-30  Ikuya Awashiro <ikuya@fruitsbasket.info>
+	* fix:
+	 - FTBFS with GCC 4.3: missing #includes
+	   http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=417266
+	   Thaks to Martin Michlmayr <tbm@cyrius.com>.
+	 - kasumi dumps core on x86_64 systems when trying
+	   to add new words to the dictionary
+	   https://bugzilla.novell.com/show_bug.cgi?id=253788
+	   Thanks to Mike Fabian.
+	 - fail in the judgment of the version.
+	   http://kasumi.sourceforge.jp/index.php?%A5%D0%A5%B0%CA%F3%B9%F0%2F95
+	   Thanks to dtana.
+	* preparation for release (ver 2.3)
+
 2006-11-29  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
 
 	* preparation for release (ver 2.2)

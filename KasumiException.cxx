@@ -24,6 +24,7 @@
 *********************************************************************/
 
 #include <gtk/gtk.h>
+#include <cstdlib>
 #include <iostream>
 #include "KasumiException.hxx"
 

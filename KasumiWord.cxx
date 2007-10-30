@@ -23,6 +23,7 @@
  * 
  *********************************************************************/
 
+#include <cstdlib>
 #include <string>
 #include <map>
 #include <iconv.h>
@@ -41,7 +42,7 @@ using namespace std;
 iconv_t KasumiWord::IconvUTF8_To_EUCJP = iconv_open("EUC-JP", "UTF-8");
 iconv_t KasumiWord::IconvEUCJP_To_UTF8 = iconv_open("UTF-8", "EUC-JP");
 
-size_t KasumiWord::id_generator = 0;
+unsigned int KasumiWord::id_generator = 0;
 
 vector<KasumiWord*> KasumiWord::words = vector<KasumiWord*>(VECTOR_UNIT);
 
@@ -277,7 +278,7 @@ string KasumiWord::getWordTypeUIString()
 	return string("");
 }
 
-KasumiWord* KasumiWord::getWordFromID(size_t id)
+KasumiWord* KasumiWord::getWordFromID(unsigned int id)
 {
     return KasumiWord::words[id];
 }

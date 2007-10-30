@@ -33,11 +33,13 @@ extern "C"{  // ad-hoc solution for a defect of Anthy
 }
 #include <anthy/anthy.h>
 #include <stdio.h>
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cassert>
 
 using namespace std;
 
@@ -72,6 +74,9 @@ void KasumiDic::load(KasumiConfiguration *conf)
   const int FREQ_LBOUND = conf->getPropertyValueByInt("MinFrequency");  
   const int FREQ_UBOUND = conf->getPropertyValueByInt("MaxFrequency");
 
+  int anthy_version = atoi(anthy_get_version_string());
+  assert(anthy_version != 0);
+
   try{
       if(anthy_priv_dic_select_first_entry() == -1){
 	  // no word
@@ -79,7 +84,6 @@ void KasumiDic::load(KasumiConfiguration *conf)
       }
       else if(anthy_priv_dic_select_first_entry() == -3)
       {
-	  int anthy_version = str2int(string(anthy_get_version_string()));
 	  if(anthy_version >= 7716)
 	  {
 	      // do not throw exception in the case that this doesn't fail to
@@ -109,16 +113,14 @@ void KasumiDic::load(KasumiConfiguration *conf)
 	      KasumiWord *newWord = KasumiWord::createNewWord(conf);
 
 	      newWord->setSound(string(sound));
-	      int anthy_version = str2int(string(anthy_get_version_string()));
-	      if(anthy_version >= 7710)
+	      if (anthy_version < 7710 && spelling[0] == ' ') {
+		      // Measures against a defect of anthy.
+		      // "anthy_priv_dic_get_word()" function returns
+		      // a string whose first character is an unwated
+		      // white space.
+		      newWord->setSpelling(string(spelling+1));
+	      } else
 		  newWord->setSpelling(string(spelling));
-	      else
-	      {
-		  // Measures against a defect of anthy.
-		  // "anthy_priv_dic_get_word()" function returns a string
-		  // whose first character is an unwated white space.
-		  newWord->setSpelling(string(spelling+1));
-	      }
 	      newWord->setFrequency(freq);
 	      newWord->setWordType(KasumiWordType::getWordTypeFromCannaTab(string(wt)));
 	      appendWord(newWord);
@@ -148,7 +150,7 @@ void KasumiDic::appendWord(KasumiWord *word){
   }
 }
 
-void KasumiDic::removeWord(size_t id)
+void KasumiDic::removeWord(unsigned int id)
 {
     int flag = 0;
     

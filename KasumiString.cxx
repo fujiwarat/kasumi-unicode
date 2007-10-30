@@ -24,6 +24,7 @@
 *********************************************************************/
 
 #include "KasumiString.hxx"
+#include <cstdlib>
 #include <iostream>
 #include <sstream>
 

@@ -26,6 +26,7 @@
 
 #include <gtk/gtk.h>
 #include "cellrendererspin.h"
+#include <cstdlib>
 #include <iostream>
 #include "KasumiMainWindow.hxx"
 #include "KasumiException.hxx"
@@ -435,7 +436,7 @@ void KasumiMainWindow::ClickedAddButton(){
 void KasumiMainWindow::ClickedRemoveButton(){
   GtkTreeModel *model = GTK_TREE_MODEL(SortList);
   GtkTreeIter iter;
-  int id;
+  unsigned int id;
   
   if(gtk_tree_selection_get_selected(SortListSelection, &model, &iter)){
     gtk_tree_model_get(model, &iter, COL_ID, &id, -1);
@@ -476,7 +477,7 @@ void KasumiMainWindow::editedTextColumn(GtkCellRendererText *renderer,
 	GtkTreeIter iter;
 	gtk_tree_model_get_iter(SortList, &iter, editingPath);
 
-	size_t id;
+	unsigned int id;
 	gtk_tree_model_get(SortList, &iter, COL_ID, &id, -1);
 
 	KasumiWord *word = KasumiWord::getWordFromID(id);
@@ -568,7 +569,7 @@ void KasumiMainWindow::changedWordTypeColumn(GtkComboBox *combo)
 	if(editingPath == NULL)
 	    throw KasumiException(string("internal error: editingPath is already freed."), STDERR, KILL);
 	gtk_tree_model_get_iter(SortList, &iter, editingPath);
-	size_t id;
+	unsigned int id;
 	gtk_tree_model_get(SortList, &iter, COL_ID, &id, -1);
 	KasumiWord *word = KasumiWord::getWordFromID(id);
 
@@ -586,7 +587,7 @@ void KasumiMainWindow::FindNext(bool fromCurrent){
   GtkTreeIter iter;
   KasumiWord *word;
   GtkTreeIter StartIter;
-  int id;
+  unsigned int id;
   string searchString = string(gtk_entry_get_text(GTK_ENTRY(mSearchEntry)));
   string comparedString;
 
@@ -692,7 +693,7 @@ void KasumiMainWindow::SortBy(GtkTreeViewColumn *column){
   gtk_tree_view_column_set_sort_order(column,order);
 }
 
-void KasumiMainWindow::removedWord(size_t id){
+void KasumiMainWindow::removedWord(unsigned int id){
   refresh();
   modificationFlag = true;  
 }
@@ -735,7 +736,7 @@ void KasumiMainWindow::appendedWord(KasumiWord *word){
 }
 
 void KasumiMainWindow::modifiedWord(KasumiWord *word){
-    size_t id = word->getID();
+    unsigned int id = word->getID();
     GtkTreeIter *iter = findCorrespondingIter(id);
 
     if(iter != NULL)
@@ -753,8 +754,8 @@ void KasumiMainWindow::modifiedWord(KasumiWord *word){
 }
 
 // Do not returns iter of SortList but WordList
-GtkTreeIter *KasumiMainWindow::findCorrespondingIter(size_t id){
-  size_t i;
+GtkTreeIter *KasumiMainWindow::findCorrespondingIter(unsigned int id){
+  unsigned int i;
   GtkTreeModel *model = GTK_TREE_MODEL(WordList);
   GtkTreeIter *iter = (GtkTreeIter*)calloc(1,sizeof(GtkTreeIter));
 
@@ -959,7 +960,7 @@ GdkModifierType getModifierType(const string &key){
 
   i = key.find("+",0);
 
-  if(i == key.npos){
+  if(i == (unsigned int) key.npos){
     return (GdkModifierType)0;
   }
 
@@ -978,7 +979,7 @@ gint sortFuncByFreq(GtkTreeModel *model,
                     GtkTreeIter *a,
                     GtkTreeIter *b,
                     gpointer user_data){
-  int id_a, id_b;
+  unsigned int id_a, id_b;
   gtk_tree_model_get(model, a, COL_ID, &id_a, -1);
   gtk_tree_model_get(model, b, COL_ID, &id_b, -1);
   KasumiWord *word_a = KasumiWord::getWordFromID(id_a);
@@ -991,7 +992,7 @@ gint sortFuncBySound(GtkTreeModel *model,
                      GtkTreeIter *iter_a,
                      GtkTreeIter *iter_b,
                      gpointer user_data){
-  int id_a, id_b;
+  unsigned int id_a, id_b;
   gtk_tree_model_get(model, iter_a, COL_ID, &id_a, -1);
   gtk_tree_model_get(model, iter_b, COL_ID, &id_b, -1);
   KasumiWord *word_a = KasumiWord::getWordFromID(id_a);
@@ -1033,7 +1034,7 @@ gint sortFuncByWordClass(GtkTreeModel *model,
                          GtkTreeIter *iter_a,
                          GtkTreeIter *iter_b,
                          gpointer user_data){
-  int id_a, id_b;
+  unsigned int id_a, id_b;
   gtk_tree_model_get(model, iter_a, COL_ID, &id_a, -1);
   gtk_tree_model_get(model, iter_b, COL_ID, &id_b, -1);
   KasumiWord *word_a = KasumiWord::getWordFromID(id_a);
