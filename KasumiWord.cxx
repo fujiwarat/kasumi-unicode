@@ -25,6 +25,7 @@
 
 #include <cstdlib>
 #include <string>
+#include <cstring>
 #include <map>
 #include <iconv.h>
 #include "KasumiWord.hxx"

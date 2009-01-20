@@ -29,7 +29,8 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstring>
 #include <time.h>
 #include <iostream>
 #include <string>

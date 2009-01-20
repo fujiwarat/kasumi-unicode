@@ -26,6 +26,7 @@
 
 #include <gtk/gtk.h>
 #include <iostream>
+#include <algorithm>
 #include "KasumiAddWindow.hxx"
 #include "KasumiWord.hxx"
 #include "KasumiDic.hxx"

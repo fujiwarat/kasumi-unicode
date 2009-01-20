@@ -2,6 +2,15 @@
 
 	* preparation for release (ver 2.4)
 
+2009-01-20  Ikuya Awashiro <ikuya@fruitsbasket.info>
+
+	* KasumiAddWindow.cxx: 
+	 - addded an include file. Thanks to Mike Fabian.
+	* KasumiWord.cxx: 
+	 - DITTO.
+	* main.cxx:
+	 - DITTO.
+
 2009-01-20  Takuro Ashie <ashie@clear-code.com>
 
 	* enhancement:
