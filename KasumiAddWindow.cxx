@@ -48,6 +48,7 @@ using namespace std;
 KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
                                  KasumiConfiguration *conf){
     this->conf = conf;
+    bool IsEUCJP = conf->getPropertyValueByBool("UseEUCJP");
   
     dictionary = aDictionary;
 
@@ -71,8 +72,10 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
     SpellingEntry = gtk_entry_new();
+    string spelling = conf->getPropertyValue("DefaultAddingSpelling");
+    if (IsEUCJP) spelling = KasumiWord::convertEUCJPToUTF8(spelling);
     gtk_entry_set_text(GTK_ENTRY(SpellingEntry),
-		       KasumiWord::convertEUCJPToUTF8(conf->getPropertyValue("DefaultAddingSpelling")).c_str());
+		       spelling.c_str());
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(SpellingEntry),FALSE,FALSE,0);
 
     // creating text entries for "Sound"
@@ -82,8 +85,10 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
     SoundEntry = gtk_entry_new();
+    string sound = conf->getPropertyValue("DefaultAddingSound");
+    if (IsEUCJP) sound = KasumiWord::convertEUCJPToUTF8(sound);
     gtk_entry_set_text(GTK_ENTRY(SoundEntry),
-		       KasumiWord::convertEUCJPToUTF8(conf->getPropertyValue("DefaultAddingSound")).c_str());
+		       sound.c_str());
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(SoundEntry),FALSE,FALSE,0);
 
     // creating spin button for "Frequency"

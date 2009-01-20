@@ -1,3 +1,9 @@
+2009-01-20  Takuro Ashie <ashie@clear-code.com>
+
+	* enhancement:
+	 - Support ANTHY_UTF8_ENCODING and set it as default.
+	   You can switch to ANTHY_EUC_JP_ENCODING by -E or --eucjp option.
+
 2007-10-30  Ikuya Awashiro <ikuya@fruitsbasket.info>
 	* fix:
 	 - FTBFS with GCC 4.3: missing #includes

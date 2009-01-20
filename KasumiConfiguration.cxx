@@ -29,6 +29,7 @@
 #include <map>
 #include <list>
 #include <getopt.h> /* for getopt_long() */
+#include <anthy/dicutil.h>
 
 #include "KasumiConfiguration.hxx"
 #include "KasumiException.hxx"
@@ -115,6 +116,11 @@ void KasumiConfiguration::loadDefaultProperties() throw(KasumiException){
   //  config[string("DefaultWindowPosX")] = string("-1");
   //  config[string("DefaultWindowPosY")] = string("-1");
   config[string("ImportSelectedText")] = string("true");
+#ifdef HAS_ANTHY_DICUTIL_SET_ENCODING
+  config[string("UseEUCJP")] = string("false");
+#else // HAS_ANTHY_DICUTIL_SET_ENCODING
+  config[string("UseEUCJP")] = string("true");
+#endif // HAS_ANTHY_DICUTIL_SET_ENCODING
 }
 
 void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
@@ -133,6 +139,9 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
     //    {"y", required_argument, NULL, 'y'},
     {"import", no_argument, NULL, 'i'},
     {"ignore", no_argument, NULL, 'I'},
+#ifdef HAS_ANTHY_DICUTIL_SET_ENCODING
+    {"eucjp", no_argument, NULL, 'E'},
+#endif // HAS_ANTHY_DICUTIL_SET_ENCODING
     {0,0,0,0}
   };
 
@@ -140,7 +149,11 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
   int c;    
   while(1){
     //    c = getopt_long(argc, argv, "hvamiIns:t:w:x:y:", long_options, &option_index);
+#ifdef HAS_ANTHY_DICUTIL_SET_ENCODING
+    c = getopt_long(argc, argv, "hvaemiInEs:t:w:", long_options, &option_index);
+#else // HAS_ANTHY_DICUTIL_SET_ENCODING
     c = getopt_long(argc, argv, "hvaemiIns:t:w:", long_options, &option_index);
+#endif // HAS_ANTHY_DICUTIL_SET_ENCODING
     if(c == -1) break; // no more argument
 
     switch(c){
@@ -179,6 +192,9 @@ void KasumiConfiguration::loadConfigurationFromArgument(int argc, char *argv[])
       break;
     case 'I':
       setPropertyValue(string("ImportSelectedText"),string("false"));
+      break;
+    case 'E':
+      setPropertyValue(string("UseEUCJP"),string("true"));
       break;
     case '?':
     case ':':

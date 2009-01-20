@@ -153,6 +153,7 @@ string KasumiWord::extractInvalidCharacterFromSound(string soundByUTF8){
 }
 
 KasumiWord::KasumiWord(KasumiConfiguration *conf){
+    IsEUCJP = conf->getPropertyValueByBool("UseEUCJP");
     setSound(conf->getPropertyValue("DefaultSound"));
     setSpelling(conf->getPropertyValue("DefaultSpelling"));
     Frequency = conf->getPropertyValueByInt("DefaultFrequency");
@@ -181,7 +182,7 @@ void KasumiWord::setSound(const string &aSound)
     if(aSound == Sound)
 	return;
 
-    string tmp = convertEUCJPToUTF8(Sound);
+    string tmp = IsEUCJP ? convertEUCJPToUTF8(Sound) : aSound;
     string invalidChar = extractInvalidCharacterFromSound(tmp);
 
     if(invalidChar != ""){
@@ -192,7 +193,7 @@ void KasumiWord::setSound(const string &aSound)
     }
   
     Sound = aSound;
-    Sound_UTF8 = convertEUCJPToUTF8(Sound);
+    Sound_UTF8 = IsEUCJP ? convertEUCJPToUTF8(Sound) : Sound;
 
     for(size_t i=0;i<EventListeners.size();i++){
 	EventListeners[i]->changedSound(this);
@@ -215,7 +216,7 @@ void KasumiWord::setSoundByUTF8(const string &aSound)
     }
   
     Sound_UTF8 = aSound;
-    Sound = convertUTF8ToEUCJP(Sound_UTF8);
+    Sound = IsEUCJP ? convertUTF8ToEUCJP(Sound_UTF8) : Sound_UTF8;
 
     for(size_t i=0;i<EventListeners.size();i++){
 	EventListeners[i]->changedSound(this);
@@ -227,7 +228,7 @@ void KasumiWord::setSpelling(const string &aSpelling){
 	return;
 
     Spelling = aSpelling;
-    Spelling_UTF8 = convertEUCJPToUTF8(Spelling);
+    Spelling_UTF8 = IsEUCJP ? convertEUCJPToUTF8(Spelling) : Spelling;
 
     for(size_t i=0;i<EventListeners.size();i++){
 	EventListeners[i]->changedSpelling(this);
@@ -239,7 +240,7 @@ void KasumiWord::setSpellingByUTF8(const string &aSpelling){
 	return;
 
     Spelling_UTF8 = aSpelling;
-    Spelling = convertUTF8ToEUCJP(Spelling_UTF8);
+    Spelling = IsEUCJP ? convertUTF8ToEUCJP(Spelling_UTF8) : Spelling_UTF8;
 
     for(size_t i=0;i<EventListeners.size();i++){
 	EventListeners[i]->changedSpelling(this);

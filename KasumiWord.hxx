@@ -43,6 +43,7 @@ using namespace std;
 
 class KasumiWord{
 private:
+    bool IsEUCJP;
     string Sound; // corresponding "Yomi" in private-dic.src
     string Sound_UTF8;
     int Frequency; // corresponding "Hindo"
