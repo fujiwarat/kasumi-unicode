@@ -1,6 +1,11 @@
 2009-06-25  Takuro Ashie <ashie@clear-code.com>
 
 	* fix
+	  - Kill duplicated Ikuya Awashiro in man page! Thanks to Jun Oizumi.
+
+2009-06-25  Takuro Ashie <ashie@clear-code.com>
+
+	* fix
  	  - Remove "SIKU" conjugation. Thanks to Jun Oizumi.
 
 2009-01-29  Takuro Ashie <ashie@clear-code.com>
