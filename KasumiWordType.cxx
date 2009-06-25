@@ -39,8 +39,7 @@ void KasumiWordType::initWordTypeList()
     KasumiWordType::addNewWordType(_("Noun"), _("Corporate Name"), "#KK");
     KasumiWordType::addNewWordType(_("Noun"), _("SURU Connection"), "#T30");
     KasumiWordType::addNewWordType(_("Numeral"), "", "#NN");
-    KasumiWordType::addNewWordType(_("Adjective (Keiyoushi)"), _("KU Conjugation"), "#KY");
-    KasumiWordType::addNewWordType(_("Adjective (Keiyoushi)"), _("SIKU Conjugation"), "#KYT");
+    KasumiWordType::addNewWordType(_("Adjective (Keiyoushi)"), "", "#KY");
     KasumiWordType::addNewWordType(_("Adjective (Keiyoudoushi)"), "", "#T05");
     KasumiWordType::addNewWordType(_("Adverb"), "", "#F04");
     KasumiWordType::addNewWordType(_("Interjection"), "", "#CJ");
