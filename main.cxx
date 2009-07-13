@@ -88,8 +88,8 @@ enum {
 static GtkTargetEntry targets[]={
 	{"STRING", 0, TARGET_STRING},
 };
-static GdkAtom  atom_kz0;  /* for checking process  */
-static GdkAtom  atom_kz1;  /* for sending arguments */
+static GdkAtom  atom0;  /* for checking process  */
+static GdkAtom  atom1;  /* for sending arguments */
 static gchar   *arg_text = NULL;
 static gint     instance = -1;
 
@@ -102,13 +102,13 @@ static void cb_selection_get(GtkWidget *widget,
   gchar *text = NULL;
   gint length = 0;
 
-  if (data->selection == atom_kz0) {
+  if (data->selection == atom0) {
     text = "Kasumi Selection";
     length = strlen(text);
-    gtk_selection_convert(window, atom_kz1,
+    gtk_selection_convert(window, atom1,
 			  GDK_SELECTION_TYPE_STRING,
 			  GDK_CURRENT_TIME);
-  } else if (data->selection == atom_kz1 && arg_text != NULL) {
+  } else if (data->selection == atom1 && arg_text != NULL) {
     text = arg_text;
     arg_text = NULL;
     length = strlen(text);
@@ -116,7 +116,7 @@ static void cb_selection_get(GtkWidget *widget,
 
   if (text != NULL) {
     gtk_selection_data_set_text(data, text, length);
-    if (data->selection == atom_kz1)
+    if (data->selection == atom1)
       g_free(text);
   }
 }
@@ -126,9 +126,9 @@ static void cb_selection_received(GtkWidget *widget,
 				  guint time,
 				  gpointer user_data)
 {
-  if (data->selection == atom_kz0) {
+  if (data->selection == atom0) {
     instance = MAX(data->length, 0);
-  } else if (data->selection == atom_kz1 && data->length > 0) {
+  } else if (data->selection == atom1 && data->length > 0) {
   }
 }
 
@@ -139,13 +139,13 @@ static GtkWidget *check_duplicated_process (int argc, char *argv[])
 
   gtk_widget_realize(window);
 
-  atom_kz0 = gdk_atom_intern("Kasumi InterProcess communication 0",
+  atom0 = gdk_atom_intern("Kasumi InterProcess communication 0",
 			     FALSE);
-  atom_kz1 = gdk_atom_intern("Kasumi InterProcess communication 1",
+  atom1 = gdk_atom_intern("Kasumi InterProcess communication 1",
 			     FALSE);
 
-  gtk_selection_add_targets(window, atom_kz0, targets, 1);
-  gtk_selection_add_targets(window, atom_kz1, targets, 1);
+  gtk_selection_add_targets(window, atom0, targets, 1);
+  gtk_selection_add_targets(window, atom1, targets, 1);
   g_signal_connect (window, "selection-get",
 		    G_CALLBACK(cb_selection_get), window);
   g_signal_connect (window, "selection-received",
@@ -163,9 +163,9 @@ static GtkWidget *check_duplicated_process (int argc, char *argv[])
   }
   if (length > 0) {
     arg_text[length - 1] = '\0';
-    gtk_selection_owner_set(window, atom_kz1, GDK_CURRENT_TIME);
+    gtk_selection_owner_set(window, atom1, GDK_CURRENT_TIME);
   }
-  gtk_selection_convert(window,atom_kz0,
+  gtk_selection_convert(window,atom0,
 			GDK_SELECTION_TYPE_STRING,
 			GDK_CURRENT_TIME);
   while (instance < 0)
@@ -182,7 +182,7 @@ static GtkWidget *check_duplicated_process (int argc, char *argv[])
   }
   g_free(arg_text);
   arg_text = NULL;
-  gtk_selection_owner_set(window, atom_kz0, GDK_CURRENT_TIME);
+  gtk_selection_owner_set(window, atom0, GDK_CURRENT_TIME);
 
   return window;
 }
