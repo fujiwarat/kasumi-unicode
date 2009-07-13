@@ -34,14 +34,21 @@ int KasumiWordType::comp_seed = 0;
 void KasumiWordType::initWordTypeList()
 {
     KasumiWordType::addNewWordType(_("Noun"), _("General Noun"), "#T35");
-    KasumiWordType::addNewWordType(_("Noun"), _("Name of people"), "#JNM");
-    KasumiWordType::addNewWordType(_("Noun"), _("Geographic Name"), "#CN");
-    KasumiWordType::addNewWordType(_("Noun"), _("Corporate Name"), "#KK");
-    KasumiWordType::addNewWordType(_("Noun"), _("SURU Connection"), "#T30");
+    KasumiWordType::addNewWordType(_("Noun"), _("followed by NA, SA and SURU"), "#T00");
+    KasumiWordType::addNewWordType(_("Noun"), _("followed by NA and SA"), "#T05");
+    KasumiWordType::addNewWordType(_("Noun"), _("followed by NA and SURU"), "#T10");
+    KasumiWordType::addNewWordType(_("Noun"), _("followed by NA"), "#T15");
+    KasumiWordType::addNewWordType(_("Noun"), _("followed by SURU"), "#T30");
+    KasumiWordType::addNewWordType(_("Proper Noun"), _("Name of people"), "#JN");
+    KasumiWordType::addNewWordType(_("Proper Noun"), _("Geographic Name"), "#CN");
+    KasumiWordType::addNewWordType(_("Proper Noun"), _("Corporate Name"), "#KK");
     KasumiWordType::addNewWordType(_("Numeral"), "", "#NN");
     KasumiWordType::addNewWordType(_("Adjective (Keiyoushi)"), "", "#KY");
-    KasumiWordType::addNewWordType(_("Adjective (Keiyoudoushi)"), "", "#T05");
-    KasumiWordType::addNewWordType(_("Adverb"), "", "#F04");
+    KasumiWordType::addNewWordType(_("Adverb"), _("General Adverb"), "#F14");
+    KasumiWordType::addNewWordType(_("Adverb"), _("followed by TO and TARU"), "#F02");
+    KasumiWordType::addNewWordType(_("Adverb"), _("followed by TO and SURU"), "#F04");
+    KasumiWordType::addNewWordType(_("Adverb"), _("followed by TO"), "#F06");
+    KasumiWordType::addNewWordType(_("Adverb"), _("followed by SURU"), "#F12");
     KasumiWordType::addNewWordType(_("Interjection"), "", "#CJ");
     KasumiWordType::addNewWordType(_("Adnominal adjunct"), "", "#RT");
     KasumiWordType::addNewWordType(_("Single Kanji Character"), "", "#KJ");

@@ -64,12 +64,12 @@ msgstr "霞 (単語登録)"
 
 # 品詞の分類
 #: KasumiAddWindow.cxx:113
-msgid "Word Type Category"
-msgstr "品詞の分類"
-
-#: KasumiAddWindow.cxx:158
 msgid "Word Type"
 msgstr "品詞"
+
+#: KasumiAddWindow.cxx:158
+msgid "Subcategory of Word Type"
+msgstr "品詞の細分類"
 
 #: KasumiAddWindow.cxx:182 KasumiAddWindow.cxx:254
 msgid "Add"
@@ -136,7 +136,7 @@ msgid "Invalid entry for Spelling."
 msgstr "「単語」の項目を正しく入力してください"
 
 #: KasumiWordType.cxx:36 KasumiWordType.cxx:37 KasumiWordType.cxx:38
-#: KasumiWordType.cxx:39 KasumiWordType.cxx:40
+#: KasumiWordType.cxx:39 KasumiWordType.cxx:40 KasumiWordType.cxx:41
 msgid "Noun"
 msgstr "名詞"
 
@@ -145,94 +145,127 @@ msgid "General Noun"
 msgstr "一般名詞"
 
 #: KasumiWordType.cxx:37
+msgid "followed by NA, SA and SURU"
+msgstr "「な」「さ」「する」に接続"
+
+#: KasumiWordType.cxx:38
+msgid "followed by NA and SA"
+msgstr "「な」「さ」に接続"
+
+#: KasumiWordType.cxx:39
+msgid "followed by NA and SURU"
+msgstr "「な」「する」に接続"
+
+#: KasumiWordType.cxx:40
+msgid "followed by NA"
+msgstr "「な」に接続"
+
+#: KasumiWordType.cxx:41 KasumiWordType.cxx:51
+msgid "followed by SURU"
+msgstr "「する」に接続"
+
+#: KasumiWordType.cxx:42 KasumiWordType.cxx:43 KasumiWordType.cxx:44
+msgid "Proper Noun"
+msgstr "固有名詞"
+
+#: KasumiWordType.cxx:42
 msgid "Name of people"
 msgstr "人名"
 
-#: KasumiWordType.cxx:38
+#: KasumiWordType.cxx:43
 msgid "Geographic Name"
 msgstr "地名"
 
-#: KasumiWordType.cxx:39
+#: KasumiWordType.cxx:44
 msgid "Corporate Name"
 msgstr "会社名"
 
-#: KasumiWordType.cxx:40
-msgid "SURU Connection"
-msgstr "する接続"
-
-#: KasumiWordType.cxx:41
+#: KasumiWordType.cxx:45
 msgid "Numeral"
 msgstr "数詞"
 
-#: KasumiWordType.cxx:42
+#: KasumiWordType.cxx:46
 msgid "Adjective (Keiyoushi)"
 msgstr "形容詞"
 
-#: KasumiWordType.cxx:43
-msgid "Adjective (Keiyoudoushi)"
-msgstr "形容動詞"
-
-#: KasumiWordType.cxx:44
+#: KasumiWordType.cxx:47 KasumiWordType.cxx:48 KasumiWordType.cxx:49
+#: KasumiWordType.cxx:50 KasumiWordType.cxx:51
 msgid "Adverb"
 msgstr "副詞"
 
-#: KasumiWordType.cxx:45
-msgid "Interjection"
-msgstr "感動詞"
+#: KasumiWordType.cxx:47
+msgid "General Adverb"
+msgstr "一般的な副詞"
 
-#: KasumiWordType.cxx:46
+#: KasumiWordType.cxx:48
+msgid "followed by TO and TARU"
+msgstr "「と」「たる」に接続"
+
+#: KasumiWordType.cxx:49
+msgid "followed by TO and SURU"
+msgstr "「と」「する」に接続"
+
+#: KasumiWordType.cxx:50
+msgid "followed by TO"
+msgstr "「と」に接続"
+
+#: KasumiWordType.cxx:52
+msgid "Interjection"
+msgstr "感動詞・接続詞"
+
+#: KasumiWordType.cxx:53
 msgid "Adnominal adjunct"
 msgstr "連体詞"
 
-#: KasumiWordType.cxx:47
+#: KasumiWordType.cxx:54
 msgid "Single Kanji Character"
 msgstr "単漢字"
 
-#: KasumiWordType.cxx:48 KasumiWordType.cxx:49 KasumiWordType.cxx:50
-#: KasumiWordType.cxx:51 KasumiWordType.cxx:52 KasumiWordType.cxx:53
-#: KasumiWordType.cxx:54 KasumiWordType.cxx:55 KasumiWordType.cxx:56
+#: KasumiWordType.cxx:55 KasumiWordType.cxx:56 KasumiWordType.cxx:57
+#: KasumiWordType.cxx:58 KasumiWordType.cxx:59 KasumiWordType.cxx:60
+#: KasumiWordType.cxx:61 KasumiWordType.cxx:62 KasumiWordType.cxx:63
 msgid "Verb"
 msgstr "動詞"
 
-#: KasumiWordType.cxx:48 KasumiWordType.cxx:57
+#: KasumiWordType.cxx:55 KasumiWordType.cxx:64
 msgid "Ka 5"
 msgstr "カ行5段"
 
-#: KasumiWordType.cxx:49 KasumiWordType.cxx:58
+#: KasumiWordType.cxx:56 KasumiWordType.cxx:65
 msgid "Ga 5"
 msgstr "ガ行5段"
 
-#: KasumiWordType.cxx:50 KasumiWordType.cxx:59
+#: KasumiWordType.cxx:57 KasumiWordType.cxx:66
 msgid "Sa 5"
 msgstr "サ行5段"
 
-#: KasumiWordType.cxx:51 KasumiWordType.cxx:60
+#: KasumiWordType.cxx:58 KasumiWordType.cxx:67
 msgid "Ta 5"
 msgstr "タ行5段"
 
-#: KasumiWordType.cxx:52 KasumiWordType.cxx:61
+#: KasumiWordType.cxx:59 KasumiWordType.cxx:68
 msgid "Na 5"
 msgstr "ナ行5段"
 
-#: KasumiWordType.cxx:53 KasumiWordType.cxx:62
+#: KasumiWordType.cxx:60 KasumiWordType.cxx:69
 msgid "Ba 5"
 msgstr "バ行5段"
 
-#: KasumiWordType.cxx:54 KasumiWordType.cxx:63
+#: KasumiWordType.cxx:61 KasumiWordType.cxx:70
 msgid "Ma 5"
 msgstr "マ行5段"
 
-#: KasumiWordType.cxx:55 KasumiWordType.cxx:64
+#: KasumiWordType.cxx:62 KasumiWordType.cxx:71
 msgid "Ra 5"
 msgstr "ラ行5段"
 
-#: KasumiWordType.cxx:56 KasumiWordType.cxx:65
+#: KasumiWordType.cxx:63 KasumiWordType.cxx:72
 msgid "Wa 5"
 msgstr "ワ行5段"
 
-#: KasumiWordType.cxx:57 KasumiWordType.cxx:60 KasumiWordType.cxx:61
-#: KasumiWordType.cxx:60 KasumiWordType.cxx:61 KasumiWordType.cxx:62
-#: KasumiWordType.cxx:63 KasumiWordType.cxx:64 KasumiWordType.cxx:65
+#: KasumiWordType.cxx:64 KasumiWordType.cxx:65 KasumiWordType.cxx:66
+#: KasumiWordType.cxx:67 KasumiWordType.cxx:68 KasumiWordType.cxx:69
+#: KasumiWordType.cxx:70 KasumiWordType.cxx:71 KasumiWordType.cxx:72
 msgid "Verb*"
 msgstr "動詞 (連用形が名詞)"
 

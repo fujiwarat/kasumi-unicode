@@ -110,8 +110,8 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
     FrequencySpin = gtk_spin_button_new(GTK_ADJUSTMENT(adjustment),1.0,0);
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(FrequencySpin),FALSE,FALSE,0);
 
-    // creating combo box for "Word Type Category"
-    label = gtk_label_new(_("Word Type Category"));
+    // creating combo box for "Word Type"
+    label = gtk_label_new(_("Word Type"));
     alignment = gtk_alignment_new(0,0.5,0,0);
     gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
@@ -155,8 +155,8 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
 		     G_CALLBACK(_call_back_word_type_category_changed),this);
 
 
-    // creating combo box for "Word Type"
-    label = gtk_label_new(_("Word Type"));
+    // creating combo box for "Subcategory of Word Type"
+    label = gtk_label_new(_("Subcategory of Word Type"));
     alignment = gtk_alignment_new(0,0.5,0,0);
     gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
