@@ -78,9 +78,8 @@ void KasumiMainWindow::createWindow()
 //  GtkWidget *mSpellingRadio;
   GSList *mSpellingRadio_group = NULL;
 //  GtkWidget *mSoundRadio;
-  GtkWidget *hbox2;
 //  GtkWidget *mSearchEntry;
-  GtkWidget *alignment6;
+  GtkWidget *alignment;
   GtkWidget *hbuttonbox1;
 //  GtkWidget *mSaveButton;
 //  GtkWidget *mAddButton;
@@ -92,30 +91,39 @@ void KasumiMainWindow::createWindow()
   accel_group = gtk_accel_group_new ();
 
   mWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_size_request(mWindow, -1, 400);
   gtk_window_set_title (GTK_WINDOW (mWindow), _("Kasumi"));
 
   vbox1 = gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width(GTK_CONTAINER(vbox1), 6);
   gtk_widget_show (vbox1);
   gtk_container_add (GTK_CONTAINER (mWindow), vbox1);
 
   mScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_set_border_width(GTK_CONTAINER(mScrolledWindow), 6);
   gtk_widget_show (mScrolledWindow);
   gtk_box_pack_start (GTK_BOX (vbox1), mScrolledWindow, TRUE, TRUE, 0);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (mScrolledWindow), GTK_SHADOW_IN);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(mScrolledWindow),
+				 GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   mWordListView = gtk_tree_view_new ();
   gtk_widget_show (mWordListView);
   gtk_container_add (GTK_CONTAINER (mScrolledWindow), mWordListView);
 
   vbox2 = gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width(GTK_CONTAINER(vbox2), 6);
   gtk_widget_show (vbox2);
   gtk_box_pack_start (GTK_BOX (vbox1), vbox2, FALSE, FALSE, 0);
 
-  label1 = gtk_label_new (_("search"));
+  label1 = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (label1), _("<b>Search:</b>"));
   gtk_widget_show (label1);
   gtk_box_pack_start (GTK_BOX (vbox2), label1, FALSE, FALSE, 0);
   gtk_misc_set_alignment (GTK_MISC (label1), 0, 0.5);
-  gtk_misc_set_padding (GTK_MISC (label1), 10, 0);
+  gtk_misc_set_padding (GTK_MISC (label1), 4, 4);
+
+
 
   hbox1 = gtk_hbox_new (FALSE, 0);
   gtk_widget_show (hbox1);
@@ -133,27 +141,28 @@ void KasumiMainWindow::createWindow()
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (mSoundRadio), mSpellingRadio_group);
   mSpellingRadio_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (mSoundRadio));
 
-  hbox2 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_show (hbox2);
-  gtk_box_pack_start (GTK_BOX (vbox2), hbox2, FALSE, FALSE, 0);
+  alignment = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment);
+  gtk_box_pack_start (GTK_BOX (vbox2), alignment, FALSE, FALSE, 6);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 8, 16, 0);
 
   mSearchEntry = gtk_entry_new ();
   gtk_widget_show (mSearchEntry);
-  gtk_box_pack_start (GTK_BOX (hbox2), mSearchEntry, TRUE, TRUE, 40);
+  gtk_container_add (GTK_CONTAINER (alignment), mSearchEntry);
 
-  alignment6 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment6);
-  gtk_box_pack_start (GTK_BOX (vbox1), alignment6, FALSE, FALSE, 8);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment6), 0, 0, 12, 12);
+  alignment = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment);
+  gtk_box_pack_start (GTK_BOX (vbox1), alignment, FALSE, FALSE, 8);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 12, 12);
 
   hbuttonbox1 = gtk_hbutton_box_new ();
   gtk_widget_show (hbuttonbox1);
-  gtk_container_add (GTK_CONTAINER (alignment6), hbuttonbox1);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox1), GTK_BUTTONBOX_SPREAD);
+  gtk_container_add (GTK_CONTAINER (alignment), hbuttonbox1);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox1), GTK_BUTTONBOX_EDGE);
 
   mSaveButton = gtk_button_new_from_stock ("gtk-save");
   gtk_widget_show (mSaveButton);
-  gtk_container_add (GTK_CONTAINER (hbuttonbox1), mSaveButton);
+  gtk_box_pack_start (GTK_BOX (hbuttonbox1), mSaveButton, FALSE, FALSE, 0);
   GTK_WIDGET_SET_FLAGS (mSaveButton, GTK_CAN_DEFAULT);
   gtk_widget_add_accelerator (mSaveButton, "clicked", accel_group,
                               GDK_S, (GdkModifierType) GDK_CONTROL_MASK,
@@ -161,7 +170,7 @@ void KasumiMainWindow::createWindow()
 
   mAddButton = gtk_button_new_from_stock ("gtk-add");
   gtk_widget_show (mAddButton);
-  gtk_container_add (GTK_CONTAINER (hbuttonbox1), mAddButton);
+  gtk_box_pack_start (GTK_BOX (hbuttonbox1), mAddButton, FALSE, FALSE, 0);
   GTK_WIDGET_SET_FLAGS (mAddButton, GTK_CAN_DEFAULT);
   gtk_widget_add_accelerator (mAddButton, "clicked", accel_group,
                               GDK_A, (GdkModifierType) GDK_CONTROL_MASK,
@@ -169,7 +178,7 @@ void KasumiMainWindow::createWindow()
 
   mRemoveButton = gtk_button_new_from_stock ("gtk-delete");
   gtk_widget_show (mRemoveButton);
-  gtk_container_add (GTK_CONTAINER (hbuttonbox1), mRemoveButton);
+  gtk_box_pack_start (GTK_BOX (hbuttonbox1), mRemoveButton, FALSE, FALSE, 0);
   GTK_WIDGET_SET_FLAGS (mRemoveButton, GTK_CAN_DEFAULT);
   gtk_widget_add_accelerator (mRemoveButton, "clicked", accel_group,
                               GDK_R, (GdkModifierType) GDK_CONTROL_MASK,
@@ -188,9 +197,9 @@ void KasumiMainWindow::createWindow()
                               GTK_ACCEL_VISIBLE);
 */
 
-  mQuitButton = gtk_button_new_from_stock ("gtk-quit");
+  mQuitButton = gtk_button_new_from_stock ("gtk-close");
   gtk_widget_show (mQuitButton);
-  gtk_container_add (GTK_CONTAINER (hbuttonbox1), mQuitButton);
+  gtk_box_pack_end (GTK_BOX (hbuttonbox1), mQuitButton, FALSE, FALSE, 0);
   GTK_WIDGET_SET_FLAGS (mQuitButton, GTK_CAN_DEFAULT);
   gtk_widget_add_accelerator (mQuitButton, "clicked", accel_group,
                               GDK_Q, (GdkModifierType) GDK_CONTROL_MASK,
