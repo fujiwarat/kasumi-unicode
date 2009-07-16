@@ -64,6 +64,7 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
 
     // creating vbox for text entries, spin button and so on.
     GtkWidget *vbox = gtk_vbox_new(FALSE,0);
+    gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
     gtk_container_add(GTK_CONTAINER(window),vbox);  
 
     // creating text entries for "Spelling"
