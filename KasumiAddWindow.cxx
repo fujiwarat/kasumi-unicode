@@ -180,46 +180,18 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
 
     if( conf->getPropertyValue("StartupMode") == "EXCLUSIVE" )
     {
-	GtkWidget *button = gtk_button_new();
-	label = gtk_label_new(_("Add"));
-	GtkWidget *button_image = gtk_image_new_from_stock(GTK_STOCK_ADD,
-						GTK_ICON_SIZE_BUTTON);
-	GtkWidget *in_box = gtk_hbox_new(FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(in_box), button_image, FALSE, FALSE, 3);
-	gtk_box_pack_start(GTK_BOX(in_box), label, FALSE, FALSE, 3);
-	gtk_container_add(GTK_CONTAINER(button),in_box);
+	GtkWidget *button = gtk_button_new_from_stock(GTK_STOCK_ADD);
 	gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),TRUE,TRUE,0);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			 G_CALLBACK(_call_back_add_window_add),this);
-	GtkAccelGroup *accel = gtk_accel_group_new();
-	gtk_window_add_accel_group(GTK_WINDOW(window), accel);
-	string key = string("Ctrl+A");
-	gtk_widget_add_accelerator(button, "clicked", accel,
-				   getAccelKey(key),
-				   getModifierType(key),
-				   GTK_ACCEL_VISIBLE);
 	gtk_tooltips_set_tip(Tooltips, button,
 			     _("Add entered word and quit registration."),
 			     _("If all the necessary items are filled in, add entered word and quit registration."));
 
-	button = gtk_button_new();
-	label = gtk_label_new(_("Cancel"));
-	button_image = gtk_image_new_from_stock(GTK_STOCK_QUIT,
-						GTK_ICON_SIZE_BUTTON);
-	in_box = gtk_hbox_new(FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(in_box), button_image, FALSE, FALSE, 3);
-	gtk_box_pack_start(GTK_BOX(in_box), label, FALSE, FALSE, 3);
-	gtk_container_add(GTK_CONTAINER(button),in_box);
+	button = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
 	gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),TRUE,TRUE,0);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			 G_CALLBACK(_call_back_add_window_quit),this);
-	accel = gtk_accel_group_new();
-	gtk_window_add_accel_group(GTK_WINDOW(window), accel);
-	key = string("Ctrl+C");
-	gtk_widget_add_accelerator(button, "clicked", accel,
-				   getAccelKey(key),
-				   getModifierType(key),
-				   GTK_ACCEL_VISIBLE);
 	gtk_tooltips_set_tip(Tooltips, button,
 			     _("Cancel registration and quit."),
 			     _("Cancel registration and quit."));
@@ -230,71 +202,29 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
     {
 	// ADD mode
 	// creating buttons and configure shortcut key
-	GtkWidget *button = gtk_button_new();
-	label = gtk_label_new(_("Quit"));
-	GtkWidget *button_image = gtk_image_new_from_stock(GTK_STOCK_QUIT,
-							   GTK_ICON_SIZE_BUTTON);
-	GtkWidget *in_box = gtk_hbox_new(FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(in_box), button_image, FALSE, FALSE, 3);
-	gtk_box_pack_start(GTK_BOX(in_box), label, FALSE, FALSE, 3);
-	gtk_container_add(GTK_CONTAINER(button),in_box);
-	gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),TRUE,TRUE,0);
-	g_signal_connect(G_OBJECT(button),"clicked",
-			 G_CALLBACK(_call_back_add_window_quit),this);
-	GtkAccelGroup *accel = gtk_accel_group_new();
-	gtk_window_add_accel_group(GTK_WINDOW(window), accel);
-	string key = string("Ctrl+Q");
-	gtk_widget_add_accelerator(button, "clicked", accel,
-				   getAccelKey(key),
-				   getModifierType(key),
-				   GTK_ACCEL_VISIBLE);
-	gtk_tooltips_set_tip(Tooltips, button,
-			     _("Quit this application"),
-			     _("Save dictionary and quit this application."));
-
-	button = gtk_button_new();
-	label = gtk_label_new(_("Add"));
-	button_image = gtk_image_new_from_stock(GTK_STOCK_ADD,
-						GTK_ICON_SIZE_BUTTON);
-	in_box = gtk_hbox_new(FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(in_box), button_image, FALSE, FALSE, 3);
-	gtk_box_pack_start(GTK_BOX(in_box), label, FALSE, FALSE, 3);
-	gtk_container_add(GTK_CONTAINER(button),in_box);
+	GtkWidget *button = gtk_button_new_from_stock(GTK_STOCK_ADD);
 	gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),TRUE,TRUE,0);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			 G_CALLBACK(_call_back_add_window_add),this);
-	accel = gtk_accel_group_new();
-	gtk_window_add_accel_group(GTK_WINDOW(window), accel);
-	key = string("Ctrl+A");
-	gtk_widget_add_accelerator(button, "clicked", accel,
-				   getAccelKey(key),
-				   getModifierType(key),
-				   GTK_ACCEL_VISIBLE);
 	gtk_tooltips_set_tip(Tooltips, button,
 			     _("Add entered word"),
 			     _("If all the necessary items are filled in, add entered word."));
 
-	button = gtk_button_new();
-	label = gtk_label_new(_("Edit"));
-	button_image = gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,
-						GTK_ICON_SIZE_BUTTON);
-	in_box = gtk_hbox_new(FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(in_box), button_image, FALSE, FALSE, 3);
-	gtk_box_pack_start(GTK_BOX(in_box), label, FALSE, FALSE, 3);
-	gtk_container_add(GTK_CONTAINER(button),in_box);
+	button = gtk_button_new_from_stock(GTK_STOCK_EDIT);
 	gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),TRUE,TRUE,0);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			 G_CALLBACK(_call_back_manage_mode),this);
-	accel = gtk_accel_group_new();
-	gtk_window_add_accel_group(GTK_WINDOW(window), accel);
-	key = string("Ctrl+M");
-	gtk_widget_add_accelerator(button, "clicked", accel,
-				   getAccelKey(key),
-				   getModifierType(key),
-				   GTK_ACCEL_VISIBLE);
 	gtk_tooltips_set_tip(Tooltips, button,
 			     _("Manage mode"),
 			     _("Make the shift to manage mode to modify and remove registered words."));
+
+	button = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
+	gtk_box_pack_start(GTK_BOX(hbutton_box),GTK_WIDGET(button),TRUE,TRUE,0);
+	g_signal_connect(G_OBJECT(button),"clicked",
+			 G_CALLBACK(_call_back_add_window_quit),this);
+	gtk_tooltips_set_tip(Tooltips, button,
+			     _("Quit this application"),
+			     _("Save dictionary and quit this application."));
 
 	// get selection at the time of launching
 	g_signal_connect(G_OBJECT(SpellingEntry),"selection_received",

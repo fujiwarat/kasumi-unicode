@@ -5,6 +5,12 @@
 2009-07-16  Takuro Ashie <ashie@clear-code.com>
 
 	* fix:
+	  - Use stock objects for buttons on KasumiAddWindow.
+	  - Remove neeldless key accelerators for KasumiAddWindow.
+
+2009-07-16  Takuro Ashie <ashie@clear-code.com>
+
+	* fix:
 	  - Fix paddings in the main window.
 	  - Fix minimum size of columns in the word list view.
 	  - Remove needless key accelerators in main window.
