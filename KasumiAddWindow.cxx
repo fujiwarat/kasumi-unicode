@@ -69,7 +69,8 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
 
     // creating text entries for "Spelling"
     GtkWidget *label = gtk_label_new(_("Spelling"));
-    GtkWidget *alignment = gtk_alignment_new(0,0.5,0,0);
+    GtkWidget *alignment = gtk_alignment_new(0, 0.5, 0, 0);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 0, 6, 6);
     gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
@@ -78,11 +79,15 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
     if (IsEUCJP) spelling = KasumiWord::convertEUCJPToUTF8(spelling);
     gtk_entry_set_text(GTK_ENTRY(SpellingEntry),
 		       spelling.c_str());
-    gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(SpellingEntry),FALSE,FALSE,0);
+    alignment = gtk_alignment_new(0, 0.5, 1.0, 1.0);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 6, 6, 6);
+    gtk_container_add(GTK_CONTAINER(alignment), SpellingEntry);
+    gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
     // creating text entries for "Sound"
     label = gtk_label_new(_("Sound"));
-    alignment = gtk_alignment_new(0,0.5,0,0);
+    alignment = gtk_alignment_new(0, 0.5, 0, 0);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 0, 6, 6);
     gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
@@ -91,11 +96,15 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
     if (IsEUCJP) sound = KasumiWord::convertEUCJPToUTF8(sound);
     gtk_entry_set_text(GTK_ENTRY(SoundEntry),
 		       sound.c_str());
-    gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(SoundEntry),FALSE,FALSE,0);
+    alignment = gtk_alignment_new(0, 0.5, 1.0, 1.0);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 6, 6, 6);
+    gtk_container_add(GTK_CONTAINER(alignment), SoundEntry);
+    gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
     // creating spin button for "Frequency"
     label = gtk_label_new(_("Frequency"));
-    alignment = gtk_alignment_new(0,0.5,0,0);
+    alignment = gtk_alignment_new(0, 0.5, 0, 0);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 0, 6, 6);
     gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
@@ -109,11 +118,15 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
 					       FREQ_UBOUND / 100
 					       ,0);
     FrequencySpin = gtk_spin_button_new(GTK_ADJUSTMENT(adjustment),1.0,0);
-    gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(FrequencySpin),FALSE,FALSE,0);
+    alignment = gtk_alignment_new(0, 0.5, 1.0, 1.0);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 6, 6, 6);
+    gtk_container_add(GTK_CONTAINER(alignment), FrequencySpin);
+    gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
     // creating combo box for "Word Type"
     label = gtk_label_new(_("Word Type"));
-    alignment = gtk_alignment_new(0,0.5,0,0);
+    alignment = gtk_alignment_new(0, 0.5, 0, 0);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 0, 6, 6);
     gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
@@ -150,15 +163,19 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
 				   "text", COL_UI_STRING,
 				   NULL);
     gtk_combo_box_set_active_iter(GTK_COMBO_BOX(WordTypeCategoryCombo), &defaultWordTypeCategoryIter);
+    alignment = gtk_alignment_new(0, 0.5, 1.0, 1.0);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 6, 6, 6);
+    gtk_container_add(GTK_CONTAINER(alignment), WordTypeCategoryCombo);
     gtk_box_pack_start(GTK_BOX(vbox),
-		       GTK_WIDGET(WordTypeCategoryCombo),FALSE,FALSE,0);
+		       GTK_WIDGET(alignment),FALSE,FALSE,0);
     g_signal_connect(G_OBJECT(WordTypeCategoryCombo),"changed",
 		     G_CALLBACK(_call_back_word_type_category_changed),this);
 
 
     // creating combo box for "Subcategory of Word Type"
     label = gtk_label_new(_("Subcategory of Word Type"));
-    alignment = gtk_alignment_new(0,0.5,0,0);
+    alignment = gtk_alignment_new(0, 0.5, 0, 0);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 0, 6, 6);
     gtk_container_add(GTK_CONTAINER(alignment),GTK_WIDGET(label));
     gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(alignment),FALSE,FALSE,0);
 
@@ -169,14 +186,18 @@ KasumiAddWindow::KasumiAddWindow(KasumiDic *aDictionary,
     gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(WordTypeCombo), renderer,
 				   "text", COL_UI_STRING,
 				   NULL);
+    alignment = gtk_alignment_new(0, 0.5, 1.0, 1.0);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 12, 6, 6);
+    gtk_container_add(GTK_CONTAINER(alignment), WordTypeCombo);
     gtk_box_pack_start(GTK_BOX(vbox),
-		       GTK_WIDGET(WordTypeCombo),FALSE,FALSE,0);
+		       GTK_WIDGET(alignment),FALSE,FALSE,0);
     ChangeWordTypeList(true);
 
     // creating box for buttons
     GtkWidget *hbutton_box = gtk_hbutton_box_new();
+    gtk_box_set_spacing(GTK_BOX(hbutton_box),6);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(hbutton_box),GTK_BUTTONBOX_SPREAD);
-    gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hbutton_box),FALSE,FALSE,0);
+    gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(hbutton_box),FALSE,FALSE,6);
 
     if( conf->getPropertyValue("StartupMode") == "EXCLUSIVE" )
     {

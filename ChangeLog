@@ -2,6 +2,11 @@
 
 	* preparation for release (ver 2.5)
 
+2009-07-21  Takuro Ashie <ashie@clear-code.com>
+
+	* fix:
+	  - Fix paddings in the KasumiAddWindow.
+
 2009-07-16  Takuro Ashie <ashie@clear-code.com>
 
 	* fix:
