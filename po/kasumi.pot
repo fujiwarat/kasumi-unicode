@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-16 15:15+0900\n"
+"POT-Creation-Date: 2009-07-21 18:18+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,39 +22,39 @@ msgid ""
 "character: "
 msgstr ""
 
-#: KasumiMainWindow.cxx:95
+#: KasumiMainWindow.cxx:81
 msgid "Kasumi"
 msgstr ""
 
-#: KasumiMainWindow.cxx:120
+#: KasumiMainWindow.cxx:106
 msgid "<b>Search:</b>"
 msgstr ""
 
-#: KasumiMainWindow.cxx:132
+#: KasumiMainWindow.cxx:118
 msgid "Search by Spelling"
 msgstr ""
 
-#: KasumiMainWindow.cxx:138
+#: KasumiMainWindow.cxx:124
 msgid "Search by Sound"
 msgstr ""
 
-#: KasumiMainWindow.cxx:220 KasumiAddWindow.cxx:70
+#: KasumiMainWindow.cxx:180 KasumiAddWindow.cxx:71
 msgid "Spelling"
 msgstr ""
 
-#: KasumiMainWindow.cxx:234 KasumiAddWindow.cxx:83
+#: KasumiMainWindow.cxx:196 KasumiAddWindow.cxx:88
 msgid "Sound"
 msgstr ""
 
-#: KasumiMainWindow.cxx:259 KasumiAddWindow.cxx:96
+#: KasumiMainWindow.cxx:222 KasumiAddWindow.cxx:105
 msgid "Frequency"
 msgstr ""
 
-#: KasumiMainWindow.cxx:293
+#: KasumiMainWindow.cxx:257
 msgid "WordClass"
 msgstr ""
 
-#: KasumiMainWindow.cxx:411
+#: KasumiMainWindow.cxx:375
 msgid ""
 "Your dictionary was changed. Do you save these changes before Kasumi quits?"
 msgstr ""
@@ -63,73 +63,57 @@ msgstr ""
 msgid "Kasumi (Register words)"
 msgstr ""
 
-#: KasumiAddWindow.cxx:114
+#: KasumiAddWindow.cxx:127
 msgid "Word Type"
 msgstr ""
 
-#: KasumiAddWindow.cxx:159
+#: KasumiAddWindow.cxx:176
 msgid "Subcategory of Word Type"
 msgstr ""
 
-#: KasumiAddWindow.cxx:183 KasumiAddWindow.cxx:255
-msgid "Add"
-msgstr ""
-
-#: KasumiAddWindow.cxx:201
+#: KasumiAddWindow.cxx:209
 msgid "Add entered word and quit registration."
 msgstr ""
 
-#: KasumiAddWindow.cxx:202
+#: KasumiAddWindow.cxx:210
 msgid ""
 "If all the necessary items are filled in, add entered word and quit "
 "registration."
 msgstr ""
 
-#: KasumiAddWindow.cxx:205
-msgid "Cancel"
-msgstr ""
-
-#: KasumiAddWindow.cxx:223 KasumiAddWindow.cxx:224
+#: KasumiAddWindow.cxx:217 KasumiAddWindow.cxx:218
 msgid "Cancel registration and quit."
 msgstr ""
 
-#: KasumiAddWindow.cxx:233
-msgid "Quit"
-msgstr ""
-
-#: KasumiAddWindow.cxx:251
-msgid "Quit this application"
-msgstr ""
-
-#: KasumiAddWindow.cxx:252
-msgid "Save dictionary and quit this application."
-msgstr ""
-
-#: KasumiAddWindow.cxx:273
+#: KasumiAddWindow.cxx:231
 msgid "Add entered word"
 msgstr ""
 
-#: KasumiAddWindow.cxx:274
+#: KasumiAddWindow.cxx:232
 msgid "If all the necessary items are filled in, add entered word."
 msgstr ""
 
-#: KasumiAddWindow.cxx:277
-msgid "Edit"
-msgstr ""
-
-#: KasumiAddWindow.cxx:295
+#: KasumiAddWindow.cxx:239
 msgid "Manage mode"
 msgstr ""
 
-#: KasumiAddWindow.cxx:296
+#: KasumiAddWindow.cxx:240
 msgid "Make the shift to manage mode to modify and remove registered words."
 msgstr ""
 
-#: KasumiAddWindow.cxx:347
+#: KasumiAddWindow.cxx:247
+msgid "Quit this application"
+msgstr ""
+
+#: KasumiAddWindow.cxx:248
+msgid "Save dictionary and quit this application."
+msgstr ""
+
+#: KasumiAddWindow.cxx:299
 msgid "Invalid entry for Sound."
 msgstr ""
 
-#: KasumiAddWindow.cxx:360
+#: KasumiAddWindow.cxx:312
 msgid "Invalid entry for Spelling."
 msgstr ""
 
