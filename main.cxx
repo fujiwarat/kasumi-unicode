@@ -6,6 +6,7 @@
  * 
  * Copyright (C) 2004-2006 Takashi Nakamoto
  * Copyright (C) 2005 Takuro Ashie
+ * Copyright (C) 2021 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,14 +102,15 @@ static void cb_selection_get(GtkWidget *widget,
 {
   gchar *text = NULL;
   gint length = 0;
+  GdkAtom emit_selection = gtk_selection_data_get_selection(data);
 
-  if (data->selection == atom0) {
+  if (emit_selection == atom0) {
     text = "Kasumi Selection";
     length = strlen(text);
     gtk_selection_convert(window, atom1,
 			  GDK_SELECTION_TYPE_STRING,
 			  GDK_CURRENT_TIME);
-  } else if (data->selection == atom1 && arg_text != NULL) {
+  } else if (emit_selection == atom1 && arg_text != NULL) {
     text = arg_text;
     arg_text = NULL;
     length = strlen(text);
@@ -116,7 +118,7 @@ static void cb_selection_get(GtkWidget *widget,
 
   if (text != NULL) {
     gtk_selection_data_set_text(data, text, length);
-    if (data->selection == atom1)
+    if (emit_selection == atom1)
       g_free(text);
   }
 }
@@ -126,9 +128,11 @@ static void cb_selection_received(GtkWidget *widget,
 				  guint time,
 				  gpointer user_data)
 {
-  if (data->selection == atom0) {
-    instance = MAX(data->length, 0);
-  } else if (data->selection == atom1 && data->length > 0) {
+  GdkAtom emit_selection = gtk_selection_data_get_selection(data);
+  int emit_length = gtk_selection_data_get_length(data);
+  if (emit_selection == atom0) {
+    instance = MAX(emit_length, 0);
+  } else if (emit_selection == atom1 && emit_length > 0) {
   }
 }
 

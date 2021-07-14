@@ -13,6 +13,7 @@
     begin                : Tue Oct 21 2003
     copyright            : (C) 2003 by Tim-Philipp M«äller
     email                : t.i.m at orange dot net
+ * Copyright (C) 2021 Takao Fujiwara <takao.fujiwara1@gmail.com>
  ***************************************************************************/
 
 /***************************************************************************
@@ -27,7 +28,7 @@
 #ifndef _cellrendererspin_h_included_
 #define _cellrendererspin_h_included_
 
-#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

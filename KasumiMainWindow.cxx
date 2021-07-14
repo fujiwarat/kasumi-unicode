@@ -6,6 +6,7 @@
  * 
  * Copyright (C) 2004-2006 Takashi Nakamoto
  * Copyright (C) 2005 Takuro Ashie
+ * Copyright (C) 2021 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,22 +151,22 @@ void KasumiMainWindow::createWindow()
   mSaveButton = gtk_button_new_from_stock ("gtk-save");
   gtk_widget_show (mSaveButton);
   gtk_box_pack_start (GTK_BOX (hbuttonbox1), mSaveButton, FALSE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (mSaveButton, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (mSaveButton, TRUE);
 
   mAddButton = gtk_button_new_from_stock ("gtk-add");
   gtk_widget_show (mAddButton);
   gtk_box_pack_start (GTK_BOX (hbuttonbox1), mAddButton, FALSE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (mAddButton, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (mAddButton, TRUE);
 
   mRemoveButton = gtk_button_new_from_stock ("gtk-delete");
   gtk_widget_show (mRemoveButton);
   gtk_box_pack_start (GTK_BOX (hbuttonbox1), mRemoveButton, FALSE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (mRemoveButton, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (mRemoveButton, TRUE);
 
   mQuitButton = gtk_button_new_from_stock ("gtk-close");
   gtk_widget_show (mQuitButton);
   gtk_box_pack_end (GTK_BOX (hbuttonbox1), mQuitButton, FALSE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (mQuitButton, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (mQuitButton, TRUE);
 }
 
 void KasumiMainWindow::createWordList()
@@ -474,7 +475,7 @@ void KasumiMainWindow::editedTextColumn(GtkCellRendererText *renderer,
 
 	// set cursor right or left
 	GtkTreeViewColumn *postCol = NULL;
-	if(lastKeyVal == GDK_Tab)
+	if(lastKeyVal == GDK_KEY_Tab)
 	{
 	    if(lastKeyState & GDK_CONTROL_MASK)
 	    { // set cursor left
@@ -887,42 +888,42 @@ guint getAccelKey(const string &key){
 
   string shortkey = key.substr(i+1);
 
-  if(shortkey == "A") return GDK_A;
-  else if(shortkey == "B") return GDK_B;
-  else if(shortkey == "C") return GDK_C;
-  else if(shortkey == "D") return GDK_D;
-  else if(shortkey == "E") return GDK_E;
-  else if(shortkey == "F") return GDK_F;
-  else if(shortkey == "G") return GDK_G;
-  else if(shortkey == "H") return GDK_H;
-  else if(shortkey == "I") return GDK_I;
-  else if(shortkey == "J") return GDK_J;
-  else if(shortkey == "K") return GDK_K;
-  else if(shortkey == "L") return GDK_L;
-  else if(shortkey == "M") return GDK_M;
-  else if(shortkey == "N") return GDK_N;
-  else if(shortkey == "O") return GDK_O;
-  else if(shortkey == "P") return GDK_P;
-  else if(shortkey == "Q") return GDK_Q;
-  else if(shortkey == "R") return GDK_R;
-  else if(shortkey == "S") return GDK_S;
-  else if(shortkey == "T") return GDK_T;
-  else if(shortkey == "U") return GDK_U;
-  else if(shortkey == "V") return GDK_V;
-  else if(shortkey == "W") return GDK_W;
-  else if(shortkey == "X") return GDK_X;
-  else if(shortkey == "Y") return GDK_Y;
-  else if(shortkey == "Z") return GDK_Z;
-  else if(shortkey == "0") return GDK_0;
-  else if(shortkey == "1") return GDK_1;
-  else if(shortkey == "2") return GDK_2;
-  else if(shortkey == "3") return GDK_3;
-  else if(shortkey == "4") return GDK_4;
-  else if(shortkey == "5") return GDK_5;
-  else if(shortkey == "6") return GDK_5;
-  else if(shortkey == "7") return GDK_7;
-  else if(shortkey == "8") return GDK_8;
-  else if(shortkey == "9") return GDK_9;
+  if(shortkey == "A") return GDK_KEY_A;
+  else if(shortkey == "B") return GDK_KEY_B;
+  else if(shortkey == "C") return GDK_KEY_C;
+  else if(shortkey == "D") return GDK_KEY_D;
+  else if(shortkey == "E") return GDK_KEY_E;
+  else if(shortkey == "F") return GDK_KEY_F;
+  else if(shortkey == "G") return GDK_KEY_G;
+  else if(shortkey == "H") return GDK_KEY_H;
+  else if(shortkey == "I") return GDK_KEY_I;
+  else if(shortkey == "J") return GDK_KEY_J;
+  else if(shortkey == "K") return GDK_KEY_K;
+  else if(shortkey == "L") return GDK_KEY_L;
+  else if(shortkey == "M") return GDK_KEY_M;
+  else if(shortkey == "N") return GDK_KEY_N;
+  else if(shortkey == "O") return GDK_KEY_O;
+  else if(shortkey == "P") return GDK_KEY_P;
+  else if(shortkey == "Q") return GDK_KEY_Q;
+  else if(shortkey == "R") return GDK_KEY_R;
+  else if(shortkey == "S") return GDK_KEY_S;
+  else if(shortkey == "T") return GDK_KEY_T;
+  else if(shortkey == "U") return GDK_KEY_U;
+  else if(shortkey == "V") return GDK_KEY_V;
+  else if(shortkey == "W") return GDK_KEY_W;
+  else if(shortkey == "X") return GDK_KEY_X;
+  else if(shortkey == "Y") return GDK_KEY_Y;
+  else if(shortkey == "Z") return GDK_KEY_Z;
+  else if(shortkey == "0") return GDK_KEY_0;
+  else if(shortkey == "1") return GDK_KEY_1;
+  else if(shortkey == "2") return GDK_KEY_2;
+  else if(shortkey == "3") return GDK_KEY_3;
+  else if(shortkey == "4") return GDK_KEY_4;
+  else if(shortkey == "5") return GDK_KEY_5;
+  else if(shortkey == "6") return GDK_KEY_5;
+  else if(shortkey == "7") return GDK_KEY_7;
+  else if(shortkey == "8") return GDK_KEY_8;
+  else if(shortkey == "9") return GDK_KEY_9;
   
   cerr << "Invalid shortcut key option: " << key << endl;
   exit(1);

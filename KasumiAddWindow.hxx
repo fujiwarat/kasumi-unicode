@@ -6,6 +6,7 @@
  * 
  * Copyright (C) 2004-2006 Takashi Nakamoto
  * Copyright (C) 2006 Ikuya Awashiro
+ * Copyright (C) 2021 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +78,6 @@ private:
     GtkWidget *FrequencySpin;
     GtkWidget *WordTypeCategoryCombo;
     GtkWidget *WordTypeCombo;
-    GtkTooltips *Tooltips;
 
     GtkTreeIter defaultWordTypeCategoryIter;
   

@@ -13,6 +13,7 @@
     begin                : Tue Oct 21 2003
     copyright            : (C) 2003 by Tim-Philipp M«äller
     email                : t.i.m at orange dot net
+ * Copyright (C) 2021 Takao Fujiwara <takao.fujiwara1@gmail.com>
  ***************************************************************************/
 
 /***************************************************************************
@@ -52,8 +53,6 @@
  */
 
 #include "cellrendererspin.h"
-#include <gtk/gtkadjustment.h>
-#include <gtk/gtkspinbutton.h>
 #include <stdlib.h>
 
 #define GUI_CELL_RENDERER_SPIN_PATH     "gui-cell-renderer-spin-path"
@@ -239,6 +238,7 @@ gui_cell_renderer_spin_editing_done (GtkCellEditable *spinbutton,
   const gchar         *path;
   const gchar         *new_text;
   GCRSpinInfo         *info;
+  gboolean canceled = FALSE;
 
   info = g_object_get_data (G_OBJECT (data), GUI_CELL_RENDERER_SPIN_INFO);
 
@@ -248,7 +248,8 @@ gui_cell_renderer_spin_editing_done (GtkCellEditable *spinbutton,
                 info->focus_out_id = 0;
         }
 
-  if (GTK_ENTRY(spinbutton)->editing_canceled)
+  g_object_get (spinbutton, "editing-canceled", &canceled, NULL);
+  if (canceled)
     return;
 
   path = g_object_get_data (G_OBJECT (spinbutton), GUI_CELL_RENDERER_SPIN_PATH);
@@ -317,19 +318,23 @@ gui_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
   GtkWidget           *spinbutton;
         GCRSpinInfo         *info;
         gdouble              curval = 0.0;
+  gboolean editable = FALSE;
+  gchar* str = NULL;
 
   celltext = GTK_CELL_RENDERER_TEXT(cell);
         spincell = GUI_CELL_RENDERER_SPIN(cell);
 
   /* If the cell isn't editable we return NULL. */
-  if (celltext->editable == FALSE)
+  editable = GPOINTER_TO_INT(g_object_get_data (G_OBJECT (celltext), "editable"));
+  if (editable == FALSE)
     return NULL;
 
   spinbutton = g_object_new (GTK_TYPE_SPIN_BUTTON, "has_frame", FALSE, "numeric", TRUE, NULL);
 
         /* dirty */
-  if (celltext->text)
-                curval = atof(celltext->text);
+  str = (gchar *)g_object_get_data (G_OBJECT (celltext), "text");
+  if (str)
+                curval = atof(str);
 
         adj = GTK_ADJUSTMENT(gtk_adjustment_new(curval,
                                                 spincell->lower,
