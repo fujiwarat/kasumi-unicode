@@ -1,7 +1,19 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(main.cxx, 2.0)
-AM_INIT_AUTOMAKE(kasumi, 2.5)
+m4_define([kasumi_released], [1])
+m4_define([kasumi_major_version], [2])
+m4_define([kasumi_minor_version], [5])
+m4_define(kasumi_maybe_datestamp,
+    m4_esyscmd([if test x]kasumi_released[ != x1; then date +.%Y%m%d | tr -d '\n\r'; fi]))
+
+m4_define([kasumi_version],
+    kasumi_major_version.kasumi_minor_version[]kasumi_maybe_datestamp)
+
+AC_INIT([kasumi-unicode], [kasumi_version],
+        [https://github.com/fujiwarat/kasumi-unicode/issues],
+        [kasumi-unicode])
+AM_INIT_AUTOMAKE([1.10])
 AM_CONFIG_HEADER(config.h)
+AC_CONFIG_MACRO_DIR(m4)
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -49,9 +61,6 @@ CFLAGS="$CFLAGS $ANTHY_CFLAGS"
 CPPFLAGS="$CPPFLAGS $ANTHY_CFLAGS"
 LIBS="$LIBS $ANTHY_LIBS"
 
-CFLAGS="$CFLAGS -Wall"
-CXXFLAGS="$CXXFLAGS -Wall"
-
 dnl Checks for header files.
 
 dnl Checks for typedefs, structures, and compiler characteristics.
@@ -63,3 +72,10 @@ kasumi.desktop
 
 AC_OUTPUT(Makefile intl/Makefile po/Makefile.in m4/Makefile )
 
+AC_OUTPUT
+echo "
+                kasumi-unicode version kasumi_version
+
+ANTHY                       $ANTHY
+GTK                         $GTK
+"
