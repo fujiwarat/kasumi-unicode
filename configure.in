@@ -33,8 +33,21 @@ CFLAGS="$CFLAGS $GTK_CFLAGS"
 CPPFLAGS="$CPPFLAGS $GTK_CFLAGS"
 LIBS="$LIBS $GTK_LIBS"
 AC_CHECK_LIB(iconv, iconv)
-AC_CHECK_LIB(anthydic, anthy_dic_util_init)
-AC_CHECK_LIB(anthy, anthy_get_version_string)
+
+PKG_CHECK_MODULES([ANTHY], [anthy-unicode], [ANTHY="anthy-unicode"],
+                  [PKG_CHECK_MODULES([ANTHY], [anthy], [ANTHY="anthy"])])
+if test "x$ANTHY" = "xanthy-unicode"; then
+    AC_CHECK_LIB(anthydic-unicode, anthy_dic_util_init)
+    AC_CHECK_LIB(anthy-unicode, anthy_get_version_string)
+elif test "x$ANTHY" = "xanthy"; then
+    AC_CHECK_LIB(anthydic, anthy_dic_util_init)
+    AC_CHECK_LIB(anthy, anthy_get_version_string)
+else
+    as_fn_error $? "anthy-unicode or anthy is not installed" "$LINENO" 5; 
+fi
+CFLAGS="$CFLAGS $ANTHY_CFLAGS"
+CPPFLAGS="$CPPFLAGS $ANTHY_CFLAGS"
+LIBS="$LIBS $ANTHY_LIBS"
 
 CFLAGS="$CFLAGS -Wall"
 CXXFLAGS="$CXXFLAGS -Wall"
