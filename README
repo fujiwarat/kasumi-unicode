@@ -1,2 +1,14 @@
-How to use: (see the following page) 
- http://kasumi.sourceforge.jp/index.php?%BB%C8%A4%A4%CA%FD
+kasumi is a dictionary management tool for Anthy.
+kasumi-unicode is forked from kasumi to work with anthy-unicode and GTK3
+
+anthy-unicode is available from:
+https://github.com/fujiwarat/anthy-unicode
+
+The original project is located at:
+https://osdn.net/projects/kasumi/
+
+「霞」はシンプルなAnthy個人辞書管理ツールとして作成され、今のところ最低限の機能
+しか実装されていませんが、今後はよりシンプルに単語登録ができるようにしたり、
+Anthy以外の辞書をインポートする機能などの改良をしていきたいと思います。
+
+ぜひみなさんに「霞」を利用してみてください。
