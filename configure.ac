@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_define([kasumi_released], [1])
 m4_define([kasumi_major_version], [2])
-m4_define([kasumi_minor_version], [5])
+m4_define([kasumi_minor_version], [6])
 m4_define(kasumi_maybe_datestamp,
     m4_esyscmd([if test x]kasumi_released[ != x1; then date +.%Y%m%d | tr -d '\n\r'; fi]))
 
@@ -14,6 +14,14 @@ AC_INIT([kasumi-unicode], [kasumi_version],
 AM_INIT_AUTOMAKE([1.10])
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_MACRO_DIR(m4)
+
+dnl Define sustituted variables:
+KASUMI_MAJOR_VERSION=kasumi_major_version
+KASUMI_MINOR_VERSION=kasumi_minor_version
+KASUMI_VERSION=kasumi_version
+AC_SUBST(KASUMI_MAJOR_VERSION)
+AC_SUBST(KASUMI_MINOR_VERSION)
+AC_SUBST(KASUMI_VERSION)
 
 dnl Checks for programs.
 AC_PROG_CC

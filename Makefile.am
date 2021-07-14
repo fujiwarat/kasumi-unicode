@@ -34,5 +34,27 @@ SUBDIRS = intl m4 po
 
 ACLOCAL_AMFLAGS = -I m4
 
+DISTCHECK_CONFIGURE_FLAGS = \
+CFLAGS="$(CFLAGS)" \
+CPPFLAGS="$(CPPFLAGS)" \
+$(NULL)
+
 CLEANFILES = $(desktop_DATA)
 #EXTRA_DIST = config.rpath
+
+dist-hook:
+	if test -d .git ; then \
+	    git log --name-status --date=iso > $(distdir)/ChangeLog ; \
+	    KASUMI_PREV_MINOR_VERSION=`expr $(KASUMI_MINOR_VERSION) - 1`; \
+	    KASUMI_PREV_VERSION=\
+"$(KASUMI_MAJOR_VERSION).$$KASUMI_PREV_MINOR_VERSION"; \
+	    echo "Changes in kasumi-unicode $(KASUMI_VERSION)" \
+	        > $(distdir)/NEWS; \
+	    echo "" >> $(distdir)/NEWS; \
+	    git shortlog $$KASUMI_PREV_VERSION...$(KASUMI_VERSION) \
+	        >> $(distdir)/NEWS; \
+	    echo "" >> $(distdir)/NEWS; \
+	    git log $$KASUMI_PREV_VERSION...$(KASUMI_VERSION) --reverse \
+	        --pretty=format:'%s (%an) %h' >> $(distdir)/NEWS; \
+	fi
+
