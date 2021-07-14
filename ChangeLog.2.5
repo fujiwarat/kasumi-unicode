@@ -1,0 +1,544 @@
+2009-07-29  Takuro Ashie <ashie@clear-code.com>
+
+	* preparation for release (ver 2.5)
+
+2009-07-21  Takuro Ashie <ashie@clear-code.com>
+
+	* fix:
+	  - Fix paddings in the KasumiAddWindow.
+
+2009-07-16  Takuro Ashie <ashie@clear-code.com>
+
+	* fix:
+	  - Use stock objects for buttons on KasumiAddWindow.
+	  - Remove neeldless key accelerators for KasumiAddWindow.
+
+2009-07-16  Takuro Ashie <ashie@clear-code.com>
+
+	* fix:
+	  - Fix paddings in the main window.
+	  - Fix minimum size of columns in the word list view.
+	  - Remove needless key accelerators in main window.
+	    Use mnemonic instead.
+	  - Remove some needless codes.
+
+2009-07-13  Takuro Ashie <ashie@clear-code.com>
+
+	* fix:
+	  - Fix a compile time warning.
+	  - Rename some strang variable names.
+
+2009-07-13  Takuro Ashie <ashie@clear-code.com>
+
+	* enhancement:
+	  - Added some word type subcategories. Thanks to Jun Oizumi.
+
+2009-06-25  Takuro Ashie <ashie@clear-code.com>
+
+	* fix
+	  - Kill duplicated Ikuya Awashiro in man page! Thanks to Jun Oizumi.
+
+2009-06-25  Takuro Ashie <ashie@clear-code.com>
+
+	* fix
+ 	  - Remove "SIKU" conjugation. Thanks to Jun Oizumi.
+
+2009-01-29  Takuro Ashie <ashie@clear-code.com>
+
+	* preparation for release (ver 2.4)
+
+2009-01-20  Ikuya Awashiro <ikuya@fruitsbasket.info>
+
+	* KasumiAddWindow.cxx: 
+	 - addded an include file. Thanks to Mike Fabian.
+	* KasumiWord.cxx: 
+	 - DITTO.
+	* main.cxx:
+	 - DITTO.
+
+2009-01-20  Takuro Ashie <ashie@clear-code.com>
+
+	* enhancement:
+	 - Support ANTHY_UTF8_ENCODING and set it as default.
+	   You can switch to ANTHY_EUC_JP_ENCODING by -E or --eucjp option.
+
+2007-10-30  Ikuya Awashiro <ikuya@fruitsbasket.info>
+	* fix:
+	 - FTBFS with GCC 4.3: missing #includes
+	   http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=417266
+	   Thaks to Martin Michlmayr <tbm@cyrius.com>.
+	 - kasumi dumps core on x86_64 systems when trying
+	   to add new words to the dictionary
+	   https://bugzilla.novell.com/show_bug.cgi?id=253788
+	   Thanks to Mike Fabian.
+	 - fail in the judgment of the version.
+	   http://kasumi.sourceforge.jp/index.php?%A5%D0%A5%B0%CA%F3%B9%F0%2F95
+	   Thanks to dtana.
+	* preparation for release (ver 2.3)
+
+2006-11-29  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* preparation for release (ver 2.2)
+
+2006-11-28  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* enhancement:
+	 - change the text color on the search entry box if Kasumi failed
+	   to find specified text
+	 - ask Gtk+ library to keep above the exclusive mode window
+
+	* fix:
+	 - scroll to the undermost of the view after adding a new word
+
+2006-11-27  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix:
+	 - the bug raised while sorting
+
+2006-10-15  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* enhancement:
+	 - add exclusive mode
+
+2006-10-14  Ikuya Awashiro <ikuya@fruitsbasket.info>
+	* configure.in: 2.1
+	* This release is a result at the CodeFest Kyoto 2006
+	  hosted by FSIJ.
+
+2006-10-14  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* enhancement:
+	 - add new word type category combo box
+
+	* fix:
+	 - export embedded string to po files
+	 - changed adding window title
+	 - remove unnecessary words
+	 - improve portability
+	 - support dakuon mark
+
+2006-06-28  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: AUTHORS
+	 - reconstruction of AUTHORS file
+	 - added Italian l10n team
+
+2006-06-26  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: KasumiException.cxx
+	 - security fix
+
+	* fix: KasumiDicEventListener.hxx KasumiWordEventListener.hxx
+	 - add virtual destructor to avoid compilation warnings 
+
+	* fix: configure.in main.cxx Makefile.am acconfig.h
+	 - removed acconfig.h deprecated in autoconf 2.5
+	 - correctly handling "--disable-nls" option on no-glibc platform
+	 - thanks to Diego's patch
+
+	* fix: AUTHORS
+	 - typo of my email address :(
+
+2006-06-25  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: KasumiAddWindow.cxx po/*.po po/*.pot
+	 - fixed typo: "Invlid" -> "Invalid"
+
+	* New feature:
+	 - Italian localization
+
+2006-06-23  Ikuya Awashiro <ikuya@fruitsbasket.info>
+	* KasumiMainWindow.hxx:
+	 - fixed compile error on gcc 4.1. thanks to sgtom.
+
+2006-06-21  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: configure.in
+	 - require Gtk+ version is 2.6 or higher for GtkCellRendererCombo
+
+2006-06-20  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: KasumiDic.cxx
+	 - fix the defect that Kasumi failes when the private dictionary
+	   doesn't have any word.
+
+2006-06-03  Ikuya Awashiro <ikuya@fruitsbasket.info>
+	* kasumi.desktop.in:
+	 - added.
+	* Makefile.am, configure.in:
+	 - resistered in GNOME/K menu.
+
+2006-06-02  Ikuya Awashiro <ikuya@fruitsbasket.info>
+	* Makefile.am:
+	 - kasumi.png was placed in /usr/share/pixmaps instead /usr/share/kasumi.
+	 - add man page.
+	* kasumi.1:
+	 - added.
+
+2006-05-29  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+ 	* preparation for release (ver 2.0)
+	
+	* fix: KasumiWord.cxx, configure.in
+	 - accept ASCII character in sound entries
+
+	* fix: AUTHORS
+	 - add Ikuya to AUTHORS
+
+	* fix: POTFILES.in ja.po
+	 - translated newly created message
+
+	* enhancement: KasumiMainWindow.cxx KasumiMainWindow.hxx
+	 - obsolete "Add Mode" button
+
+2006-05-28  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: main.cxx
+	 - changed copyright notice
+
+	* fix: KasumiWordType.hxx, KasumiWord.cxx
+	 - don't issue modification event when the same value are set
+
+2006-05-27  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: KasumiDic.cxx, KasumiWordType.cxx
+	 - set an alternative word type if specified one does not exist
+	 - measures against an anthy's defect that it returns error code
+	   even when it is right and no word is registered.
+
+	* fix:
+	 - inserted copyright and license terms into the head of each
+	   source file or header file.
+
+	* fix: KasumiAddWindow.cxx
+	 - changed the page size of the spin button
+
+2006-05-17  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix: KasumiDic.cxx
+	 - change the condition of anthy version
+
+2006-05-14  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* fix
+	 - KasumiAddWindow
+	 - search function for KasumiMainWindow
+
+	* enhancement
+	 - implement of KasumiWordEventListener
+
+2006-05-7  Takashi Nakamoto  <bluedwarf@bpost.plala.or.jp>
+
+	* drastic changes for new version 2.0
+
+2006-03-26  Ikuya Awashiro <ikuya@fruitsbasket.info>
+	* KasumiMainWindow.hxx, KasumiAddWindow.hxx:
+	Fixed with G++ 4.1: friends not declared
+	Thanks to Martin Michlmayr <tbm@cyrius.com>
+
+2005-12-06  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+ 	* preparation for release (ver 1.0)
+
+	* fix
+	 - rearrangement of some manuals
+
+2005-12-01  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* enhancement
+	 - Output notification when duplicated process was found.
+
+2005-11-30  Takuro Ashie <ashie@homa.ne.jp>
+
+	* enhancement
+	 - Check duplicated process.
+
+2005-11-22  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* obolete
+	 - DefaultWindowPosX and DefaultWindowPosY option
+
+2005-11-08  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix (KasumiString.cxx)
+	 - load words including "=" properly
+
+2005-10-15  Takuro Ashie <ashie@homa.ne.jp>
+
+	* KasumiMainWindow.cxx, KasumiAddWindow.cxx:
+	Set default window position to GTK_WIN_POS_MOUSE.
+	If you feel unpleasant, please revert it.
+
+2005-10-15  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - request >=gtk2.4.0 for GTK_COMBO_BOX
+
+2005-09-19  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+ 	* preparation for release (ver 0.10)
+
+2005-09-07  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - No save, when add a new word in adding mode
+
+2005-09-05  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* enhancement
+	 - tooltips for adding window
+	 - obsolete KasumiOutOfBoundException
+	 - make columns resizable
+
+2005-09-01  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - changed exception handling system
+
+	* fix (in KasumiAddWindow.cxx)
+	 - wrong string for verb option
+
+2005-08-29  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* enhancement
+	 - make adding mode buttons not to display string for neat appearance
+
+	* enhancement
+	 - sort function for word class
+
+	* enhancement
+	 - sort function for sound
+
+	* enhancement
+	 make typical buttons to use stock
+
+2005-08-23  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* feature
+	 - sort function
+	   ( Just supporting sorting by frequency only because it is still
+	     experiment. )
+
+	* enhancement
+	 - a new option to ignore X selection
+	   thanks to nubata
+	   http://kasumi.sourceforge.jp/index.php?%A5%D0%A5%B0%CA%F3%B9%F0%2F50
+
+2005-06-02  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix (in KasumiString.cxx)
+	 - avoid comparison with unsigned int value and "npos"
+	   ("npos" can be negative value
+
+2005-05-27  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+ 	* preparation for release (ver 0.9)
+
+	* fix
+	 - verb can be registered only with anthy 6131 or later
+
+2005-05-23  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - changed behavior when changing a word class in adding mode
+	   not to jump to unconcerned position
+
+	* enhancement
+	 - Verb registration support
+
+2005-05-18  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* enhancement
+	 - save dictionary when "Add" button clicked in "Adding" mode
+
+	* fix
+	 - typo: "versoin" -> "version"
+	 - type definition "size_type" -> "string::size_type"
+	 - for http://kasumi.sourceforge.jp/index?%A5%D0%A5%B0%CA%F3%B9%F0%2F45
+	   thanks to pinkmonkey http://d.hatena.ne.jp/pinkmonkey/20050411
+
+2005-04-11  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - avoid comparison with unsigned int value and "npos"
+	   ("npos" can be negative value)
+
+2005-04-08  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - make the button in adding window smaller
+
+	* preparation for release (ver 0.8)
+
+2005-04-07  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - trivial change for no-warning compilation
+
+2005-04-06  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - When Kasumi is launched in adding mode, the selected utf8 string
+	   will be set in the spelling entry
+
+	* fix
+	 - to enable "--version" and "--help" option
+
+2005-04-04  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - updated automake version from 1.4 to 1.7.9
+	 - updated autoconf version from 2.13 to 2.59
+
+2005-04-02  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - revise UI for adding new word
+
+2005-03-02  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - A new icon for Kasumi (kasumi.png)
+	   It will be installed in /usr/local/share/kasumi/ by default
+
+	* fix
+	 - launch correctly unless ~/.anthy directory exists
+
+2005-03-01  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - typo
+
+	* fix
+	 - solved inability to change mode
+
+	* fix
+	 - change the type of 'i' to be compared with 'npos' from unsigned int 
+	   to (signed) int because npos can be negative value in x86_64
+	   machine.
+
+2005-01-31  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - quit correctly when close button clicked
+
+2005-01-08  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - do not accept non-Hiragana character in Sound entry
+
+2005-01-07  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - mode switch
+
+2005-01-06  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* fix
+	 - validate method for configurations
+
+2004-12-30  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* preparation for release (ver 0.7)
+
+2004-12-28  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - incremental search
+
+2004-12-27  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - configuration option for default window position 
+
+2004-12-21  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - flexible default values in various fields
+
+2004-12-20  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - shortcut key configuration
+
+	* New feature
+	 - Users can change default/maximum/minimum frequency value
+	 - Remove "Add" button and add "New Word" button
+
+2004-12-08  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - configuration framework
+
+2004-12-07  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* KasumiMainWindow.cxx: Feature
+	 - default status of prefix search is set checked
+
+2004-12-02  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* main.cxx: Fix
+	 - fix argument handling codes to resolve segumentation fault
+	 which rises if wrong argument (such as "--ad") specified.
+	 - remove the message about dictionary file reading from output
+	 string which displayed when "--help" option specified
+
+2004-11-27  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* Fix
+	 - trivial code and comment change for easy code reading
+
+2004-11-26  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* KasumiAddWindow.cxx: New feature
+	 - shortcut key for add window
+
+	* KasumiAddWindow:cxx: Fix
+	 - to resize add window acorrding to content size
+
+2004-11-25  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - Shortcut key
+
+	* Fix
+	 - trivial change for Changed* methods' argument
+
+2004-11-14  Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* Fix
+	 - trivial change for temporary file 
+
+	* New feature
+	 - prefix search function
+
+2004-11-12 Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* Fix
+	 - adjust default frequency value and upper bounds
+	
+2004-11-10 Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - search function (complete version)
+	
+2004-11-10 Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* KasumiDic.cxx: Load dictionary directly from "anthy-dic-tool
+	--dump" storing into temporary file.
+	If user removed word, it will be removed correctly from Anthy's
+	internal dictionary.
+	* Solved some compile warnings
+	* KasumiMainWindow.cxx: changed add word operation.
+	* New feature
+	 - search function (test version)
+
+2004-11-05 Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New feature
+	 - Add Window.
+
+2004-11-03 Takashi Nakamoto  <bluedwarf@openoffice.org>
+
+	* New version of Kasumi rewritten by C++.
+	* KasumiMainWindow.cxx: New option pane for noun and adverbs.
