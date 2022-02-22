@@ -188,7 +188,7 @@ void KasumiWord::setSound(const string &aSound)
 
     if(invalidChar != ""){
 	string message;
-	message = string(_("Sound must consist of only Hiragana characters. You have entered invalid character: "));
+	message = string(_("You have entered invalid character: "));
 	message += invalidChar;
 	throw KasumiException(message, ERR_DIALOG, ALERT_ONLY);
     }
@@ -211,7 +211,7 @@ void KasumiWord::setSoundByUTF8(const string &aSound)
 
     if(invalidChar != ""){
 	string message;
-	message = string(_("Sound must consist of only Hiragana characters. You have entered invalid character: "));
+	message = string(_("You have entered invalid character: "));
 	message += invalidChar;
 	throw KasumiException(message, ERR_DIALOG, ALERT_ONLY);
     }
