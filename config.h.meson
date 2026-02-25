@@ -1,0 +1,25 @@
+/* Define to 1 if translation of program messages to the user's native
+   language is requested. */
+#mesondefine ENABLE_NLS
+
+#mesondefine LOCALEDIR
+
+#mesondefine HAVE_CATGETS
+
+/* Define if the GNU gettext() function is already present or preinstalled. */
+#mesondefine HAVE_GETTEXT
+
+/* Define if you have the iconv() function. */
+#mesondefine HAVE_ICONV
+
+/* Define if your <locale.h> file defines LC_MESSAGES. */
+#mesondefine HAVE_LC_MESSAGES
+
+/* Define as const if the declaration of iconv() needs const. */
+#mesondefine ICONV_CONST
+
+/* Name of package */
+#mesondefine PACKAGE
+
+/* Version number of package */
+#mesondefine VERSION
