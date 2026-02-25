@@ -1,4 +1,4 @@
-project('kasumi',
+project('kasumi-unicode',
   ['c', 'cpp'],
   version: '2.7',
   default_options: [ 'cpp_std=c++14' ],
