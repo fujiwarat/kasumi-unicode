@@ -1,6 +1,6 @@
 project('kasumi',
   ['c', 'cpp'],
-  version: '2.6',
+  version: '2.7',
   default_options: [ 'cpp_std=c++14' ],
   meson_version: '>= 1.5.0',
   license: 'GPL-2.0-or-later'

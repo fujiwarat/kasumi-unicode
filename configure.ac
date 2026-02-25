@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_define([kasumi_released], [1])
 m4_define([kasumi_major_version], [2])
-m4_define([kasumi_minor_version], [6])
+m4_define([kasumi_minor_version], [7])
 m4_define(kasumi_maybe_datestamp,
     m4_esyscmd([if test x]kasumi_released[ != x1; then date +.%Y%m%d | tr -d '\n\r'; fi]))
 
