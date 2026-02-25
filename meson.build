@@ -86,3 +86,5 @@ kasumi_bin = executable('kasumi',
 )
 
 subdir('po')
+
+meson.add_dist_script('meson_dist.py')
